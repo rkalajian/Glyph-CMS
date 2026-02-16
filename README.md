@@ -22,7 +22,7 @@ npm run develop
 - Open http://localhost:1337/admin
 - Create your first admin user
 - In **Settings → Users & Permissions → Roles → Public**:
-  - Enable `find` and `findOne` for **Page**, **Blog Post**, **Blog Category**, **Event**, **Site Alert**, and **Navigation Item**
+  - Enable `find` and `findOne` for **Page**, **Blog Post**, **Blog Category**, **Event**, **Site Alert**, **Navigation**, and **Theme Option**
 - Create content in **Content Manager**
 
 ### 2. Frontend
@@ -94,15 +94,13 @@ Create categories, then assign them to posts in the Blog Post editor. Filter pos
 
 Alerts display in a banner when the current date is between start and end. Shown at the top of every page.
 
-### Navigation Item
+### Navigation (single type)
 
-- `label` (required)
-- `url` (required)
-- `menu` (primary | utility | footer)
-- `order` (integer, for ordering)
-- `openInNewTab` (boolean)
+- **Utility Nav** – links above the main header (right-aligned)
+- **Primary Nav** – main header links
+- **Footer Nav** – footer links
 
-Create items in **Content Manager → Navigation Item**. Each item belongs to one menu. With no items, default primary nav (Home, Blog, Events, Contact) is used.
+Edit in **Content Manager → Navigation**. Add nav links to each section. With no items, default primary/footer nav is used. Ensure **Strapi is running** when developing (`cd strapi-backend && npm run develop`) so the frontend can fetch navigation.
 
 ## Accessibility (WCAG 2.2)
 

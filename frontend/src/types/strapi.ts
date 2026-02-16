@@ -151,13 +151,12 @@ export interface StrapiNavItem {
 // -----------------------------------------------------------------------------
 
 export interface StrapiThemeOptionMarker {
-  markerioId?: string | null;
-  markerioScriptUrl?: string | null;
+  markerSnippet?: string | null;
 }
 
 export interface StrapiThemeOptionGtm {
-  gtmHeaderId?: string | null;
-  gtmBodyId?: string | null;
+  gtmHeaderSnippet?: string | null;
+  gtmBodySnippet?: string | null;
 }
 
 export interface StrapiThemeOptionSocial {

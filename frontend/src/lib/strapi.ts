@@ -161,11 +161,12 @@ export async function getEvents(): Promise<StrapiEvent[]> {
 // -----------------------------------------------------------------------------
 
 type NavLinkInput = {
+  id?: number;
   label: string;
   url: string;
   order?: number;
   openInNewTab?: boolean;
-  subnav?: Array<{ label: string; url: string; order?: number; openInNewTab?: boolean }>;
+  subnav?: Array<{ id?: number; label: string; url: string; order?: number; openInNewTab?: boolean }>;
 };
 
 function toNavItem(
@@ -173,12 +174,13 @@ function toNavItem(
   prefix: string,
   i: number
 ): StrapiNavItem {
+  const docId = item.id != null ? `${prefix}-${item.id}` : `${prefix}-${i}`;
   const subnav: StrapiNavItem[] | undefined = item.subnav?.length
     ? (item.subnav ?? [])
         .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
         .map((sub, j) => ({
-          id: j,
-          documentId: `${prefix}-${i}-sub-${j}`,
+          id: sub.id ?? j,
+          documentId: sub.id != null ? `${prefix}-${i}-sub-${sub.id}` : `${prefix}-${i}-sub-${j}`,
           label: sub.label,
           url: sub.url,
           menu: prefix as 'primary' | 'utility' | 'footer',
@@ -189,12 +191,12 @@ function toNavItem(
         }))
     : undefined;
   return {
-    id: i,
-    documentId: `${prefix}-${i}`,
+    id: item.id ?? i,
+    documentId: docId,
     label: item.label,
     url: item.url,
     menu: prefix as 'primary' | 'utility' | 'footer',
-    order: item.order,
+    order: item.order ?? i,
     openInNewTab: item.openInNewTab ?? false,
     subnav,
     createdAt: '',
@@ -203,21 +205,25 @@ function toNavItem(
 }
 
 export async function getNavigation(): Promise<{
-  primary: StrapiNavItem[];
-  utility: StrapiNavItem[];
-  footer: StrapiNavItem[];
+  utilityNav: StrapiNavItem[];
+  primaryNav: StrapiNavItem[];
+  footerNav: StrapiNavItem[];
 }> {
   const res = await fetchApi<{
     utilityNav?: NavLinkInput[];
     primaryNav?: NavLinkInput[];
     footerNav?: NavLinkInput[];
-  }>('/api/navigation?status=published');
-  const raw = res.data;
-  const data = Array.isArray(raw) ? raw[0] : raw;
+  }>('/api/navigation?status=published&populate=*');
+  const raw = res?.data;
+  // Single type: data is the document object directly
+  const data = raw != null && !Array.isArray(raw) ? raw : Array.isArray(raw) && raw.length > 0 ? raw[0] : null;
   if (data == null || typeof data !== 'object') {
-    return { primary: [], utility: [], footer: [] };
+    if (import.meta.env.DEV) {
+      console.warn('[getNavigation] No data from Strapi — using defaults. Is Strapi running? (cd strapi-backend && npm run develop)');
+    }
+    return { utilityNav: [], primaryNav: [], footerNav: [] };
   }
-  const d = data as {
+  const d = data as Record<string, unknown> & {
     utilityNav?: NavLinkInput[];
     primaryNav?: NavLinkInput[];
     footerNav?: NavLinkInput[];
@@ -227,9 +233,9 @@ export async function getNavigation(): Promise<{
       .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
       .map((item, i) => toNavItem(item, prefix, i));
   return {
-    utility: toNavItems(d.utilityNav, 'utility'),
-    primary: toNavItems(d.primaryNav, 'primary'),
-    footer: toNavItems(d.footerNav, 'footer'),
+    utilityNav: toNavItems(d.utilityNav, 'utility'),
+    primaryNav: toNavItems(d.primaryNav, 'primary'),
+    footerNav: toNavItems(d.footerNav, 'footer'),
   };
 }
 

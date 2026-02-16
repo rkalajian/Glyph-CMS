@@ -2,6 +2,12 @@
  * Strapi admin button overrides – Rebellion Group branding.
  */
 
+/* Remove borders from all buttons and button-like links */
+.custom-admin-buttons button,
+.custom-admin-buttons a[role="button"] {
+  border: none !important;
+}
+
 /* Hide Marketplace and Deploy in sidebar */
 .custom-admin-buttons li:has(a[href*="/plugins/cloud"]),
 .custom-admin-buttons li:has(a[href*="list-plugins"]),
@@ -14,19 +20,19 @@
 }
 
 /**
- * Primary buttons: black background, white text, white border.
+ * Primary buttons: black background, white text. No borders.
  * Hover: white background, black text.
  */
 
 /* "Create new entry" link in list views */
 .custom-admin-buttons a[href*="/create"]:not([href*="/create/"]) {
   background-color: #0a0a0a !important;
-  border: 1px solid #ffffff !important;
+  border: none !important;
   color: #ffffff !important;
 }
 .custom-admin-buttons a[href*="/create"]:not([href*="/create/"]):hover {
   background-color: #ffffff !important;
-  border: 1px solid #0a0a0a !important;
+  border: none !important;
   color: #0a0a0a !important;
 }
 
@@ -34,20 +40,20 @@
 .custom-admin-buttons button[type="submit"],
 .custom-admin-buttons button[type="button"]:not([role="checkbox"]):not([role="switch"]):not([aria-label="Close"]):not([aria-label="Search"]):not([aria-label="Add"]):not([aria-label="Filter"]):not([aria-label="Refresh"]):not(:has(svg[width="3.2rem"])) {
   background-color: #0a0a0a !important;
-  border: 1px solid #ffffff !important;
+  border: none !important;
   color: #ffffff !important;
 }
 .custom-admin-buttons button[type="submit"]:hover,
 .custom-admin-buttons button[type="button"]:not([role="checkbox"]):not([role="switch"]):not([aria-label="Close"]):not([aria-label="Search"]):not([aria-label="Add"]):not([aria-label="Filter"]):not([aria-label="Refresh"]):not(:has(svg[width="3.2rem"])):hover {
   background-color: #ffffff !important;
-  border: 1px solid #0a0a0a !important;
+  border: none !important;
   color: #0a0a0a !important;
 }
 
 /* "No entry. Click to add one" component initializer – white bg, black text/icon on hover */
 .custom-admin-buttons button[type="button"]:has(svg[width="3.2rem"]):hover {
   background-color: #ffffff !important;
-  border-color: #0a0a0a !important;
+  border: none !important;
   color: #0a0a0a !important;
 }
 /* Override all descendants – Strapi uses theme primary600 (white in dark mode) for text/icon */

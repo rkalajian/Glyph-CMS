@@ -20,11 +20,42 @@ function isValidMarkerioUrl(url: string): boolean {
   }
 }
 
-function buildMarkerioScriptUrl(marker: StrapiThemeOptions['marker']): string | null {
-  const customUrl = marker?.markerioScriptUrl?.trim();
-  if (customUrl) return customUrl;
-  const id = marker?.markerioId?.trim();
-  return id ? `https://marker.io/script/v2/${id}` : null;
+function injectMarkerSnippet(snippet: string): boolean {
+  const s = snippet.trim();
+  if (!s) return false;
+
+  // URL: use as script src
+  try {
+    new URL(s);
+    if (isValidMarkerioUrl(s)) {
+      const script = document.createElement('script');
+      script.id = 'markerio-script';
+      script.src = s;
+      script.async = true;
+      document.head.appendChild(script);
+      return true;
+    }
+  } catch {
+    /* not a URL */
+  }
+
+  // Try to extract script src from HTML
+  const srcMatch = s.match(/<script[^>]+src=["']([^"']+)["']/i);
+  if (srcMatch && isValidMarkerioUrl(srcMatch[1])) {
+    const script = document.createElement('script');
+    script.id = 'markerio-script';
+    script.src = srcMatch[1];
+    script.async = true;
+    document.head.appendChild(script);
+    return true;
+  }
+
+  // Inline script content
+  const script = document.createElement('script');
+  script.id = 'markerio-script';
+  script.innerHTML = s;
+  document.head.appendChild(script);
+  return true;
 }
 
 interface ThemeScriptsProps {
@@ -40,40 +71,37 @@ export function ThemeScripts({ options }: ThemeScriptsProps) {
 
     const toRemove: string[] = [];
 
-    // Google Tag Manager – header script
-    const gtmHeaderId = gtm?.gtmHeaderId?.trim();
-    if (gtmHeaderId) {
+    // Google Tag Manager – header script (ID e.g. GTM-XXX or full snippet)
+    const gtmHeaderSnippet = gtm?.gtmHeaderSnippet?.trim();
+    if (gtmHeaderSnippet) {
       const script = document.createElement('script');
       script.id = 'gtm-script';
-      script.innerHTML = `
-        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      const isGtmId = /^GTM-[A-Z0-9]+$/i.test(gtmHeaderSnippet);
+      script.innerHTML = isGtmId
+        ? `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','${gtmHeaderId}');
-      `.trim();
+        })(window,document,'script','dataLayer','${gtmHeaderSnippet}');`
+        : gtmHeaderSnippet;
       document.head.appendChild(script);
       toRemove.push('gtm-script');
     }
 
-    // Marker.io – feedback widget script
-    const markerioUrl = buildMarkerioScriptUrl(marker);
-    if (markerioUrl && isValidMarkerioUrl(markerioUrl)) {
-      const script = document.createElement('script');
-      script.id = 'markerio-script';
-      script.src = markerioUrl;
-      script.async = true;
-      document.head.appendChild(script);
+    // Marker.io – feedback widget (URL or snippet from Theme Options)
+    const markerSnippet = marker?.markerSnippet?.trim();
+    if (markerSnippet && injectMarkerSnippet(markerSnippet)) {
       toRemove.push('markerio-script');
     }
 
     return () => {
       toRemove.forEach((id) => document.getElementById(id)?.remove());
     };
-  }, [gtm?.gtmHeaderId, marker?.markerioId, marker?.markerioScriptUrl]);
+  }, [gtm?.gtmHeaderSnippet, marker?.markerSnippet]);
 
   // GTM noscript iframe – fallback when JavaScript is disabled
-  const gtmBodyId = gtm?.gtmBodyId?.trim() || gtm?.gtmHeaderId?.trim();
+  const gtmBodySnippet = gtm?.gtmBodySnippet?.trim() || gtm?.gtmHeaderSnippet?.trim();
+  const gtmBodyId = gtmBodySnippet && /^GTM-[A-Z0-9]+$/i.test(gtmBodySnippet) ? gtmBodySnippet : null;
   if (!gtmBodyId) return null;
 
   return (

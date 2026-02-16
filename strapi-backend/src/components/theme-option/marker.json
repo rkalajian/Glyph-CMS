@@ -5,15 +5,10 @@
     "description": "Marker.io feedback widget settings"
   },
   "attributes": {
-    "markerioId": {
-      "type": "string",
-      "displayName": "Project ID",
-      "description": "Project ID from Marker.io dashboard (Settings > Widget > Installation). For custom scripts, use Script URL instead."
-    },
-    "markerioScriptUrl": {
-      "type": "string",
-      "displayName": "Script URL",
-      "description": "Optional: Full script URL from Marker.io if the project ID alone does not work"
+    "markerSnippet": {
+      "type": "text",
+      "displayName": "Marker Snippet",
+      "description": "Script URL (e.g. https://marker.io/script/v2/YOUR_ID) or full script tag HTML from Marker.io"
     }
   }
 }

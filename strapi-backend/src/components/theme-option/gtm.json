@@ -5,15 +5,11 @@
     "description": "Google Tag Manager settings"
   },
   "attributes": {
-    "gtmHeaderId": {
-      "type": "string",
-      "displayName": "GTM Header ID",
-      "description": "Google Tag Manager script for <head>. e.g. GTM-XXXXXXX"
+    "gtmHeaderSnippet": {
+      "type": "text"
     },
-    "gtmBodyId": {
-      "type": "string",
-      "displayName": "GTM Body ID",
-      "description": "Google Tag Manager noscript for <body>. e.g. GTM-XXXXXXX. Usually same as header."
+    "gtmBodySnippet": {
+      "type": "text"
     }
   }
 }

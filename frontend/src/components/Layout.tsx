@@ -39,15 +39,20 @@ export function Layout() {
   const location = useLocation();
   const [themeOptions, setThemeOptions] = useState<StrapiThemeOptions | null>(null);
   const [nav, setNav] = useState<{
-    primary: StrapiNavItem[];
-    utility: StrapiNavItem[];
-    footer: StrapiNavItem[];
+    utilityNav: StrapiNavItem[];
+    primaryNav: StrapiNavItem[];
+    footerNav: StrapiNavItem[];
   } | null>(null);
 
   useEffect(() => {
     getNavigation()
       .then(setNav)
-      .catch(() => setNav(null));
+      .catch((err) => {
+        if (import.meta.env.DEV) {
+          console.warn('[Layout] Navigation fetch failed — using defaults. Is Strapi running?', err);
+        }
+        setNav(null);
+      });
   }, []);
 
   useEffect(() => {
@@ -56,12 +61,12 @@ export function Layout() {
       .catch(() => setThemeOptions(null));
   }, []);
 
-  const primary: StrapiNavItem[] = nav?.primary?.length
-    ? nav.primary
+  const primaryNav: StrapiNavItem[] = nav?.primaryNav?.length
+    ? nav.primaryNav
     : (DEFAULT_PRIMARY_NAV as StrapiNavItem[]);
-  const utility: StrapiNavItem[] = nav?.utility ?? [];
-  const footer: StrapiNavItem[] = nav?.footer?.length
-    ? nav.footer
+  const utilityNav: StrapiNavItem[] = nav?.utilityNav ?? [];
+  const footerNav: StrapiNavItem[] = nav?.footerNav?.length
+    ? nav.footerNav
     : (DEFAULT_FOOTER_NAV as StrapiNavItem[]);
 
   const logoUrl =
@@ -77,8 +82,19 @@ export function Layout() {
         <SiteAlerts />
 
         <header className="border-b border-border bg-bg" role="banner">
-          <div className="max-w-4xl mx-auto px-4 py-4">
-            <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="max-w-4xl mx-auto px-4">
+            {utilityNav.length > 0 && (
+              <nav aria-label="Utility navigation" className="flex justify-end py-2 -mx-4 px-4 bg-[var(--color-utility-nav-bg)]">
+                <ul className="flex gap-4 list-none m-0 p-0 flex-wrap">
+                  {utilityNav.map((item) => (
+                    <li key={item.documentId}>
+                      <NavLink item={item} currentPath={location.pathname} variant="header" />
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            )}
+            <div className="flex flex-wrap items-center justify-between gap-4 py-4">
               <Link
                 to="/"
                 className="flex items-center shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded"
@@ -92,28 +108,15 @@ export function Layout() {
                   }`}
                 />
               </Link>
-              <div className="flex items-center gap-6 flex-wrap">
-                <nav aria-label="Main navigation">
-                  <ul className="flex gap-6 list-none m-0 p-0 flex-wrap">
-                    {primary.map((item) => (
-                      <li key={item.documentId}>
-                        <NavLink item={item} currentPath={location.pathname} variant="header" />
-                      </li>
-                    ))}
-                  </ul>
-                </nav>
-                {utility.length > 0 && (
-                  <nav aria-label="Utility navigation">
-                    <ul className="flex gap-4 list-none m-0 p-0 flex-wrap border-l border-border pl-6">
-                      {utility.map((item) => (
-                        <li key={item.documentId}>
-                          <NavLink item={item} currentPath={location.pathname} variant="header" />
-                        </li>
-                      ))}
-                    </ul>
-                  </nav>
-                )}
-              </div>
+              <nav aria-label="Main navigation">
+                <ul className="flex gap-6 list-none m-0 p-0 flex-wrap">
+                  {primaryNav.map((item) => (
+                    <li key={item.documentId}>
+                      <NavLink item={item} currentPath={location.pathname} variant="header" />
+                    </li>
+                  ))}
+                </ul>
+              </nav>
             </div>
           </div>
         </header>
@@ -126,7 +129,7 @@ export function Layout() {
           <div className="max-w-4xl mx-auto px-4 py-6">
             <nav aria-label="Footer navigation" className="mb-4">
               <ul className="flex flex-wrap gap-4 list-none m-0 p-0">
-                {footer.map((item) => (
+                {footerNav.map((item) => (
                   <li key={item.documentId}>
                     <NavLink item={item} currentPath={location.pathname} variant="footer" />
                   </li>

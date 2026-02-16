@@ -48,8 +48,8 @@ export interface ThemeOptionGtm extends Struct.ComponentSchema {
     displayName: 'GTM';
   };
   attributes: {
-    gtmBodyId: Schema.Attribute.String;
-    gtmHeaderId: Schema.Attribute.String;
+    gtmBodySnippet: Schema.Attribute.Text;
+    gtmHeaderSnippet: Schema.Attribute.Text;
   };
 }
 
@@ -75,8 +75,7 @@ export interface ThemeOptionMarker extends Struct.ComponentSchema {
     displayName: 'Marker';
   };
   attributes: {
-    markerioId: Schema.Attribute.String;
-    markerioScriptUrl: Schema.Attribute.String;
+    markerSnippet: Schema.Attribute.Text;
   };
 }
 

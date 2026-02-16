@@ -11,13 +11,6 @@ import { DocumentTitle } from '../components/DocumentTitle';
 import { LINK_ACCENT } from '../utils/classes';
 import type { StrapiPage } from '../types/strapi';
 
-const DEFAULT_QUICK_LINKS = [
-  { url: '/blog', label: 'Read the blog' },
-  { url: '/press', label: 'Press releases' },
-  { url: '/events', label: 'View events' },
-  { url: '/contact', label: 'Contact us' },
-];
-
 export function HomePage() {
   const [page, setPage] = useState<StrapiPage | null | undefined>(undefined);
 
@@ -38,10 +31,10 @@ export function HomePage() {
   const title = page?.seoTitle ?? page?.title ?? 'Welcome';
   const displayTitle = page?.title ?? 'Welcome';
   const subtitle = page?.subtitle ?? 'A simple, templatable CMS powered by Glyph.';
-  const quickLinks = (page?.quickLinks?.length ? page.quickLinks : DEFAULT_QUICK_LINKS) as Array<{
+  const quickLinks = (page?.quickLinks?.length ? page.quickLinks : null) as Array<{
     url: string;
     label: string;
-  }>;
+  }> | null;
 
   return (
     <article>
@@ -53,27 +46,29 @@ export function HomePage() {
           <RichText content={page.content} />
         </div>
       )}
-      <nav aria-label="Quick links">
-        <ul className="flex gap-4 list-none p-0 m-0 flex-wrap">
-          {quickLinks.map(({ url, label }) => {
-            const isExternal = url.startsWith('http://') || url.startsWith('https://');
-            const linkClass = `${LINK_ACCENT} py-2 px-4`;
-            return (
-              <li key={`${url}-${label}`}>
-                {isExternal ? (
-                  <a href={url} className={linkClass} target="_blank" rel="noopener noreferrer">
-                    {label}
-                  </a>
-                ) : (
-                  <Link to={url} className={linkClass}>
-                    {label}
-                  </Link>
-                )}
-              </li>
-            );
-          })}
+      {quickLinks && quickLinks.length > 0 && (
+        <nav aria-label="Quick links">
+          <ul className="flex gap-4 list-none p-0 m-0 flex-wrap">
+            {quickLinks.map(({ url, label }) => {
+              const isExternal = url.startsWith('http://') || url.startsWith('https://');
+              const linkClass = `${LINK_ACCENT} py-2 px-4`;
+              return (
+                <li key={`${url}-${label}`}>
+                  {isExternal ? (
+                    <a href={url} className={linkClass} target="_blank" rel="noopener noreferrer">
+                      {label}
+                    </a>
+                  ) : (
+                    <Link to={url} className={linkClass}>
+                      {label}
+                    </Link>
+                  )}
+                </li>
+              );
+            })}
         </ul>
       </nav>
+      )}
     </article>
   );
 }
