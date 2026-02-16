@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_navigation_nav_sub_links",
+  "info": {
+    "displayName": "Subnav Link",
+    "description": "A dropdown item under a main nav link"
+  },
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "url": {
+      "type": "string",
+      "required": true
+    },
+    "order": {
+      "type": "integer",
+      "default": 0
+    },
+    "openInNewTab": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

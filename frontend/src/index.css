@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+/* -----------------------------------------------------------------------------
+   Design tokens – WCAG 2.2 AA compliant
+   ----------------------------------------------------------------------------- */
+@theme {
+  --color-fg: #1a1a1a;
+  --color-bg: #ffffff;
+  --color-accent: #2563eb;
+  --color-accent-hover: #1d4ed8;
+  --color-muted: #4b5563;
+  --color-border: #e5e7eb;
+}
+
+@layer base {
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-fg: #f3f4f6;
+      --color-bg: #111827;
+      --color-accent: #60a5fa;
+      --color-accent-hover: #93c5fd;
+      --color-muted: #9ca3af;
+      --color-border: #374151;
+    }
+  }
+
+  html {
+    font-size: 100%;
+  }
+
+  body {
+    @apply font-sans leading-relaxed;
+    color: var(--color-fg);
+    background-color: var(--color-bg);
+  }
+
+  /* Focus visible for keyboard users - WCAG 2.4.7 */
+  :focus-visible {
+    @apply outline outline-2 outline-offset-2;
+    outline-color: var(--color-accent);
+  }
+
+  /* Skip link - WCAG 2.4.1 Bypass Blocks */
+  .skip-link {
+    @apply absolute -top-10 left-0 px-4 py-2 text-white z-[100] transition-[top] duration-200;
+    background-color: var(--color-accent);
+  }
+
+  .skip-link:focus {
+    @apply top-0;
+  }
+
+  /* Site logo: invert in light mode (glyph is white), normal in dark mode */
+  .site-logo {
+    filter: invert(1) brightness(0);
+  }
+  @media (prefers-color-scheme: dark) {
+    .site-logo {
+      filter: none;
+    }
+  }
+}

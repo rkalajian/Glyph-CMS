@@ -1,0 +1,7 @@
+import { factories } from '@strapi/strapi';
+
+export default factories.createCoreRouter('api::form-submission.form-submission', {
+  config: {
+    create: { auth: false },
+  },
+});

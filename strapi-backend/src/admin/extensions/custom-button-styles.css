@@ -1,0 +1,59 @@
+/**
+ * Strapi admin button overrides – Rebellion Group branding.
+ *
+ * Primary buttons: black background, white text, white border.
+ * Hover: white background, black text.
+ */
+
+/* "Create new entry" link in list views */
+.custom-admin-buttons a[href*="/create"]:not([href*="/create/"]) {
+  background-color: #0a0a0a !important;
+  border: 1px solid #ffffff !important;
+  color: #ffffff !important;
+}
+.custom-admin-buttons a[href*="/create"]:not([href*="/create/"]):hover {
+  background-color: #ffffff !important;
+  border: 1px solid #0a0a0a !important;
+  color: #0a0a0a !important;
+}
+
+/* Primary action buttons (Save, Publish, etc.) – exclude checkbox, switch, icon-only, component initializer */
+.custom-admin-buttons button[type="submit"],
+.custom-admin-buttons button[type="button"]:not([role="checkbox"]):not([role="switch"]):not([aria-label="Close"]):not([aria-label="Search"]):not([aria-label="Add"]):not([aria-label="Filter"]):not([aria-label="Refresh"]):not(:has(svg[width="3.2rem"])) {
+  background-color: #0a0a0a !important;
+  border: 1px solid #ffffff !important;
+  color: #ffffff !important;
+}
+.custom-admin-buttons button[type="submit"]:hover,
+.custom-admin-buttons button[type="button"]:not([role="checkbox"]):not([role="switch"]):not([aria-label="Close"]):not([aria-label="Search"]):not([aria-label="Add"]):not([aria-label="Filter"]):not([aria-label="Refresh"]):not(:has(svg[width="3.2rem"])):hover {
+  background-color: #ffffff !important;
+  border: 1px solid #0a0a0a !important;
+  color: #0a0a0a !important;
+}
+
+/* "No entry. Click to add one" component initializer – white bg, black text/icon on hover */
+.custom-admin-buttons button[type="button"]:has(svg[width="3.2rem"]):hover {
+  background-color: #ffffff !important;
+  border-color: #0a0a0a !important;
+  color: #0a0a0a !important;
+}
+/* Override all descendants – Strapi uses theme primary600 (white in dark mode) for text/icon */
+.custom-admin-buttons button[type="button"]:has(svg[width="3.2rem"]):hover * {
+  color: #0a0a0a !important;
+}
+.custom-admin-buttons button[type="button"]:has(svg[width="3.2rem"]):hover svg,
+.custom-admin-buttons button[type="button"]:has(svg[width="3.2rem"]):hover path,
+.custom-admin-buttons button[type="button"]:has(svg[width="3.2rem"]):hover circle {
+  color: #0a0a0a !important;
+  fill: #0a0a0a !important;
+}
+
+/* Content Manager: indent categories and Form Submissions as sub-items */
+.custom-admin-buttons a[href*="api::blog-category.blog-category"],
+.custom-admin-buttons a[href*="api::press-release-category.press-release-category"],
+.custom-admin-buttons a[href*="api::form-submission.form-submission"] {
+  padding-left: 2rem !important;
+  border-left: 2px solid currentColor;
+  margin-left: 0.5rem;
+  opacity: 0.9;
+}

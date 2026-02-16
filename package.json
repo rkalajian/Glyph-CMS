@@ -1,0 +1,11 @@
+{
+  "name": "cms",
+  "private": true,
+  "description": "Templatable CMS with Strapi, React, and Netlify Forms",
+  "scripts": {
+    "dev:backend": "cd strapi-backend && npm run develop",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "build:strapi": "cd strapi-backend && npm run build"
+  }
+}

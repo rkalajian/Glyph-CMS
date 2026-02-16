@@ -1,0 +1,330 @@
+/**
+ * Strapi REST API client
+ *
+ * In dev: uses relative /api so Vite proxy forwards to Strapi
+ * In prod: uses VITE_STRAPI_URL (required for deploy)
+ *
+ * Strapi 5 uses status=published (not publicationState=live) and
+ * populate[0]=x&populate[1]=y for multiple relations.
+ */
+
+import type {
+  StrapiResponse,
+  StrapiPage,
+  StrapiBlogPost,
+  StrapiBlogCategory,
+  StrapiPressRelease,
+  StrapiPressReleaseCategory,
+  StrapiEvent,
+  StrapiSiteAlert,
+  StrapiNavItem,
+  StrapiThemeOptions,
+  StrapiImage,
+  StrapiForm,
+} from '../types/strapi';
+
+/** Base URL for Strapi API. In dev, empty so Vite proxy works. */
+const STRAPI_URL =
+  import.meta.env.VITE_STRAPI_URL ??
+  (import.meta.env.DEV ? '' : 'http://localhost:1337');
+
+// -----------------------------------------------------------------------------
+// Internal helpers
+// -----------------------------------------------------------------------------
+
+async function fetchApi<T>(
+  endpoint: string,
+  options?: RequestInit
+): Promise<StrapiResponse<T>> {
+  const url = `${STRAPI_URL}${endpoint}`;
+  const res = await fetch(url, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+  });
+
+  if (!res.ok) {
+    const base = `Strapi API error: ${res.status} ${res.statusText}`;
+    const hints: Record<number, string> = {
+      400: ' — Invalid query params. Strapi 5 uses status=published and populate[0]=field, populate[1]=field.',
+      403: ' — Enable permissions: Strapi Admin → Settings → Users & Permissions → Roles → Public → enable find for theme-option (and other content types).',
+      404: ' — Is Strapi running? Run `cd strapi-backend && npm run develop`.',
+    };
+    const hint = hints[res.status] ?? '';
+    throw new Error(base + hint);
+  }
+
+  return res.json();
+}
+
+function toArray<T>(data: T | T[] | null | undefined): T[] {
+  if (data == null) return [];
+  return Array.isArray(data) ? data : [data];
+}
+
+// -----------------------------------------------------------------------------
+// Image helpers
+// -----------------------------------------------------------------------------
+
+/**
+ * Resolves a Strapi image to a full URL.
+ * Handles absolute URLs and relative paths (e.g. /uploads/...).
+ */
+export function getStrapiImageUrl(
+  image: StrapiImage | null | undefined
+): string | null {
+  if (!image?.url || typeof image.url !== 'string') return null;
+  const url = image.url.trim();
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  const base = STRAPI_URL.replace(/\/$/, '');
+  return `${base}${url.startsWith('/') ? '' : '/'}${url}`;
+}
+
+// -----------------------------------------------------------------------------
+// Content API
+// -----------------------------------------------------------------------------
+
+export async function getPage(slug: string): Promise<StrapiPage | null> {
+  const res = await fetchApi<StrapiPage>(
+    `/api/pages?filters[slug][$eq]=${encodeURIComponent(slug)}&status=published&populate[0]=quickLinks&populate[1]=parent`
+  );
+  const pages = toArray(res.data) as StrapiPage[];
+  return pages[0] ?? null;
+}
+
+export async function getPages(): Promise<StrapiPage[]> {
+  const res = await fetchApi<StrapiPage>(
+    '/api/pages?status=published&sort=title:asc'
+  );
+  return toArray(res.data) as StrapiPage[];
+}
+
+export async function getBlogPost(slug: string): Promise<StrapiBlogPost | null> {
+  const res = await fetchApi<StrapiBlogPost>(
+    `/api/blog-posts?filters[slug][$eq]=${encodeURIComponent(slug)}&status=published&populate[0]=coverImage&populate[1]=categories&populate[2]=parent`
+  );
+  const posts = toArray(res.data) as StrapiBlogPost[];
+  return posts[0] ?? null;
+}
+
+export async function getBlogPosts(categorySlug?: string): Promise<StrapiBlogPost[]> {
+  let url = '/api/blog-posts?status=published&sort=publishedAt:desc&populate[0]=coverImage&populate[1]=categories';
+  if (categorySlug) {
+    url += `&filters[categories][slug][$eq]=${encodeURIComponent(categorySlug)}`;
+  }
+  const res = await fetchApi<StrapiBlogPost>(url);
+  return toArray(res.data) as StrapiBlogPost[];
+}
+
+export async function getBlogCategories(): Promise<StrapiBlogCategory[]> {
+  const res = await fetchApi<StrapiBlogCategory>(
+    '/api/blog-categories?status=published&sort=name:asc'
+  );
+  return toArray(res.data) as StrapiBlogCategory[];
+}
+
+export async function getPressRelease(slug: string): Promise<StrapiPressRelease | null> {
+  const res = await fetchApi<StrapiPressRelease>(
+    `/api/press-releases?filters[slug][$eq]=${encodeURIComponent(slug)}&status=published&populate[0]=coverImage&populate[1]=categories`
+  );
+  const releases = toArray(res.data) as StrapiPressRelease[];
+  return releases[0] ?? null;
+}
+
+export async function getPressReleases(categorySlug?: string): Promise<StrapiPressRelease[]> {
+  let url = '/api/press-releases?status=published&sort=publishedAt:desc&populate[0]=coverImage&populate[1]=categories';
+  if (categorySlug) {
+    url += `&filters[categories][slug][$eq]=${encodeURIComponent(categorySlug)}`;
+  }
+  const res = await fetchApi<StrapiPressRelease>(url);
+  return toArray(res.data) as StrapiPressRelease[];
+}
+
+export async function getPressReleaseCategories(): Promise<StrapiPressReleaseCategory[]> {
+  const res = await fetchApi<StrapiPressReleaseCategory>(
+    '/api/press-release-categories?status=published&sort=name:asc'
+  );
+  return toArray(res.data) as StrapiPressReleaseCategory[];
+}
+
+export async function getEvents(): Promise<StrapiEvent[]> {
+  const res = await fetchApi<StrapiEvent>(
+    '/api/events?status=published&sort=startDate:asc'
+  );
+  return toArray(res.data) as StrapiEvent[];
+}
+
+// -----------------------------------------------------------------------------
+// Navigation (single type: Utility Nav, Primary Nav, Footer Nav modules)
+// -----------------------------------------------------------------------------
+
+type NavLinkInput = {
+  label: string;
+  url: string;
+  order?: number;
+  openInNewTab?: boolean;
+  subnav?: Array<{ label: string; url: string; order?: number; openInNewTab?: boolean }>;
+};
+
+function toNavItem(
+  item: NavLinkInput,
+  prefix: string,
+  i: number
+): StrapiNavItem {
+  const subnav: StrapiNavItem[] | undefined = item.subnav?.length
+    ? (item.subnav ?? [])
+        .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+        .map((sub, j) => ({
+          id: j,
+          documentId: `${prefix}-${i}-sub-${j}`,
+          label: sub.label,
+          url: sub.url,
+          menu: prefix as 'primary' | 'utility' | 'footer',
+          order: sub.order,
+          openInNewTab: sub.openInNewTab ?? false,
+          createdAt: '',
+          updatedAt: '',
+        }))
+    : undefined;
+  return {
+    id: i,
+    documentId: `${prefix}-${i}`,
+    label: item.label,
+    url: item.url,
+    menu: prefix as 'primary' | 'utility' | 'footer',
+    order: item.order,
+    openInNewTab: item.openInNewTab ?? false,
+    subnav,
+    createdAt: '',
+    updatedAt: '',
+  };
+}
+
+export async function getNavigation(): Promise<{
+  primary: StrapiNavItem[];
+  utility: StrapiNavItem[];
+  footer: StrapiNavItem[];
+}> {
+  const res = await fetchApi<{
+    utilityNav?: NavLinkInput[];
+    primaryNav?: NavLinkInput[];
+    footerNav?: NavLinkInput[];
+  }>('/api/navigation?status=published');
+  const raw = res.data;
+  const data = Array.isArray(raw) ? raw[0] : raw;
+  if (data == null || typeof data !== 'object') {
+    return { primary: [], utility: [], footer: [] };
+  }
+  const d = data as {
+    utilityNav?: NavLinkInput[];
+    primaryNav?: NavLinkInput[];
+    footerNav?: NavLinkInput[];
+  };
+  const toNavItems = (arr: NavLinkInput[] | undefined, prefix: string): StrapiNavItem[] =>
+    (arr ?? [])
+      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+      .map((item, i) => toNavItem(item, prefix, i));
+  return {
+    utility: toNavItems(d.utilityNav, 'utility'),
+    primary: toNavItems(d.primaryNav, 'primary'),
+    footer: toNavItems(d.footerNav, 'footer'),
+  };
+}
+
+// -----------------------------------------------------------------------------
+// Theme options (GTM, Marker.io, social links)
+// -----------------------------------------------------------------------------
+
+/** Normalize Strapi response: v5 flat format or v4 attributes wrapper */
+function normalizeThemeOptions(
+  raw: unknown
+): StrapiThemeOptions | null {
+  if (raw == null || typeof raw !== 'object') return null;
+  if (Array.isArray(raw)) return null;
+  const obj = raw as Record<string, unknown>;
+  // Strapi v4: data.attributes
+  const attrs = (obj.attributes ?? obj) as Record<string, unknown>;
+  return {
+    documentId: (obj.documentId ?? attrs.documentId) as string | undefined,
+    siteName: (attrs.siteName ?? obj.siteName) as string | null | undefined,
+    logo: (attrs.logo ?? obj.logo) as StrapiThemeOptions['logo'],
+    showBreadcrumbs: (attrs.showBreadcrumbs ?? obj.showBreadcrumbs) as boolean | undefined,
+    marker: (attrs.marker ?? obj.marker) as StrapiThemeOptions['marker'],
+    gtm: (attrs.gtm ?? obj.gtm) as StrapiThemeOptions['gtm'],
+    social: (attrs.social ?? obj.social) as StrapiThemeOptions['social'],
+    publishedAt: (attrs.publishedAt ?? obj.publishedAt) as string | null | undefined,
+    updatedAt: (attrs.updatedAt ?? obj.updatedAt) as string | undefined,
+  };
+}
+
+export async function getThemeOptions(): Promise<StrapiThemeOptions | null> {
+  const res = await fetchApi<unknown>(
+    '/api/theme-option?status=published&populate[0]=logo&populate[1]=social&populate[2]=gtm&populate[3]=marker'
+  );
+  const data = res.data;
+  if (data == null) return null;
+  return normalizeThemeOptions(data);
+}
+
+// -----------------------------------------------------------------------------
+// Site alerts (scheduled banners)
+// -----------------------------------------------------------------------------
+
+// -----------------------------------------------------------------------------
+// Forms (form builder, embeddable)
+// -----------------------------------------------------------------------------
+
+export async function getForm(slug: string): Promise<StrapiForm | null> {
+  const res = await fetchApi<StrapiForm>(
+    `/api/forms/slug/${encodeURIComponent(slug)}`
+  );
+  const form = res.data;
+  if (Array.isArray(form)) return form[0] ?? null;
+  return form && typeof form === 'object' ? form : null;
+}
+
+export async function getFormBySlug(slug: string): Promise<StrapiForm | null> {
+  const res = await fetchApi<StrapiForm>(
+    `/api/forms?filters[slug][$eq]=${encodeURIComponent(slug)}&status=published`
+  );
+  const forms = toArray(res.data) as StrapiForm[];
+  return forms[0] ?? null;
+}
+
+export async function submitForm(formSlug: string, data: Record<string, string | number | boolean>): Promise<{ ok: boolean; error?: string }> {
+  try {
+    const res = await fetch(`${STRAPI_URL}/api/form-submissions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        data: { form: formSlug, ...data },
+      }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      return { ok: false, error: (err as { error?: { message?: string } })?.error?.message ?? 'Submission failed' };
+    }
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : 'Submission failed' };
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Site alerts (scheduled banners)
+// -----------------------------------------------------------------------------
+
+export async function getSiteAlerts(): Promise<StrapiSiteAlert[]> {
+  const res = await fetchApi<StrapiSiteAlert>(
+    '/api/site-alerts?status=published&sort=startDate:asc'
+  );
+  const all = toArray(res.data) as StrapiSiteAlert[];
+  const now = new Date();
+  return all.filter((a) => {
+    const start = new Date(a.startDate);
+    const end = a.endDate ? new Date(a.endDate) : null;
+    return start <= now && (!end || end >= now);
+  });
+}

@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_theme_option_markers",
+  "info": {
+    "displayName": "Marker",
+    "description": "Marker.io feedback widget settings"
+  },
+  "attributes": {
+    "markerioId": {
+      "type": "string",
+      "displayName": "Project ID",
+      "description": "Project ID from Marker.io dashboard (Settings > Widget > Installation). For custom scripts, use Script URL instead."
+    },
+    "markerioScriptUrl": {
+      "type": "string",
+      "displayName": "Script URL",
+      "description": "Optional: Full script URL from Marker.io if the project ID alone does not work"
+    }
+  }
+}
