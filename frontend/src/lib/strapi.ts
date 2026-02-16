@@ -15,6 +15,7 @@ import type {
   StrapiBlogCategory,
   StrapiPressRelease,
   StrapiPressReleaseCategory,
+  StrapiPagination,
   StrapiEvent,
   StrapiSiteAlert,
   StrapiNavItem,
@@ -109,13 +110,25 @@ export async function getBlogPost(slug: string): Promise<StrapiBlogPost | null> 
   return posts[0] ?? null;
 }
 
-export async function getBlogPosts(categorySlug?: string): Promise<StrapiBlogPost[]> {
-  let url = '/api/blog-posts?status=published&sort=publishedAt:desc&populate[0]=coverImage&populate[1]=categories';
+export type BlogPostsResult = {
+  data: StrapiBlogPost[];
+  meta: { pagination: StrapiPagination };
+};
+
+export async function getBlogPosts(opts?: {
+  categorySlug?: string;
+  page?: number;
+  pageSize?: number;
+}): Promise<BlogPostsResult> {
+  const { categorySlug, page = 1, pageSize = 12 } = opts ?? {};
+  let url = `/api/blog-posts?status=published&sort=publishedAt:desc&populate[0]=coverImage&populate[1]=categories&pagination[page]=${page}&pagination[pageSize]=${Math.max(1, Math.min(100, pageSize))}`;
   if (categorySlug) {
     url += `&filters[categories][slug][$eq]=${encodeURIComponent(categorySlug)}`;
   }
   const res = await fetchApi<StrapiBlogPost>(url);
-  return toArray(res.data) as StrapiBlogPost[];
+  const data = toArray(res.data) as StrapiBlogPost[];
+  const pagination = res.meta?.pagination ?? { page: 1, pageSize, pageCount: 1, total: data.length };
+  return { data, meta: { pagination } };
 }
 
 export async function getBlogCategories(): Promise<StrapiBlogCategory[]> {
@@ -133,13 +146,25 @@ export async function getPressRelease(slug: string): Promise<StrapiPressRelease 
   return releases[0] ?? null;
 }
 
-export async function getPressReleases(categorySlug?: string): Promise<StrapiPressRelease[]> {
-  let url = '/api/press-releases?status=published&sort=publishedAt:desc&populate[0]=coverImage&populate[1]=categories';
+export type PressReleasesResult = {
+  data: StrapiPressRelease[];
+  meta: { pagination: StrapiPagination };
+};
+
+export async function getPressReleases(opts?: {
+  categorySlug?: string;
+  page?: number;
+  pageSize?: number;
+}): Promise<PressReleasesResult> {
+  const { categorySlug, page = 1, pageSize = 12 } = opts ?? {};
+  let url = `/api/press-releases?status=published&sort=publishedAt:desc&populate[0]=coverImage&populate[1]=categories&pagination[page]=${page}&pagination[pageSize]=${Math.max(1, Math.min(100, pageSize))}`;
   if (categorySlug) {
     url += `&filters[categories][slug][$eq]=${encodeURIComponent(categorySlug)}`;
   }
   const res = await fetchApi<StrapiPressRelease>(url);
-  return toArray(res.data) as StrapiPressRelease[];
+  const data = toArray(res.data) as StrapiPressRelease[];
+  const pagination = res.meta?.pagination ?? { page: 1, pageSize, pageCount: 1, total: data.length };
+  return { data, meta: { pagination } };
 }
 
 export async function getPressReleaseCategories(): Promise<StrapiPressReleaseCategory[]> {
@@ -257,6 +282,8 @@ function normalizeThemeOptions(
     siteName: (attrs.siteName ?? obj.siteName) as string | null | undefined,
     logo: (attrs.logo ?? obj.logo) as StrapiThemeOptions['logo'],
     showBreadcrumbs: (attrs.showBreadcrumbs ?? obj.showBreadcrumbs) as boolean | undefined,
+    blogPostsPerPage: (attrs.blogPostsPerPage ?? obj.blogPostsPerPage) as number | undefined,
+    pressReleasesPerPage: (attrs.pressReleasesPerPage ?? obj.pressReleasesPerPage) as number | undefined,
     marker: (attrs.marker ?? obj.marker) as StrapiThemeOptions['marker'],
     gtm: (attrs.gtm ?? obj.gtm) as StrapiThemeOptions['gtm'],
     social: (attrs.social ?? obj.social) as StrapiThemeOptions['social'],

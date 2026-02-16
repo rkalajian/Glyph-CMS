@@ -34,11 +34,12 @@ const CONTACT_FORM_FIELDS = [
   { type: 'textarea' as const, name: 'message', label: 'Message', required: true },
 ];
 
-/** Desired Theme Options edit layout order: Site Name, Logo, Breadcrumbs, Social, Mailgun, GTM, Marker */
+/** Desired Theme Options edit layout order: Site Name, Logo, Breadcrumbs, Pagination, Social, Mailgun, GTM, Marker */
 const THEME_OPTIONS_EDIT_LAYOUT = [
   [{ name: 'siteName', size: 12 }],
   [{ name: 'logo', size: 12 }],
   [{ name: 'showBreadcrumbs', size: 12 }],
+  [{ name: 'blogPostsPerPage', size: 6 }, { name: 'pressReleasesPerPage', size: 6 }],
   [{ name: 'social', size: 12 }],
   [{ name: 'mailgun', size: 12 }],
   [{ name: 'gtm', size: 12 }],

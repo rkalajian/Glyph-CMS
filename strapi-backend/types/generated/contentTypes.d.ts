@@ -808,6 +808,15 @@ export interface ApiThemeOptionsThemeOption extends Struct.SingleTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    blogPostsPerPage: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 100;
+          min: 1;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<12>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -821,6 +830,15 @@ export interface ApiThemeOptionsThemeOption extends Struct.SingleTypeSchema {
     logo: Schema.Attribute.Media<'images'>;
     mailgun: Schema.Attribute.Component<'theme-option.mailgun', false>;
     marker: Schema.Attribute.Component<'theme-option.marker', false>;
+    pressReleasesPerPage: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 100;
+          min: 1;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<12>;
     publishedAt: Schema.Attribute.DateTime;
     showBreadcrumbs: Schema.Attribute.Boolean &
       Schema.Attribute.DefaultTo<true>;

@@ -180,6 +180,8 @@ export interface StrapiThemeOptions {
   siteName?: string | null;
   logo?: StrapiImage | null;
   showBreadcrumbs?: boolean;
+  blogPostsPerPage?: number;
+  pressReleasesPerPage?: number;
   marker?: StrapiThemeOptionMarker | null;
   gtm?: StrapiThemeOptionGtm | null;
   social?: StrapiThemeOptionSocial | null;

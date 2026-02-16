@@ -10,14 +10,20 @@ import { formatDate } from '../utils/format';
 import { RichText } from '../components/RichText';
 import { DocumentTitle } from '../components/DocumentTitle';
 import { Breadcrumb } from '../components/Breadcrumb';
+import { Pagination } from '../components/Pagination';
+import { useThemeOptions } from '../contexts/ThemeContext';
 import type { StrapiPressRelease, StrapiPressReleaseCategory, StrapiPage } from '../types/strapi';
 
 export function PressList() {
   const [searchParams] = useSearchParams();
+  const themeOptions = useThemeOptions();
   const categorySlug = searchParams.get('category') ?? undefined;
+  const pageNum = Math.max(1, parseInt(searchParams.get('page') ?? '1', 10) || 1);
+  const pageSize = Math.max(1, Math.min(100, themeOptions?.pressReleasesPerPage ?? 12));
 
   const [page, setPage] = useState<StrapiPage | null>(null);
   const [releases, setReleases] = useState<StrapiPressRelease[]>([]);
+  const [pagination, setPagination] = useState<{ page: number; pageSize: number; pageCount: number; total: number } | null>(null);
   const [categories, setCategories] = useState<StrapiPressReleaseCategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -27,17 +33,18 @@ export function PressList() {
     setError(null);
     Promise.all([
       getPage('press'),
-      getPressReleases(categorySlug),
+      getPressReleases({ categorySlug, page: pageNum, pageSize }),
       getPressReleaseCategories(),
     ])
-      .then(([pageData, releasesData, categoriesData]) => {
+      .then(([pageData, { data: releasesData, meta }, categoriesData]) => {
         setPage(pageData ?? null);
         setReleases(releasesData);
+        setPagination(meta.pagination);
         setCategories(categoriesData);
       })
       .catch((err) => setError(err instanceof Error ? err.message : 'Failed to load'))
       .finally(() => setLoading(false));
-  }, [categorySlug]);
+  }, [categorySlug, pageNum, pageSize]);
 
   if (loading) {
     return (
@@ -151,6 +158,13 @@ export function PressList() {
             </li>
           ))}
         </ul>
+      )}
+      {pagination && pagination.pageCount > 1 && (
+        <Pagination
+          meta={pagination}
+          basePath="/press"
+          searchParams={categorySlug ? { category: categorySlug } : undefined}
+        />
       )}
     </article>
   );
