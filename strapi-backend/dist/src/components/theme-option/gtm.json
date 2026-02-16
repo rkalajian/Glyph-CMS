@@ -1,0 +1,19 @@
+{
+    "collectionName": "components_theme_option_gtms",
+    "info": {
+        "displayName": "GTM",
+        "description": "Google Tag Manager settings"
+    },
+    "attributes": {
+        "gtmHeaderId": {
+            "type": "string",
+            "displayName": "GTM Header ID",
+            "description": "Google Tag Manager script for <head>. e.g. GTM-XXXXXXX"
+        },
+        "gtmBodyId": {
+            "type": "string",
+            "displayName": "GTM Body ID",
+            "description": "Google Tag Manager noscript for <body>. e.g. GTM-XXXXXXX. Usually same as header."
+        }
+    }
+}

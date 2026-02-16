@@ -1,0 +1,38 @@
+{
+    "kind": "collectionType",
+    "collectionName": "site_alerts",
+    "info": {
+        "singularName": "site-alert",
+        "pluralName": "site-alerts",
+        "displayName": "Site Alert",
+        "description": "Site-wide alerts with schedule"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "message": {
+            "type": "string",
+            "required": true
+        },
+        "startDate": {
+            "type": "datetime",
+            "required": true
+        },
+        "endDate": {
+            "type": "datetime"
+        },
+        "severity": {
+            "type": "enumeration",
+            "enum": ["info", "warning", "critical"],
+            "default": "info"
+        },
+        "linkUrl": {
+            "type": "string"
+        },
+        "linkLabel": {
+            "type": "string"
+        }
+    }
+}

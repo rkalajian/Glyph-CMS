@@ -1,0 +1,31 @@
+{
+    "collectionName": "components_navigation_nav_links",
+    "info": {
+        "displayName": "Nav Link",
+        "description": "A nav link with optional dropdown sub-items"
+    },
+    "attributes": {
+        "label": {
+            "type": "string",
+            "required": true
+        },
+        "url": {
+            "type": "string",
+            "required": true
+        },
+        "order": {
+            "type": "integer",
+            "default": 0
+        },
+        "openInNewTab": {
+            "type": "boolean",
+            "default": false
+        },
+        "subnav": {
+            "type": "component",
+            "repeatable": true,
+            "component": "navigation.nav-sub-link",
+            "displayName": "Subnav items"
+        }
+    }
+}

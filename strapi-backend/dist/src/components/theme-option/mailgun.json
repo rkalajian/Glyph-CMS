@@ -1,0 +1,34 @@
+{
+    "collectionName": "components_theme_option_mailguns",
+    "info": {
+        "displayName": "Mailgun",
+        "description": "Mailgun email delivery. API key can also be set via MAILGUN_API_KEY env var."
+    },
+    "attributes": {
+        "apiKey": {
+            "type": "password",
+            "displayName": "API Key",
+            "description": "Mailgun API key (private key). Prefer setting MAILGUN_API_KEY env var for security."
+        },
+        "domain": {
+            "type": "string",
+            "displayName": "Domain",
+            "description": "Mailgun domain, e.g. mg.yourdomain.com"
+        },
+        "host": {
+            "type": "string",
+            "displayName": "API Host",
+            "description": "Optional. Use api.eu.mailgun.net for EU region. Default: api.mailgun.net"
+        },
+        "defaultFrom": {
+            "type": "string",
+            "displayName": "Default From",
+            "description": "Default sender email, e.g. noreply@yourdomain.com"
+        },
+        "defaultReplyTo": {
+            "type": "string",
+            "displayName": "Reply-To",
+            "description": "Optional default reply-to address"
+        }
+    }
+}
