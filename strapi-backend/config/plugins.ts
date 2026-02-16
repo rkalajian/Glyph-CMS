@@ -6,6 +6,7 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin =>
   const useMailgun = Boolean(mailgunKey && mailgunDomain);
 
   return {
+    'strapi-cloud': { enabled: false },
     email: useMailgun
       ? {
           config: {

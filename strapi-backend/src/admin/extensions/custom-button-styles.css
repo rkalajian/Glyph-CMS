@@ -1,6 +1,19 @@
 /**
  * Strapi admin button overrides – Rebellion Group branding.
- *
+ */
+
+/* Hide Marketplace and Deploy in sidebar */
+.custom-admin-buttons li:has(a[href*="/plugins/cloud"]),
+.custom-admin-buttons li:has(a[href*="list-plugins"]),
+.custom-admin-buttons li:has(a[href*="market.strapi.io"]) {
+  display: none !important;
+}
+/* Fallback: Marketplace links to market.strapi.io (may use div wrapper) */
+.custom-admin-buttons *:has(> a[href*="market.strapi.io"]) {
+  display: none !important;
+}
+
+/**
  * Primary buttons: black background, white text, white border.
  * Hover: white background, black text.
  */
