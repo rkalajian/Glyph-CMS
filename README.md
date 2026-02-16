@@ -1,4 +1,4 @@
-# Templatable CMS
+# Glyph-CMS
 
 A simple, templatable CMS with Strapi 5 backend and React/TypeScript/Tailwind frontend. Built with accessibility (WCAG 2.2) and Netlify Forms support.
 
@@ -132,4 +132,3 @@ Create items in **Content Manager → Navigation Item**. Each item belongs to on
 - **Strapi:** Deploy to a Node.js host (Railway, Render, Strapi Cloud)
 - **Frontend:** Deploy to Netlify or Vercel (see `netlify.toml` / `vercel.json`)
 - Set `VITE_STRAPI_URL` to your Strapi URL in the frontend build
-# Glyph-CMS
