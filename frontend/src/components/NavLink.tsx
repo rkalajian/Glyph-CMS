@@ -87,6 +87,8 @@ export function NavLink({ item, currentPath, variant = 'header' }: NavLinkProps)
 
   // Header dropdown: hover + click for mobile
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const leaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -99,12 +101,28 @@ export function NavLink({ item, currentPath, variant = 'header' }: NavLinkProps)
     }
   }, [open]);
 
+  const handleMouseEnter = () => {
+    if (leaveTimerRef.current) {
+      clearTimeout(leaveTimerRef.current);
+      leaveTimerRef.current = null;
+    }
+    setOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    leaveTimerRef.current = setTimeout(() => setOpen(false), 150);
+  };
+
+  useEffect(() => () => {
+    if (leaveTimerRef.current) clearTimeout(leaveTimerRef.current);
+  }, []);
+
   return (
     <div
       ref={dropdownRef}
       className="relative group"
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <button
         type="button"
@@ -121,7 +139,7 @@ export function NavLink({ item, currentPath, variant = 'header' }: NavLinkProps)
       </button>
       {open && (
         <ul
-          className="absolute left-0 top-full mt-0 min-w-[180px] py-2 bg-bg border border-border rounded shadow-lg list-none m-0 z-10"
+          className="absolute left-0 top-full -mt-1 min-w-[180px] py-2 bg-bg border border-border rounded shadow-lg list-none m-0 z-10"
           role="menu"
         >
           <li role="none">

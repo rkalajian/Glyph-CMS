@@ -75,9 +75,6 @@ export function Layout() {
   return (
     <ThemeProvider value={themeOptions}>
       <ThemeScripts options={themeOptions} />
-      <a href="#main-content" className="skip-link">
-        Skip to main content
-      </a>
       <div className="min-h-screen flex flex-col">
         <SiteAlerts />
 

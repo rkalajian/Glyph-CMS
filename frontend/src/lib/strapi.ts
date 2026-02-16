@@ -185,13 +185,23 @@ export async function getEvents(): Promise<StrapiEvent[]> {
 // Navigation (single type: Utility Nav, Primary Nav, Footer Nav modules)
 // -----------------------------------------------------------------------------
 
-type NavLinkInput = {
+type NavSubLinkInput = {
   id?: number;
+  documentId?: string;
   label: string;
   url: string;
   order?: number;
   openInNewTab?: boolean;
-  subnav?: Array<{ id?: number; label: string; url: string; order?: number; openInNewTab?: boolean }>;
+};
+
+type NavLinkInput = {
+  id?: number;
+  documentId?: string;
+  label: string;
+  url: string;
+  order?: number;
+  openInNewTab?: boolean;
+  subnav?: NavSubLinkInput[] | null;
 };
 
 function toNavItem(
@@ -199,13 +209,13 @@ function toNavItem(
   prefix: string,
   i: number
 ): StrapiNavItem {
-  const docId = item.id != null ? `${prefix}-${item.id}` : `${prefix}-${i}`;
-  const subnav: StrapiNavItem[] | undefined = item.subnav?.length
-    ? (item.subnav ?? [])
+  const docId = item.documentId ?? (item.id != null ? `${prefix}-${item.id}` : `${prefix}-${i}`);
+  const subnav: StrapiNavItem[] | undefined = item.subnav && item.subnav.length > 0
+    ? [...item.subnav]
         .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
         .map((sub, j) => ({
           id: sub.id ?? j,
-          documentId: sub.id != null ? `${prefix}-${i}-sub-${sub.id}` : `${prefix}-${i}-sub-${j}`,
+          documentId: sub.documentId ?? (sub.id != null ? `${prefix}-${i}-sub-${sub.id}` : `${prefix}-${i}-sub-${j}`),
           label: sub.label,
           url: sub.url,
           menu: prefix as 'primary' | 'utility' | 'footer',
@@ -238,7 +248,10 @@ export async function getNavigation(): Promise<{
     utilityNav?: NavLinkInput[];
     primaryNav?: NavLinkInput[];
     footerNav?: NavLinkInput[];
-  }>('/api/navigation?status=published&populate=*');
+  }>(
+    '/api/navigation?status=published&populate[0]=utilityNav&populate[1]=primaryNav&populate[2]=footerNav' +
+    '&populate[3]=utilityNav.subnav&populate[4]=primaryNav.subnav&populate[5]=footerNav.subnav'
+  );
   const raw = res?.data;
   // Single type: data is the document object directly
   const data = raw != null && !Array.isArray(raw) ? raw : Array.isArray(raw) && raw.length > 0 ? raw[0] : null;
