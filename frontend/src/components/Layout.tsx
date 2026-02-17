@@ -1,6 +1,7 @@
 /**
  * Main layout with customizable navigation
  * WCAG 2.2: Skip link (2.4.1), consistent nav (3.2.3), focus visible (2.4.7)
+ * Mobile: utility + primary nav combined in hamburger menu
  */
 
 import { useEffect, useState } from 'react';
@@ -72,6 +73,20 @@ export function Layout() {
   const logoUrl =
     getStrapiImageUrl(themeOptions?.logo) ?? DEFAULT_LOGO;
 
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const hasMobileNav = primaryNav.length > 0 || utilityNav.length > 0;
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+      return () => { document.body.style.overflow = ''; };
+    }
+  }, [mobileMenuOpen]);
+
   return (
     <ThemeProvider value={themeOptions}>
       <ThemeScripts options={themeOptions} />
@@ -80,8 +95,9 @@ export function Layout() {
 
         <header className="border-b border-border bg-bg" role="banner">
           <div className="max-w-4xl mx-auto px-4">
+            {/* Utility nav – desktop only */}
             {utilityNav.length > 0 && (
-              <nav aria-label="Utility navigation" className="flex justify-end py-2 -mx-4 px-4 bg-[var(--color-utility-nav-bg)]">
+              <nav aria-label="Utility navigation" className="hidden md:flex justify-end py-2 -mx-4 px-4 bg-[var(--color-utility-nav-bg)]">
                 <ul className="flex gap-4 list-none m-0 p-0 flex-wrap">
                   {utilityNav.map((item) => (
                     <li key={item.documentId}>
@@ -105,7 +121,8 @@ export function Layout() {
                   }`}
                 />
               </Link>
-              <nav aria-label="Main navigation">
+              {/* Primary nav – desktop only */}
+              <nav aria-label="Main navigation" className="hidden md:block">
                 <ul className="flex gap-6 list-none m-0 p-0 flex-wrap">
                   {primaryNav.map((item) => (
                     <li key={item.documentId}>
@@ -114,9 +131,89 @@ export function Layout() {
                   ))}
                 </ul>
               </nav>
+              {/* Hamburger button – mobile only */}
+              {hasMobileNav && (
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen((o) => !o)}
+                  className="md:hidden flex items-center justify-center w-12 h-12 -mr-2 rounded text-fg hover:bg-border focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                  aria-expanded={mobileMenuOpen}
+                  aria-controls="mobile-nav"
+                  aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+                >
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden
+                  >
+                    {mobileMenuOpen ? (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    ) : (
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                    )}
+                  </svg>
+                </button>
+              )}
             </div>
           </div>
         </header>
+
+        {/* Mobile menu overlay + panel */}
+        {hasMobileNav && (
+          <div
+            id="mobile-nav"
+            className={`md:hidden fixed inset-0 z-50 transition-opacity duration-200 ${
+              mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+            }`}
+            aria-hidden={!mobileMenuOpen}
+          >
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(false)}
+              className="absolute inset-0 bg-black/50"
+              aria-label="Close menu"
+            />
+            <aside
+              className={`absolute top-0 right-0 w-full max-w-sm h-full bg-bg border-l border-border shadow-xl flex flex-col transition-transform duration-200 ease-out ${
+                mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+              }`}
+              aria-label="Mobile navigation"
+            >
+              <div className="flex items-center justify-between px-4 py-4 border-b border-border">
+                <span className="font-semibold text-fg">Menu</span>
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2 -m-2 rounded text-fg hover:bg-border focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                  aria-label="Close menu"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <nav className="flex-1 overflow-y-auto px-4 py-6" aria-label="Site navigation">
+                <ul className="flex flex-col gap-1 list-none m-0 p-0">
+                  {utilityNav.map((item) => (
+                    <li key={item.documentId}>
+                      <NavLink item={item} currentPath={location.pathname} variant="footer" />
+                    </li>
+                  ))}
+                  {utilityNav.length > 0 && primaryNav.length > 0 && (
+                    <li className="border-t border-border my-3" aria-hidden />
+                  )}
+                  {primaryNav.map((item) => (
+                    <li key={item.documentId}>
+                      <NavLink item={item} currentPath={location.pathname} variant="footer" />
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </aside>
+          </div>
+        )}
 
         <main id="main-content" className="flex-1 max-w-4xl w-full mx-auto px-4 py-8" role="main" tabIndex={-1}>
           <Outlet />
