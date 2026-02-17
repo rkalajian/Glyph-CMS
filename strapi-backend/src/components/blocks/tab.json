@@ -1,0 +1,1 @@
+{"collectionName":"components_blocks_tabs","info":{"displayName":"Tab","description":"Tabs block with variations"},"attributes":{"variation":{"type":"integer","default":1,"min":1},"title":{"type":"string"},"subtitle":{"type":"text"},"tabs":{"type":"component","repeatable":true,"component":"blocks.tab-item"}}}

@@ -664,6 +664,36 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    blocks: Schema.Attribute.DynamicZone<
+      [
+        'blocks.hero',
+        'blocks.about',
+        'blocks.features',
+        'blocks.cta',
+        'blocks.testimonials',
+        'blocks.rich-text-block',
+        'blocks.tailgrids-component',
+        'blocks.row',
+        'blocks.accordion',
+        'blocks.brand',
+        'blocks.card',
+        'blocks.chart',
+        'blocks.map',
+        'blocks.modal',
+        'blocks.newsletter',
+        'blocks.popover',
+        'blocks.pricing',
+        'blocks.product-carousel',
+        'blocks.product-grid',
+        'blocks.promo-banner',
+        'blocks.stats',
+        'blocks.step',
+        'blocks.tab',
+        'blocks.table',
+        'blocks.team',
+        'blocks.video',
+      ]
+    >;
     children: Schema.Attribute.Relation<'oneToMany', 'api::page.page'>;
     content: Schema.Attribute.RichText;
     createdAt: Schema.Attribute.DateTime;

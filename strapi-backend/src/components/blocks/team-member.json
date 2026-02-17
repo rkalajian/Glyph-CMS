@@ -1,0 +1,1 @@
+{"collectionName":"components_blocks_team_members","info":{"displayName":"Team Member","description":"Team member"},"attributes":{"name":{"type":"string","required":true},"role":{"type":"string"},"image":{"type":"media","multiple":false,"allowedTypes":["images"]},"bio":{"type":"text"},"socialLinks":{"type":"json"}}}

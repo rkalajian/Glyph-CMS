@@ -9,6 +9,7 @@ import { getPage } from '../lib/strapi';
 import { DocumentTitle } from '../components/DocumentTitle';
 import { RichText } from '../components/RichText';
 import { Breadcrumb } from '../components/Breadcrumb';
+import { BlockRenderer } from '../components/blocks/BlockRenderer';
 import type { StrapiPage } from '../types/strapi';
 
 export function PageTemplate() {
@@ -54,14 +55,16 @@ export function PageTemplate() {
       ]
     : [{ label: 'Home', url: '/' }, { label: page.title }];
 
+  const hasBlocks = page.blocks && page.blocks.length > 0;
+
   return (
     <article>
       <DocumentTitle title={title} />
       <header className="mb-8">
         <Breadcrumb items={breadcrumbItems} />
-        <h1 className="text-3xl font-bold">{page.title}</h1>
+        {!hasBlocks && <h1 className="text-3xl font-bold">{page.title}</h1>}
       </header>
-      <RichText content={page.content} />
+      {hasBlocks ? <BlockRenderer blocks={page.blocks} /> : <RichText content={page.content} />}
     </article>
   );
 }

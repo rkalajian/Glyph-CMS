@@ -54,6 +54,17 @@ const NAVIGATION_EDIT_LAYOUT = [
   [{ name: 'footerNav', size: 12 }],
 ];
 
+/** Page edit layout: blocks above content */
+const PAGE_EDIT_LAYOUT = [
+  [{ name: 'title', size: 8 }, { name: 'slug', size: 4 }],
+  [{ name: 'subtitle', size: 12 }],
+  [{ name: 'blocks', size: 12 }],
+  [{ name: 'content', size: 12 }],
+  [{ name: 'quickLinks', size: 12 }],
+  [{ name: 'seoTitle', size: 6 }, { name: 'seoDescription', size: 6 }],
+  [{ name: 'parent', size: 6 }],
+];
+
 export default {
   register() {},
 
@@ -180,6 +191,21 @@ export default {
       }
     } catch {
       // Ignore if content-manager not ready or config not found
+    }
+
+    try {
+      const pageContentType = strapi.contentTypes[PAGE_UID];
+      if (pageContentType) {
+        const cmService = strapi.plugin('content-manager').service('content-types');
+        const pageConfig = await cmService.findConfiguration(pageContentType);
+        await cmService.updateConfiguration(pageContentType, {
+          ...pageConfig,
+          settings: { ...pageConfig?.settings, mainField: 'title' },
+          layouts: { ...pageConfig?.layouts, edit: PAGE_EDIT_LAYOUT },
+        });
+      }
+    } catch {
+      // Ignore if content-manager not ready
     }
 
     try {

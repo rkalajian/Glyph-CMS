@@ -1,0 +1,1 @@
+{"collectionName":"components_blocks_brand_items","info":{"displayName":"Brand Item","description":"Single brand logo/link"},"attributes":{"image":{"type":"media","multiple":false,"required":true,"allowedTypes":["images"]},"href":{"type":"string"},"alt":{"type":"string"}}}

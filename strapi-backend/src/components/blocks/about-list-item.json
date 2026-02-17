@@ -1,0 +1,10 @@
+{
+  "collectionName": "components_blocks_about_list_items",
+  "info": {
+    "displayName": "About List Item",
+    "description": "Bullet list item for About block"
+  },
+  "attributes": {
+    "text": { "type": "string", "required": true }
+  }
+}

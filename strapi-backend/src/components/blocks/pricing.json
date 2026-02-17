@@ -1,0 +1,1 @@
+{"collectionName":"components_blocks_pricings","info":{"displayName":"Pricing","description":"Pricing plans block with variations"},"attributes":{"variation":{"type":"integer","default":1,"min":1},"title":{"type":"string"},"subtitle":{"type":"text"},"plans":{"type":"component","repeatable":true,"component":"blocks.pricing-plan"}}}

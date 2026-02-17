@@ -1,0 +1,57 @@
+{
+  "collectionName": "components_blocks_rows",
+  "info": {
+    "displayName": "Row (Columns)",
+    "description": "Multi-column layout - arrange blocks in 2, 3, or 4 Tailwind columns"
+  },
+  "attributes": {
+    "columns": {
+      "type": "enumeration",
+      "enum": [
+        "2",
+        "3",
+        "4"
+      ],
+      "default": "2"
+    },
+    "gap": {
+      "type": "enumeration",
+      "enum": [
+        "4",
+        "6",
+        "8"
+      ],
+      "default": "6"
+    },
+    "blocks": {
+      "type": "dynamiczone",
+      "components": [
+        "blocks.hero",
+        "blocks.about",
+        "blocks.accordion",
+        "blocks.features",
+        "blocks.cta",
+        "blocks.testimonials",
+        "blocks.rich-text-block",
+        "blocks.tailgrids-component",
+        "blocks.brand",
+        "blocks.card",
+        "blocks.chart",
+        "blocks.map",
+        "blocks.modal",
+        "blocks.newsletter",
+        "blocks.popover",
+        "blocks.pricing",
+        "blocks.product-carousel",
+        "blocks.product-grid",
+        "blocks.promo-banner",
+        "blocks.stats",
+        "blocks.step",
+        "blocks.tab",
+        "blocks.table",
+        "blocks.team",
+        "blocks.video"
+      ]
+    }
+  }
+}

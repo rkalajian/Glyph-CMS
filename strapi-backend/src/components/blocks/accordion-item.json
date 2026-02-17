@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_blocks_accordion_items",
+  "info": {
+    "displayName": "Accordion Item",
+    "description": "Single accordion item (question/answer or tab with content)"
+  },
+  "attributes": {
+    "header": {
+      "type": "string",
+      "required": true
+    },
+    "text": {
+      "type": "text"
+    },
+    "text2": {
+      "type": "text"
+    },
+    "listItems": {
+      "type": "component",
+      "repeatable": true,
+      "component": "blocks.about-list-item"
+    }
+  }
+}

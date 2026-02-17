@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { getPage } from '../lib/strapi';
 import { RichText } from '../components/RichText';
 import { DocumentTitle } from '../components/DocumentTitle';
+import { BlockRenderer } from '../components/blocks/BlockRenderer';
 import { LINK_ACCENT } from '../utils/classes';
 import type { StrapiPage } from '../types/strapi';
 
@@ -35,6 +36,16 @@ export function HomePage() {
     url: string;
     label: string;
   }> | null;
+  const hasBlocks = page?.blocks && page.blocks.length > 0;
+
+  if (hasBlocks) {
+    return (
+      <article>
+        <DocumentTitle title={title} />
+        <BlockRenderer blocks={page!.blocks} />
+      </article>
+    );
+  }
 
   return (
     <article>

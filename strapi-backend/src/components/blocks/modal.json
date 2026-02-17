@@ -1,0 +1,1 @@
+{"collectionName":"components_blocks_modals","info":{"displayName":"Modal","description":"Modal dialog block with variations"},"attributes":{"variation":{"type":"integer","default":1,"min":1},"title":{"type":"string"},"content":{"type":"text"},"triggerText":{"type":"string"},"triggerButtonStyle":{"type":"enumeration","enum":["primary","secondary","outline"],"default":"primary"}}}

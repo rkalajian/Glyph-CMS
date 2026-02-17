@@ -1,0 +1,1 @@
+{"collectionName":"components_blocks_newsletters","info":{"displayName":"Newsletter","description":"Newsletter signup block with variations"},"attributes":{"variation":{"type":"integer","default":1,"min":1},"title":{"type":"string"},"subtitle":{"type":"text"},"placeholder":{"type":"string"},"buttonText":{"type":"string"},"actionUrl":{"type":"string"}}}

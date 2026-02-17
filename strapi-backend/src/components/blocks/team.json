@@ -1,0 +1,1 @@
+{"collectionName":"components_blocks_teams","info":{"displayName":"Team","description":"Team members block with variations"},"attributes":{"variation":{"type":"integer","default":1,"min":1},"title":{"type":"string"},"subtitle":{"type":"text"},"members":{"type":"component","repeatable":true,"component":"blocks.team-member"}}}

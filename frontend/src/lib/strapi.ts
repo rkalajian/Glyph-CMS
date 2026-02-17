@@ -89,7 +89,9 @@ export function getStrapiImageUrl(
 
 export async function getPage(slug: string): Promise<StrapiPage | null> {
   const res = await fetchApi<StrapiPage>(
-    `/api/pages?filters[slug][$eq]=${encodeURIComponent(slug)}&status=published&populate[0]=quickLinks&populate[1]=parent`
+    `/api/pages?filters[slug][$eq]=${encodeURIComponent(slug)}&status=published` +
+    '&populate[0]=quickLinks&populate[1]=parent&populate[2]=blocks' +
+    '&populate[blocks][on][blocks.row][populate][0]=blocks'
   );
   const pages = toArray(res.data) as StrapiPage[];
   return pages[0] ?? null;

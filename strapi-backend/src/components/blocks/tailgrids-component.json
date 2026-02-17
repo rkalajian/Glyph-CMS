@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_blocks_tailgrids_components",
+  "info": {
+    "displayName": "Tailgrids Component",
+    "description": "Any Tailgrids component – pick type (e.g. Hero, Stats, Team) and variation number"
+  },
+  "attributes": {
+    "componentType": { "type": "string", "required": true },
+    "variation": { "type": "integer", "default": 1, "min": 1 },
+    "title": { "type": "string" },
+    "subtitle": { "type": "text" },
+    "props": { "type": "json" }
+  }
+}

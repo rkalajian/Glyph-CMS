@@ -1,0 +1,9 @@
+{
+  "collectionName": "components_blocks_testimonial_items",
+  "info": { "displayName": "Testimonial Item", "description": "Single testimonial" },
+  "attributes": {
+    "quote": { "type": "text", "required": true },
+    "author": { "type": "string", "required": true },
+    "role": { "type": "string" }
+  }
+}

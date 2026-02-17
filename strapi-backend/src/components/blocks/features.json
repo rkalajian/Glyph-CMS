@@ -1,0 +1,10 @@
+{
+  "collectionName": "components_blocks_features",
+  "info": { "displayName": "Features", "description": "Tailgrids-style features grid" },
+  "attributes": {
+    "variation": { "type": "integer", "default": 1, "min": 1 },
+    "title": { "type": "string", "required": true },
+    "subtitle": { "type": "text" },
+    "items": { "type": "component", "repeatable": true, "component": "blocks.feature-item", "displayName": "Items" }
+  }
+}

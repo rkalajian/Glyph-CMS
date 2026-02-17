@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_blocks_accordions",
+  "info": {
+    "displayName": "Accordion",
+    "description": "FAQ / accordion block with 5 layout variations"
+  },
+  "attributes": {
+    "variation": {
+      "type": "integer",
+      "default": 1,
+      "min": 1
+    },
+    "badge": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "text"
+    },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "blocks.accordion-item"
+    }
+  }
+}

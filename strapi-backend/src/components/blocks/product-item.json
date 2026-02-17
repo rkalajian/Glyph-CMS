@@ -1,0 +1,1 @@
+{"collectionName":"components_blocks_product_items","info":{"displayName":"Product Item","description":"Product for carousel/grid"},"attributes":{"image":{"type":"media","multiple":false,"allowedTypes":["images"]},"title":{"type":"string","required":true},"price":{"type":"string"},"originalPrice":{"type":"string"},"description":{"type":"text"},"url":{"type":"string"}}}

@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_blocks_abouts",
+  "info": {
+    "displayName": "About",
+    "description": "About section with 8 layout variations"
+  },
+  "attributes": {
+    "variation": { "type": "integer", "default": 1, "min": 1, "max": 8 },
+    "title": { "type": "string" },
+    "badge": { "type": "string" },
+    "subtitle": { "type": "text" },
+    "description": { "type": "text" },
+    "buttonText": { "type": "string" },
+    "buttonUrl": { "type": "string" },
+    "image": { "type": "media", "multiple": false, "required": false, "allowedTypes": ["images"] },
+    "images": { "type": "media", "multiple": true, "required": false, "allowedTypes": ["images"] },
+    "items": { "type": "component", "repeatable": true, "component": "blocks.about-item" },
+    "listItems": { "type": "component", "repeatable": true, "component": "blocks.about-list-item" },
+    "statsNumber": { "type": "string" },
+    "statsLabel": { "type": "string" },
+    "statsSublabel": { "type": "string" }
+  }
+}

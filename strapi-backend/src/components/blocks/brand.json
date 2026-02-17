@@ -1,0 +1,1 @@
+{"collectionName":"components_blocks_brands","info":{"displayName":"Brand","description":"Brand logos section with variations"},"attributes":{"variation":{"type":"integer","default":1,"min":1},"title":{"type":"string"},"items":{"type":"component","repeatable":true,"component":"blocks.brand-item"}}}

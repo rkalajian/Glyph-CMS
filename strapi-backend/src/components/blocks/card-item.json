@@ -1,0 +1,1 @@
+{"collectionName":"components_blocks_card_items","info":{"displayName":"Card Item","description":"Single card content"},"attributes":{"image":{"type":"media","multiple":false,"allowedTypes":["images"]},"title":{"type":"string","required":true},"description":{"type":"text"},"buttonText":{"type":"string"},"buttonUrl":{"type":"string"},"titleUrl":{"type":"string"}}}

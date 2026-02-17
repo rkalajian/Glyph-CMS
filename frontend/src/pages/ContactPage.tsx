@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { getPage } from '../lib/strapi';
-import { FormEmbed } from '../components/FormEmbed';
 import { DocumentTitle } from '../components/DocumentTitle';
 import { RichText } from '../components/RichText';
 import { Breadcrumb } from '../components/Breadcrumb';

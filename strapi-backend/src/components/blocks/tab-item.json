@@ -1,0 +1,1 @@
+{"collectionName":"components_blocks_tab_items","info":{"displayName":"Tab Item","description":"Single tab content"},"attributes":{"label":{"type":"string","required":true},"content":{"type":"text"}}}

@@ -1,0 +1,7 @@
+{
+  "collectionName": "components_blocks_rich_text_blocks",
+  "info": { "displayName": "Rich Text", "description": "Flexible rich text content block" },
+  "attributes": {
+    "content": { "type": "richtext" }
+  }
+}

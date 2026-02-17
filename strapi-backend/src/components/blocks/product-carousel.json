@@ -1,0 +1,1 @@
+{"collectionName":"components_blocks_product_carousels","info":{"displayName":"Product Carousel","description":"Product carousel block with variations"},"attributes":{"variation":{"type":"integer","default":1,"min":1},"title":{"type":"string"},"subtitle":{"type":"text"},"products":{"type":"component","repeatable":true,"component":"blocks.product-item"}}}

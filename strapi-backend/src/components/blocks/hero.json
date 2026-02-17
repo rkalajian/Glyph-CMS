@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_blocks_heroes",
+  "info": { "displayName": "Hero", "description": "Tailgrids-style hero section" },
+  "attributes": {
+    "variation": { "type": "integer", "default": 1, "min": 1 },
+    "title": { "type": "string", "required": true },
+    "subtitle": { "type": "text" },
+    "primaryButtonText": { "type": "string" },
+    "primaryButtonUrl": { "type": "string" },
+    "secondaryButtonText": { "type": "string" },
+    "secondaryButtonUrl": { "type": "string" },
+    "image": { "type": "media", "multiple": false, "required": false, "allowedTypes": ["images"] }
+  }
+}

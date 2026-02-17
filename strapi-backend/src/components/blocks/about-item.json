@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_blocks_about_items",
+  "info": {
+    "displayName": "About Item",
+    "description": "Feature item for About block (variation 3)"
+  },
+  "attributes": {
+    "title": { "type": "string", "required": true },
+    "description": { "type": "text" },
+    "icon": { "type": "media", "multiple": false, "required": false, "allowedTypes": ["images"] }
+  }
+}

@@ -21,16 +21,44 @@
       "targetField": "title",
       "required": true
     },
-    "content": {
-      "type": "richtext"
+    "blocks": {
+      "type": "dynamiczone",
+      "components": [
+        "blocks.hero",
+        "blocks.about",
+        "blocks.features",
+        "blocks.cta",
+        "blocks.testimonials",
+        "blocks.rich-text-block",
+        "blocks.tailgrids-component",
+        "blocks.row",
+        "blocks.accordion",
+        "blocks.brand",
+        "blocks.card",
+        "blocks.chart",
+        "blocks.map",
+        "blocks.modal",
+        "blocks.newsletter",
+        "blocks.popover",
+        "blocks.pricing",
+        "blocks.product-carousel",
+        "blocks.product-grid",
+        "blocks.promo-banner",
+        "blocks.stats",
+        "blocks.step",
+        "blocks.tab",
+        "blocks.table",
+        "blocks.team",
+        "blocks.video"
+      ]
     },
     "subtitle": {
       "type": "string"
     },
     "quickLinks": {
       "type": "component",
-      "repeatable": true,
-      "component": "blocks.quick-link"
+      "component": "blocks.quick-link",
+      "repeatable": true
     },
     "seoTitle": {
       "type": "string"
@@ -38,19 +66,22 @@
     "seoDescription": {
       "type": "text"
     },
+    "content": {
+      "type": "richtext"
+    },
     "parent": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::page.page",
-      "inversedBy": "children",
-      "description": "Parent page for hierarchy"
+      "description": "Parent page for hierarchy",
+      "inversedBy": "children"
     },
     "children": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::page.page",
-      "mappedBy": "parent",
-      "description": "Child pages"
+      "description": "Child pages",
+      "mappedBy": "parent"
     }
   }
 }

@@ -1,0 +1,9 @@
+{
+  "collectionName": "components_blocks_feature_items",
+  "info": { "displayName": "Feature Item", "description": "Single feature row" },
+  "attributes": {
+    "icon": { "type": "media", "multiple": false, "required": false, "allowedTypes": ["images"] },
+    "title": { "type": "string", "required": true },
+    "description": { "type": "text" }
+  }
+}

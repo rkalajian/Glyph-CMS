@@ -1,0 +1,1 @@
+{"collectionName":"components_blocks_charts","info":{"displayName":"Chart","description":"Chart block with variations"},"attributes":{"variation":{"type":"integer","default":1,"min":1},"title":{"type":"string"},"subtitle":{"type":"text"},"chartType":{"type":"enumeration","enum":["line","bar","area","pie"]},"props":{"type":"json"}}}
