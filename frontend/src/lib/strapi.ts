@@ -6,8 +6,11 @@
  *
  * Strapi 5 uses status=published (not publicationState=live) and
  * populate[0]=x&populate[1]=y for multiple relations.
+ *
+ * Uses Zod for runtime validation of external API data.
  */
 
+import { parseStrapiResponse, strapiSiteAlertSchema } from './strapi-schemas';
 import type {
   StrapiResponse,
   StrapiPage,
@@ -89,9 +92,7 @@ export function getStrapiImageUrl(
 
 export async function getPage(slug: string): Promise<StrapiPage | null> {
   const res = await fetchApi<StrapiPage>(
-    `/api/pages?filters[slug][$eq]=${encodeURIComponent(slug)}&status=published` +
-    '&populate[0]=quickLinks&populate[1]=parent&populate[2]=blocks' +
-    '&populate[blocks][on][blocks.row][populate][0]=blocks'
+    `/api/pages?filters[slug][$eq]=${encodeURIComponent(slug)}&status=published&populate=*`
   );
   const pages = toArray(res.data) as StrapiPage[];
   return pages[0] ?? null;
@@ -112,10 +113,10 @@ export async function getBlogPost(slug: string): Promise<StrapiBlogPost | null> 
   return posts[0] ?? null;
 }
 
-export type BlogPostsResult = {
+export interface BlogPostsResult {
   data: StrapiBlogPost[];
   meta: { pagination: StrapiPagination };
-};
+}
 
 export async function getBlogPosts(opts?: {
   categorySlug?: string;
@@ -148,10 +149,10 @@ export async function getPressRelease(slug: string): Promise<StrapiPressRelease 
   return releases[0] ?? null;
 }
 
-export type PressReleasesResult = {
+export interface PressReleasesResult {
   data: StrapiPressRelease[];
   meta: { pagination: StrapiPagination };
-};
+}
 
 export async function getPressReleases(opts?: {
   categorySlug?: string;
@@ -251,8 +252,7 @@ export async function getNavigation(): Promise<{
     primaryNav?: NavLinkInput[];
     footerNav?: NavLinkInput[];
   }>(
-    '/api/navigation?status=published&populate[0]=utilityNav&populate[1]=primaryNav&populate[2]=footerNav' +
-    '&populate[3]=utilityNav.subnav&populate[4]=primaryNav.subnav&populate[5]=footerNav.subnav'
+    '/api/navigation?status=published&populate=*'
   );
   const raw = res?.data;
   // Single type: data is the document object directly
@@ -309,7 +309,7 @@ function normalizeThemeOptions(
 
 export async function getThemeOptions(): Promise<StrapiThemeOptions | null> {
   const res = await fetchApi<unknown>(
-    '/api/theme-option?status=published&populate[0]=logo&populate[1]=social&populate[2]=gtm&populate[3]=marker'
+    '/api/theme-option?status=published&populate=*'
   );
   const data = res.data;
   if (data == null) return null;
@@ -365,12 +365,13 @@ export async function submitForm(formSlug: string, data: Record<string, string |
 // -----------------------------------------------------------------------------
 
 export async function getSiteAlerts(): Promise<StrapiSiteAlert[]> {
-  const res = await fetchApi<StrapiSiteAlert>(
-    '/api/site-alerts?status=published&sort=startDate:asc'
+  const raw = await fetchApi<unknown>(
+    '/api/site-alerts?status=published&sort[0]=startDate:asc'
   );
-  const all = toArray(res.data) as StrapiSiteAlert[];
+  const parsed = parseStrapiResponse(raw, strapiSiteAlertSchema, '[getSiteAlerts]');
+  const alerts = (parsed ? toArray(parsed.data) : []) as StrapiSiteAlert[];
   const now = new Date();
-  return all.filter((a) => {
+  return alerts.filter((a) => {
     const start = new Date(a.startDate);
     const end = a.endDate ? new Date(a.endDate) : null;
     return start <= now && (!end || end >= now);

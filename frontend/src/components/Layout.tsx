@@ -6,6 +6,7 @@
 
 import { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import { SiteAlerts } from './SiteAlerts';
 import { NavLink } from './NavLink';
 import { ThemeScripts } from './ThemeScripts';
@@ -116,6 +117,9 @@ export function Layout() {
                 <img
                   src={logoUrl}
                   alt=""
+                  width={200}
+                  height={32}
+                  loading="eager"
                   className={`h-8 w-auto max-w-[200px] object-contain object-left ${
                     logoUrl === DEFAULT_LOGO ? 'site-logo' : ''
                   }`}
@@ -133,10 +137,11 @@ export function Layout() {
               </nav>
               {/* Hamburger button – mobile only */}
               {hasMobileNav && (
-                <button
+                <motion.button
                   type="button"
                   onClick={() => setMobileMenuOpen((o) => !o)}
-                  className="md:hidden flex items-center justify-center w-12 h-12 -mr-2 rounded text-fg hover:bg-border focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                  className="md:hidden flex items-center justify-center w-12 h-12 -mr-2 rounded text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                  whileHover={{ backgroundColor: 'var(--color-border)' }}
                   aria-expanded={mobileMenuOpen}
                   aria-controls="mobile-nav"
                   aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
@@ -154,7 +159,7 @@ export function Layout() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                     )}
                   </svg>
-                </button>
+                </motion.button>
               )}
             </div>
           </div>
@@ -162,37 +167,44 @@ export function Layout() {
 
         {/* Mobile menu overlay + panel */}
         {hasMobileNav && (
-          <div
-            id="mobile-nav"
-            className={`md:hidden fixed inset-0 z-50 transition-opacity duration-200 ${
-              mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-            }`}
-            aria-hidden={!mobileMenuOpen}
-          >
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(false)}
-              className="absolute inset-0 bg-black/50"
-              aria-label="Close menu"
-            />
-            <aside
-              className={`absolute top-0 right-0 w-full max-w-sm h-full bg-bg border-l border-border shadow-xl flex flex-col transition-transform duration-200 ease-out ${
-                mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-              }`}
-              aria-label="Mobile navigation"
-            >
-              <div className="flex items-center justify-between px-4 py-4 border-b border-border">
-                <span className="font-semibold text-fg">Menu</span>
+          <AnimatePresence>
+            {mobileMenuOpen && (
+              <motion.div
+                id="mobile-nav"
+                className="md:hidden fixed inset-0 z-50"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                aria-hidden={!mobileMenuOpen}
+              >
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="p-2 -m-2 rounded text-fg hover:bg-border focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                  className="absolute inset-0 bg-black/50"
+                  aria-label="Close menu"
+                />
+                <motion.aside
+                  className="absolute top-0 right-0 w-full max-w-sm h-full bg-bg border-l border-border shadow-xl flex flex-col"
+                  initial={{ x: '100%' }}
+                  animate={{ x: 0 }}
+                  exit={{ x: '100%' }}
+                  transition={{ duration: 0.2, ease: [0, 0, 0.2, 1] }}
+                  aria-label="Mobile navigation"
+                >
+              <div className="flex items-center justify-between px-4 py-4 border-b border-border">
+                <span className="font-semibold text-fg">Menu</span>
+                <motion.button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2 -m-2 rounded text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                  whileHover={{ backgroundColor: 'var(--color-border)' }}
                   aria-label="Close menu"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
-                </button>
+                </motion.button>
               </div>
               <nav className="flex-1 overflow-y-auto px-4 py-6" aria-label="Site navigation">
                 <ul className="flex flex-col gap-1 list-none m-0 p-0">
@@ -211,8 +223,10 @@ export function Layout() {
                   ))}
                 </ul>
               </nav>
-            </aside>
-          </div>
+            </motion.aside>
+          </motion.div>
+            )}
+          </AnimatePresence>
         )}
 
         <main id="main-content" className="flex-1 max-w-4xl w-full mx-auto px-4 py-8" role="main" tabIndex={-1}>

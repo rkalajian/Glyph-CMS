@@ -4,13 +4,16 @@
  */
 
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { useParams, Link } from 'react-router-dom';
-import { getBlogPost, getStrapiImageUrl } from '../lib/strapi';
-import { formatDate } from '../utils/format';
-import { DocumentTitle } from '../components/DocumentTitle';
-import { RichText } from '../components/RichText';
-import { Breadcrumb } from '../components/Breadcrumb';
-import type { StrapiBlogPost } from '../types/strapi';
+import { getBlogPost, getStrapiImageUrl } from '../../lib/strapi';
+import { formatDate } from '../../utils/format';
+import { DocumentTitle } from '../../components/DocumentTitle';
+import { RichText } from '../../components/RichText';
+import { Breadcrumb } from '../../components/Breadcrumb';
+import type { StrapiBlogPost } from '../../types/strapi';
+
+const MotionLink = motion(Link);
 
 export function BlogPost() {
   const { slug } = useParams<{ slug: string }>();
@@ -41,9 +44,9 @@ export function BlogPost() {
       <article>
         <h1>Post not found</h1>
         <p>{error ?? 'The requested post could not be found.'}</p>
-        <Link to="/blog" className="text-accent hover:underline">
+        <MotionLink to="/blog" className="text-accent" whileHover={{ textDecoration: 'underline' }} whileTap={{ scale: 0.98 }}>
           Back to blog
-        </Link>
+        </MotionLink>
       </article>
     );
   }
@@ -79,12 +82,14 @@ export function BlogPost() {
               <ul className="flex flex-wrap gap-2 list-none m-0 p-0" role="list">
                 {post.categories.map((cat) => (
                   <li key={cat.documentId}>
-                    <Link
+                    <MotionLink
                       to={`/blog?category=${encodeURIComponent(cat.slug)}`}
-                      className="text-accent hover:underline"
+                      className="text-accent"
+                      whileHover={{ textDecoration: 'underline' }}
+                      whileTap={{ scale: 0.98 }}
                     >
                       {cat.name}
-                    </Link>
+                    </MotionLink>
                   </li>
                 ))}
               </ul>
@@ -96,6 +101,10 @@ export function BlogPost() {
             <img
               src={coverUrl}
               alt={post.coverImage?.alternativeText ?? post.title}
+              width={post.coverImage?.width ?? 1200}
+              height={post.coverImage?.height ?? 630}
+              fetchPriority="high"
+              loading="eager"
               className="w-full max-h-96 object-cover rounded-lg"
             />
           </figure>

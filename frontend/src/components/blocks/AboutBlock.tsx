@@ -106,15 +106,15 @@ function ImageBlock({ image, images, variation }: Partial<AboutBlockProps> & { v
         {variation === 1 ? (
           <div className="flex flex-wrap -mx-3 sm:-mx-4">
             <div className="w-full px-3 sm:px-4 xl:w-1/2 space-y-4">
-              <img src={imgs[0]} alt="" className="w-full rounded-2xl" />
-              <img src={imgs[1]} alt="" className="w-full rounded-2xl" />
+              <img src={imgs[0]} alt="" width={600} height={400} loading="lazy" className="w-full rounded-2xl" />
+              <img src={imgs[1]} alt="" width={600} height={400} loading="lazy" className="w-full rounded-2xl" />
             </div>
             <div className="w-full px-3 sm:px-4 xl:w-1/2">
-              <img src={imgs[2]} alt="" className="w-full rounded-2xl my-4" />
+              <img src={imgs[2]} alt="" width={600} height={400} loading="lazy" className="w-full rounded-2xl my-4" />
             </div>
           </div>
         ) : (
-          <img src={img} alt="" className="w-full max-w-lg rounded-2xl" />
+          <img src={img} alt="" width={600} height={400} loading="lazy" className="w-full max-w-lg rounded-2xl" />
         )}
       </div>
     </div>
@@ -179,7 +179,7 @@ function AboutVariation3(props: AboutBlockProps) {
             <div key={i} className="w-full px-4 sm:w-1/2">
               <div className="mb-6 flex h-[75px] w-[75px] items-center justify-center rounded-[20px] bg-primary/20 text-primary">
                 {item.iconUrl ? (
-                  <img src={item.iconUrl} alt="" className="w-10 h-10 object-contain" />
+                  <img src={item.iconUrl} alt="" width={40} height={40} loading="lazy" className="w-10 h-10 object-contain" />
                 ) : (
                   <span className="text-2xl font-bold">{i + 1}</span>
                 )}
@@ -191,7 +191,7 @@ function AboutVariation3(props: AboutBlockProps) {
         </div>
       </div>
       <div className="w-full px-4 lg:w-6/12 flex justify-center mt-10 lg:mt-0">
-        <img src={image ?? DEFAULTS.defaultImage} alt="" className="max-w-md w-full" />
+        <img src={image ?? DEFAULTS.defaultImage} alt="" width={448} height={300} loading="lazy" className="max-w-md w-full" />
       </div>
     </Section>
   );
@@ -213,10 +213,10 @@ function AboutVariation4(props: AboutBlockProps) {
       <div className="w-full px-4 lg:w-1/2">
         <div className="flex flex-wrap -mx-2 gap-4">
           <div className="w-full sm:w-1/2">
-            <img src={imgs[0]} alt="" className="w-full h-64 sm:h-[400px] object-cover rounded-lg" />
+            <img src={imgs[0]} alt="" width={600} height={400} loading="lazy" className="w-full h-64 sm:h-[400px] object-cover rounded-lg" />
           </div>
           <div className="w-full sm:w-1/2 space-y-4">
-            <img src={imgs[1]} alt="" className="w-full h-48 object-cover rounded-lg" />
+            <img src={imgs[1]} alt="" width={600} height={288} loading="lazy" className="w-full h-48 object-cover rounded-lg" />
             <StatsBox statsNumber={statsNumber} statsLabel={statsLabel} statsSublabel={statsSublabel} />
           </div>
         </div>
@@ -230,7 +230,7 @@ function AboutVariation5(props: AboutBlockProps) {
   return (
     <Section>
       <div className="w-full px-4 lg:w-6/12">
-        <img src={image ?? DEFAULTS.defaultImage} alt="" className="w-full max-w-md rounded-lg" />
+        <img src={image ?? DEFAULTS.defaultImage} alt="" width={448} height={300} loading="lazy" className="w-full max-w-md rounded-lg" />
       </div>
       <ContentBlock badge={badge} title={title} description={description} buttonText={buttonText} buttonUrl={buttonUrl} />
     </Section>
@@ -260,7 +260,7 @@ function AboutVariation6(props: AboutBlockProps) {
         </div>
       </div>
       <div className="w-full px-4 lg:w-1/2 flex justify-center">
-        <img src={image ?? DEFAULTS.defaultImage} alt="" className="w-full max-w-lg rounded-lg" />
+        <img src={image ?? DEFAULTS.defaultImage} alt="" width={512} height={340} loading="lazy" className="w-full max-w-lg rounded-lg" />
       </div>
     </Section>
   );
@@ -272,7 +272,7 @@ function AboutVariation7(props: AboutBlockProps) {
     <Section>
       <ContentBlock badge={badge} title={title} description={description} />
       <div className="w-full px-4 lg:w-1/2 flex justify-center">
-        <img src={image ?? DEFAULTS.defaultImage} alt="" className="w-full max-w-md rounded-lg" />
+        <img src={image ?? DEFAULTS.defaultImage} alt="" width={448} height={300} loading="lazy" className="w-full max-w-md rounded-lg" />
       </div>
     </Section>
   );
@@ -284,7 +284,7 @@ function AboutVariation8(props: AboutBlockProps) {
     <Section>
       <div className="w-full px-4 lg:w-6/12">
         <div className="max-w-[430px] rounded-tl-[50px] overflow-hidden">
-          <img src={image ?? DEFAULTS.defaultImage} alt="" className="w-full" />
+          <img src={image ?? DEFAULTS.defaultImage} alt="" width={600} height={400} loading="lazy" className="w-full" />
         </div>
       </div>
       <div className="w-full px-4 lg:w-6/12">

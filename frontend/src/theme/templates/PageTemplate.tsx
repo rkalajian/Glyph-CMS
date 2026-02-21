@@ -5,12 +5,12 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getPage } from '../lib/strapi';
-import { DocumentTitle } from '../components/DocumentTitle';
-import { RichText } from '../components/RichText';
-import { Breadcrumb } from '../components/Breadcrumb';
-import { BlockRenderer } from '../components/blocks/BlockRenderer';
-import type { StrapiPage } from '../types/strapi';
+import { getPage } from '../../lib/strapi';
+import { DocumentTitle } from '../../components/DocumentTitle';
+import { RichText } from '../../components/RichText';
+import { Breadcrumb } from '../../components/Breadcrumb';
+import { BlockRenderer } from '../../components/blocks/BlockRenderer';
+import type { StrapiPage } from '../../types/strapi';
 
 export function PageTemplate() {
   const { slug } = useParams<{ slug: string }>();

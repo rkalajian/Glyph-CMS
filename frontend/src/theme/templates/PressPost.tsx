@@ -4,13 +4,16 @@
  */
 
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { useParams, Link } from 'react-router-dom';
-import { getPressRelease, getStrapiImageUrl } from '../lib/strapi';
-import { formatDate } from '../utils/format';
-import { DocumentTitle } from '../components/DocumentTitle';
-import { RichText } from '../components/RichText';
-import { Breadcrumb } from '../components/Breadcrumb';
-import type { StrapiPressRelease } from '../types/strapi';
+import { getPressRelease, getStrapiImageUrl } from '../../lib/strapi';
+import { formatDate } from '../../utils/format';
+import { DocumentTitle } from '../../components/DocumentTitle';
+import { RichText } from '../../components/RichText';
+import { Breadcrumb } from '../../components/Breadcrumb';
+import type { StrapiPressRelease } from '../../types/strapi';
+
+const MotionLink = motion(Link);
 
 export function PressPost() {
   const { slug } = useParams<{ slug: string }>();
@@ -41,9 +44,9 @@ export function PressPost() {
       <article>
         <h1>Press release not found</h1>
         <p>{error ?? 'The requested press release could not be found.'}</p>
-        <Link to="/press" className="text-accent hover:underline">
+        <MotionLink to="/press" className="text-accent" whileHover={{ textDecoration: 'underline' }} whileTap={{ scale: 0.98 }}>
           Back to press
-        </Link>
+        </MotionLink>
       </article>
     );
   }
@@ -72,12 +75,14 @@ export function PressPost() {
               <ul className="flex flex-wrap gap-2 list-none m-0 p-0" role="list">
                 {release.categories.map((cat) => (
                   <li key={cat.documentId}>
-                    <Link
+                    <MotionLink
                       to={`/press?category=${encodeURIComponent(cat.slug)}`}
-                      className="text-accent hover:underline"
+                      className="text-accent"
+                      whileHover={{ textDecoration: 'underline' }}
+                      whileTap={{ scale: 0.98 }}
                     >
                       {cat.name}
-                    </Link>
+                    </MotionLink>
                   </li>
                 ))}
               </ul>
@@ -89,6 +94,10 @@ export function PressPost() {
             <img
               src={coverUrl}
               alt={release.coverImage?.alternativeText ?? release.title}
+              width={release.coverImage?.width ?? 1200}
+              height={release.coverImage?.height ?? 630}
+              fetchPriority="high"
+              loading="eager"
               className="w-full max-h-96 object-cover rounded-lg"
             />
           </figure>

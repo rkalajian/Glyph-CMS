@@ -5,14 +5,17 @@
 
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { getPage, getBlogPosts, getBlogCategories, getStrapiImageUrl } from '../lib/strapi';
-import { formatDate } from '../utils/format';
-import { RichText } from '../components/RichText';
-import { DocumentTitle } from '../components/DocumentTitle';
-import { Breadcrumb } from '../components/Breadcrumb';
-import { Pagination } from '../components/Pagination';
-import { useThemeOptions } from '../contexts/ThemeContext';
-import type { StrapiBlogPost, StrapiBlogCategory, StrapiPage } from '../types/strapi';
+import { motion } from 'framer-motion';
+import { getPage, getBlogPosts, getBlogCategories, getStrapiImageUrl } from '../../lib/strapi';
+import { formatDate } from '../../utils/format';
+import { RichText } from '../../components/RichText';
+import { DocumentTitle } from '../../components/DocumentTitle';
+import { Breadcrumb } from '../../components/Breadcrumb';
+import { Pagination } from '../../components/Pagination';
+import { useThemeOptions } from '../../contexts/ThemeContext';
+import type { StrapiBlogPost, StrapiBlogCategory, StrapiPage } from '../../types/strapi';
+
+const MotionLink = motion(Link);
 
 export function BlogList() {
   const [searchParams] = useSearchParams();
@@ -84,29 +87,33 @@ export function BlogList() {
           <nav aria-label="Blog categories" className="mt-4">
             <ul className="flex flex-wrap gap-2 list-none m-0 p-0">
               <li>
-                <Link
+                <MotionLink
                   to="/blog"
                   className={`inline-block px-3 py-2 rounded text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
                     !categorySlug
                       ? 'bg-accent text-white'
-                      : 'bg-border text-fg hover:bg-accent/20'
+                      : 'bg-border text-fg'
                   }`}
+                  whileHover={!categorySlug ? undefined : { backgroundColor: 'rgba(37, 99, 235, 0.2)' }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   All
-                </Link>
+                </MotionLink>
               </li>
               {categories.map((cat) => (
                 <li key={cat.documentId}>
-                  <Link
+                  <MotionLink
                     to={`/blog?category=${encodeURIComponent(cat.slug)}`}
                     className={`inline-block px-3 py-2 rounded text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
                       categorySlug === cat.slug
                         ? 'bg-accent text-white'
-                        : 'bg-border text-fg hover:bg-accent/20'
+                        : 'bg-border text-fg'
                     }`}
+                    whileHover={categorySlug === cat.slug ? undefined : { backgroundColor: 'rgba(37, 99, 235, 0.2)' }}
+                    whileTap={{ scale: 0.98 }}
                   >
                     {cat.name}
-                  </Link>
+                  </MotionLink>
                 </li>
               ))}
             </ul>
@@ -118,11 +125,16 @@ export function BlogList() {
         <p>No posts yet{categorySlug ? ' in this category' : ''}.</p>
       ) : (
         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 list-none p-0 m-0" role="list">
-          {posts.map((post) => {
+          {posts.map((post, index) => {
             const coverUrl = getStrapiImageUrl(post.coverImage);
+            const isFirstImage = index === 0;
             return (
               <li key={post.documentId}>
-                <article className="flex flex-col h-full rounded-lg border border-border overflow-hidden bg-bg hover:border-accent/30 transition-colors">
+                <motion.article
+                  className="flex flex-col h-full rounded-lg border border-border overflow-hidden bg-bg"
+                  whileHover={{ borderColor: 'rgba(37, 99, 235, 0.3)' }}
+                  transition={{ duration: 0.2 }}
+                >
                   <Link
                     to={`/blog/${post.slug}`}
                     className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded-t-lg"
@@ -131,6 +143,10 @@ export function BlogList() {
                       <img
                         src={coverUrl}
                         alt={post.coverImage?.alternativeText ?? post.title}
+                        width={post.coverImage?.width ?? 640}
+                        height={post.coverImage?.height ?? 400}
+                        loading={isFirstImage ? 'eager' : 'lazy'}
+                        fetchPriority={isFirstImage ? 'high' : undefined}
                         className="w-full aspect-16/10 object-cover"
                       />
                     ) : (
@@ -144,12 +160,14 @@ export function BlogList() {
                   </Link>
                   <div className="p-4 flex flex-col flex-1">
                     <h2 className="text-lg font-semibold mb-2">
-                      <Link
+                      <MotionLink
                         to={`/blog/${post.slug}`}
-                        className="text-fg hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 rounded line-clamp-2"
+                        className="text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 rounded line-clamp-2"
+                        whileHover={{ color: 'var(--color-accent)' }}
+                        whileTap={{ scale: 0.98 }}
                       >
                         {post.title}
-                      </Link>
+                      </MotionLink>
                     </h2>
                     <div className="flex flex-wrap items-center gap-2 text-sm text-muted mb-2">
                       <time dateTime={post.publishedAt ?? post.createdAt}>
@@ -161,12 +179,14 @@ export function BlogList() {
                           <ul className="flex flex-wrap gap-2 list-none m-0 p-0" role="list">
                             {post.categories.map((cat) => (
                               <li key={cat.documentId}>
-                                <Link
+                                <MotionLink
                                   to={`/blog?category=${encodeURIComponent(cat.slug)}`}
-                                  className="text-accent hover:underline"
+                                  className="text-accent"
+                                  whileHover={{ textDecoration: 'underline' }}
+                                  whileTap={{ scale: 0.98 }}
                                 >
                                   {cat.name}
-                                </Link>
+                                </MotionLink>
                               </li>
                             ))}
                           </ul>
@@ -177,7 +197,7 @@ export function BlogList() {
                       <p className="text-muted text-sm line-clamp-3 flex-1">{post.excerpt}</p>
                     )}
                   </div>
-                </article>
+                </motion.article>
               </li>
             );
           })}

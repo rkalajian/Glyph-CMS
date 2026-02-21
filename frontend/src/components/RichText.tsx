@@ -65,8 +65,8 @@ function renderBlocks(blocks: StrapiBlock[]): (React.ReactElement | null)[] {
           <img
             src={src}
             alt={img?.alternativeText ?? ''}
-            width={img?.width}
-            height={img?.height}
+            width={img?.width ?? 800}
+            height={img?.height ?? 600}
             className="max-w-full h-auto rounded-lg"
             loading="lazy"
           />
@@ -189,6 +189,8 @@ export function RichText({ content, className = '' }: RichTextProps) {
                   <img
                     src={resolveImageUrl(src ?? undefined)}
                     alt={alt ?? ''}
+                    width={800}
+                    height={600}
                     loading="lazy"
                     className="max-w-full h-auto rounded-lg my-4"
                     {...props}
@@ -216,6 +218,8 @@ export function RichText({ content, className = '' }: RichTextProps) {
               <img
                 src={resolveImageUrl(src ?? undefined)}
                 alt={alt ?? ''}
+                width={800}
+                height={600}
                 loading="lazy"
                 className="max-w-full h-auto rounded-lg my-4"
                 {...props}

@@ -1,0 +1,12 @@
+---
+description: Rules for writing clean, performant Tailwind CSS.
+globs: **/*.{tsx,ts,css}
+alwaysApply: true
+---
+# Tailwind CSS Best Practices
+
+## Guidelines
+- **Utility First**: Avoid custom CSS files. Use `@apply` only for base resets or extremely complex repeated patterns.
+- **Mobile First**: Always write responsive classes in order (e.g., `w-full md:w-1/2 lg:w-1/3`).
+- **Dynamic Classes**: Do not use string interpolation for classes (e.g., `text-${color}`). Use full class names in lookup objects.
+- **Framer Motion**: Use `framer-motion` for all transitions and hover states to match Figma prototyping.

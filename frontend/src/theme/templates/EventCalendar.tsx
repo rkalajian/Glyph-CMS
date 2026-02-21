@@ -4,11 +4,12 @@
  */
 
 import { useEffect, useState, useMemo } from 'react';
-import { getPage, getEvents } from '../lib/strapi';
-import { RichText } from '../components/RichText';
-import { DocumentTitle } from '../components/DocumentTitle';
-import { Breadcrumb } from '../components/Breadcrumb';
-import type { StrapiEvent, StrapiPage } from '../types/strapi';
+import { motion } from 'framer-motion';
+import { getPage, getEvents } from '../../lib/strapi';
+import { RichText } from '../../components/RichText';
+import { DocumentTitle } from '../../components/DocumentTitle';
+import { Breadcrumb } from '../../components/Breadcrumb';
+import type { StrapiEvent, StrapiPage } from '../../types/strapi';
 
 const WEEKDAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const MONTH_LABELS = [
@@ -134,34 +135,40 @@ export function EventCalendar() {
 
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-2" role="group" aria-label="Calendar navigation">
-            <button
+            <motion.button
               type="button"
               onClick={goPrev}
-              className="px-4 py-2 rounded border border-border bg-bg text-fg hover:bg-border focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 min-h-[44px] min-w-[44px]"
+              className="px-4 py-2 rounded border border-border bg-bg text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 min-h-[44px] min-w-[44px]"
               aria-label="Previous month"
+              whileHover={{ backgroundColor: 'var(--color-border)' }}
+              whileTap={{ scale: 0.98 }}
             >
               ←
-            </button>
+            </motion.button>
             <h2 id="calendar-month" className="text-xl font-semibold min-w-[180px] text-center">
               {MONTH_LABELS[month]} {year}
             </h2>
-            <button
+            <motion.button
               type="button"
               onClick={goNext}
-              className="px-4 py-2 rounded border border-border bg-bg text-fg hover:bg-border focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 min-h-[44px] min-w-[44px]"
+              className="px-4 py-2 rounded border border-border bg-bg text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 min-h-[44px] min-w-[44px]"
               aria-label="Next month"
+              whileHover={{ backgroundColor: 'var(--color-border)' }}
+              whileTap={{ scale: 0.98 }}
             >
               →
-            </button>
+            </motion.button>
           </div>
-          <button
+          <motion.button
             type="button"
             onClick={goToday}
-            className="px-4 py-2 rounded border border-border bg-bg text-fg hover:bg-border focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 min-h-[44px]"
+            className="px-4 py-2 rounded border border-border bg-bg text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 min-h-[44px]"
             aria-label="Go to current month"
+            whileHover={{ backgroundColor: 'var(--color-border)' }}
+            whileTap={{ scale: 0.98 }}
           >
             Today
-          </button>
+          </motion.button>
         </div>
       </header>
 

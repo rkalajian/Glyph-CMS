@@ -1,0 +1,8 @@
+/**
+ * Theme entry point – imports all theme files
+ *
+ * Import this from your main CSS (e.g. index.css) after tailwindcss.
+ */
+
+@import "./tokens.css";
+@import "./dark.css";

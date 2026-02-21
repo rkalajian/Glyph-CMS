@@ -4,6 +4,9 @@
  */
 
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+
+const MotionLink = motion(Link);
 
 export interface PaginationMeta {
   page: number;
@@ -42,12 +45,14 @@ export function Pagination({
   return (
     <nav aria-label="Pagination" className="mt-8 flex flex-wrap items-center justify-center gap-2">
       {page > 1 ? (
-        <Link
+        <MotionLink
           to={href(page - 1)}
-          className="inline-flex items-center px-3 py-2 rounded text-sm bg-border text-fg hover:bg-accent/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+          className="inline-flex items-center px-3 py-2 rounded text-sm bg-border text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+          whileHover={{ backgroundColor: 'rgba(37, 99, 235, 0.2)' }}
+          whileTap={{ scale: 0.98 }}
         >
           Previous
-        </Link>
+        </MotionLink>
       ) : (
         <span className="inline-flex items-center px-3 py-2 rounded text-sm bg-border text-muted" aria-disabled>
           Previous
@@ -65,24 +70,28 @@ export function Pagination({
                 {p}
               </span>
             ) : (
-              <Link
+              <MotionLink
                 to={href(p)}
-                className="inline-flex items-center justify-center min-w-9 px-3 py-2 rounded text-sm bg-border text-fg hover:bg-accent/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                className="inline-flex items-center justify-center min-w-9 px-3 py-2 rounded text-sm bg-border text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                whileHover={{ backgroundColor: 'rgba(37, 99, 235, 0.2)' }}
+                whileTap={{ scale: 0.98 }}
               >
                 {p}
-              </Link>
+              </MotionLink>
             )}
           </li>
         ))}
       </ol>
 
       {page < pageCount ? (
-        <Link
+        <MotionLink
           to={href(page + 1)}
-          className="inline-flex items-center px-3 py-2 rounded text-sm bg-border text-fg hover:bg-accent/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+          className="inline-flex items-center px-3 py-2 rounded text-sm bg-border text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+          whileHover={{ backgroundColor: 'rgba(37, 99, 235, 0.2)' }}
+          whileTap={{ scale: 0.98 }}
         >
           Next
-        </Link>
+        </MotionLink>
       ) : (
         <span className="inline-flex items-center px-3 py-2 rounded text-sm bg-border text-muted" aria-disabled>
           Next

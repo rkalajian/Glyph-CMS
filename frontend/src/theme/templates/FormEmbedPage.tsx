@@ -4,7 +4,7 @@
  */
 
 import { useParams } from 'react-router-dom';
-import { FormEmbed } from '../components/FormEmbed';
+import { FormEmbed } from '../../components/FormEmbed';
 
 export function FormEmbedPage() {
   const { slug } = useParams<{ slug: string }>();

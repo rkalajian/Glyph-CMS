@@ -5,6 +5,7 @@
  */
 
 import { useEffect, useState, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { getForm, getFormBySlug, submitForm } from '../lib/strapi';
 import type { StrapiForm, StrapiFormField } from '../types/strapi';
@@ -209,14 +210,16 @@ export function FormEmbed({ slug, className = '' }: FormEmbedProps) {
             </div>
           ))}
 
-          <button
+          <motion.button
             type="submit"
             disabled={status === 'submitting'}
-            className="px-6 py-3 bg-accent text-white font-medium rounded hover:bg-accent-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:opacity-70 min-h-[44px] min-w-[44px]"
             aria-busy={status === 'submitting'}
+            className="px-6 py-3 bg-accent text-white font-medium rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:opacity-70 min-h-[44px] min-w-[44px]"
+            whileHover={{ backgroundColor: 'var(--color-accent-hover)' }}
+            whileTap={{ scale: 0.98 }}
           >
             {status === 'submitting' ? 'Submitting…' : (form.submitButtonLabel ?? 'Submit')}
-          </button>
+          </motion.button>
         </div>
       </form>
     </div>

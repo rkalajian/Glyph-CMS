@@ -1,0 +1,17 @@
+/**
+ * Design tokens – WCAG 2.2 AA compliant
+ *
+ * Edit this file to theme the frontend. Tokens are used by Tailwind utilities
+ * (e.g. text-fg, bg-accent) and base styles in index.css.
+ */
+
+@theme {
+  /* Core palette */
+  --color-fg: #1a1a1a;
+  --color-bg: #ffffff;
+  --color-utility-nav-bg: #f9fafb;
+  --color-accent: #2563eb;
+  --color-accent-hover: #1d4ed8;
+  --color-muted: #4b5563;
+  --color-border: #e5e7eb;
+}

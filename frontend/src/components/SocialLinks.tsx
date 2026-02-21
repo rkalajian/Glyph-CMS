@@ -4,6 +4,7 @@
  * WCAG 2.2: Accessible link labels (2.4.4), sufficient contrast.
  */
 
+import { motion } from 'framer-motion';
 import type { StrapiThemeOptionSocial } from '../types/strapi';
 
 interface SocialLinksProps {
@@ -49,16 +50,18 @@ export function SocialLinks({ social, className = '' }: SocialLinksProps) {
       <ul className="flex flex-wrap gap-3 list-none m-0 p-0">
         {links.map(({ url, label, icon }) => (
           <li key={label}>
-            <a
+            <motion.a
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-muted hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded px-1"
+              className="inline-flex items-center gap-1.5 text-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded px-1"
               aria-label={`${label} (opens in new tab)`}
+              whileHover={{ color: 'var(--color-accent)' }}
+              whileTap={{ scale: 0.95 }}
             >
               <i className={`${icon} fa-fw text-[1.1rem]`} aria-hidden />
               <span className="sr-only">{label}</span>
-            </a>
+            </motion.a>
           </li>
         ))}
       </ul>

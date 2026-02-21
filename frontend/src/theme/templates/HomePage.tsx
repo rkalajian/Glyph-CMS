@@ -5,12 +5,12 @@
 
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getPage } from '../lib/strapi';
-import { RichText } from '../components/RichText';
-import { DocumentTitle } from '../components/DocumentTitle';
-import { BlockRenderer } from '../components/blocks/BlockRenderer';
-import { LINK_ACCENT } from '../utils/classes';
-import type { StrapiPage } from '../types/strapi';
+import { getPage } from '../../lib/strapi';
+import { RichText } from '../../components/RichText';
+import { DocumentTitle } from '../../components/DocumentTitle';
+import { BlockRenderer } from '../../components/blocks/BlockRenderer';
+import { LINK_ACCENT } from '../../utils/classes';
+import type { StrapiPage } from '../../types/strapi';
 
 export function HomePage() {
   const [page, setPage] = useState<StrapiPage | null | undefined>(undefined);
@@ -77,8 +77,8 @@ export function HomePage() {
                 </li>
               );
             })}
-        </ul>
-      </nav>
+          </ul>
+        </nav>
       )}
     </article>
   );

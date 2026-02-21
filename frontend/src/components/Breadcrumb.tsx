@@ -2,8 +2,11 @@
  * Breadcrumb navigation. Renders only when showBreadcrumbs is enabled in Theme Options.
  */
 
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useThemeOptions } from '../contexts/ThemeContext';
+
+const MotionLink = motion(Link);
 
 export interface BreadcrumbItem {
   label: string;
@@ -29,12 +32,14 @@ export function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
         <span key={`${item.label}-${i}`} className="flex items-center gap-1">
           {i > 0 && <span aria-hidden="true">/</span>}
           {item.url ? (
-            <Link
+            <MotionLink
               to={item.url}
-              className="text-accent hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded"
+              className="text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded"
+              whileHover={{ textDecoration: 'underline' }}
+              whileTap={{ scale: 0.98 }}
             >
               {item.label}
-            </Link>
+            </MotionLink>
           ) : (
             <span aria-current="page">{item.label}</span>
           )}

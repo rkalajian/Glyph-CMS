@@ -4,15 +4,18 @@
  */
 
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { Link, useSearchParams } from 'react-router-dom';
-import { getPage, getPressReleases, getPressReleaseCategories } from '../lib/strapi';
-import { formatDate } from '../utils/format';
-import { RichText } from '../components/RichText';
-import { DocumentTitle } from '../components/DocumentTitle';
-import { Breadcrumb } from '../components/Breadcrumb';
-import { Pagination } from '../components/Pagination';
-import { useThemeOptions } from '../contexts/ThemeContext';
-import type { StrapiPressRelease, StrapiPressReleaseCategory, StrapiPage } from '../types/strapi';
+import { getPage, getPressReleases, getPressReleaseCategories } from '../../lib/strapi';
+import { formatDate } from '../../utils/format';
+import { RichText } from '../../components/RichText';
+import { DocumentTitle } from '../../components/DocumentTitle';
+import { Breadcrumb } from '../../components/Breadcrumb';
+import { Pagination } from '../../components/Pagination';
+import { useThemeOptions } from '../../contexts/ThemeContext';
+import type { StrapiPressRelease, StrapiPressReleaseCategory, StrapiPage } from '../../types/strapi';
+
+const MotionLink = motion(Link);
 
 export function PressList() {
   const [searchParams] = useSearchParams();
@@ -84,29 +87,33 @@ export function PressList() {
           <nav aria-label="Press categories" className="mt-4">
             <ul className="flex flex-wrap gap-2 list-none m-0 p-0">
               <li>
-                <Link
+                <MotionLink
                   to="/press"
                   className={`inline-block px-3 py-2 rounded text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
                     !categorySlug
                       ? 'bg-accent text-white'
-                      : 'bg-border text-fg hover:bg-accent/20'
+                      : 'bg-border text-fg'
                   }`}
+                  whileHover={!categorySlug ? undefined : { backgroundColor: 'rgba(37, 99, 235, 0.2)' }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   All
-                </Link>
+                </MotionLink>
               </li>
               {categories.map((cat) => (
                 <li key={cat.documentId}>
-                  <Link
+                  <MotionLink
                     to={`/press?category=${encodeURIComponent(cat.slug)}`}
                     className={`inline-block px-3 py-2 rounded text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
                       categorySlug === cat.slug
                         ? 'bg-accent text-white'
-                        : 'bg-border text-fg hover:bg-accent/20'
+                        : 'bg-border text-fg'
                     }`}
+                    whileHover={categorySlug === cat.slug ? undefined : { backgroundColor: 'rgba(37, 99, 235, 0.2)' }}
+                    whileTap={{ scale: 0.98 }}
                   >
                     {cat.name}
-                  </Link>
+                  </MotionLink>
                 </li>
               ))}
             </ul>
@@ -122,12 +129,14 @@ export function PressList() {
             <li key={release.documentId}>
               <article className="border-b border-border pb-6">
                 <h2 className="text-xl font-semibold mb-2">
-                  <Link
+                  <MotionLink
                     to={`/press/${release.slug}`}
-                    className="text-fg hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded"
+                    className="text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded"
+                    whileHover={{ color: 'var(--color-accent)' }}
+                    whileTap={{ scale: 0.98 }}
                   >
                     {release.title}
-                  </Link>
+                  </MotionLink>
                 </h2>
                 <div className="flex flex-wrap items-center gap-2 text-sm text-muted mb-2">
                   <time dateTime={release.publishedAt ?? release.createdAt}>
@@ -139,12 +148,14 @@ export function PressList() {
                       <ul className="flex flex-wrap gap-2 list-none m-0 p-0" role="list">
                         {release.categories.map((cat) => (
                           <li key={cat.documentId}>
-                            <Link
+                            <MotionLink
                               to={`/press?category=${encodeURIComponent(cat.slug)}`}
-                              className="text-accent hover:underline"
+                              className="text-accent"
+                              whileHover={{ textDecoration: 'underline' }}
+                              whileTap={{ scale: 0.98 }}
                             >
                               {cat.name}
-                            </Link>
+                            </MotionLink>
                           </li>
                         ))}
                       </ul>

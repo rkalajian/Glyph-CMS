@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { getPage } from '../lib/strapi';
-import { DocumentTitle } from '../components/DocumentTitle';
-import { RichText } from '../components/RichText';
-import { Breadcrumb } from '../components/Breadcrumb';
-import type { StrapiPage } from '../types/strapi';
+import { getPage } from '../../lib/strapi';
+import { DocumentTitle } from '../../components/DocumentTitle';
+import { RichText } from '../../components/RichText';
+import { Breadcrumb } from '../../components/Breadcrumb';
+import type { StrapiPage } from '../../types/strapi';
 
 export function ContactPage() {
   const [page, setPage] = useState<StrapiPage | null>(null);

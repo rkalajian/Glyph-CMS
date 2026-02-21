@@ -1,0 +1,20 @@
+/**
+ * Dark mode overrides (prefers-color-scheme: dark)
+ *
+ * Define dark theme values here. These override the tokens in tokens.css
+ * when the user's system preference is dark mode.
+ */
+
+@layer base {
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-fg: #f3f4f6;
+      --color-bg: #111827;
+      --color-utility-nav-bg: #1f2937;
+      --color-accent: #60a5fa;
+      --color-accent-hover: #93c5fd;
+      --color-muted: #9ca3af;
+      --color-border: #374151;
+    }
+  }
+}

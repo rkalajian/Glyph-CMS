@@ -4,11 +4,14 @@
  */
 
 import { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+
+const MotionLink = motion(Link);
 import type { StrapiNavItem } from '../types/strapi';
 
 const linkClass = (isActive: boolean) =>
-  `py-2 text-fg hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${
+  `py-2 text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${
     isActive ? 'font-semibold underline underline-offset-4' : ''
   }`;
 
@@ -42,22 +45,24 @@ function NavLinkSimple({
 
   if (item.openInNewTab || !isInternal(item.url)) {
     return (
-      <a
+      <motion.a
         href={href}
         className={linkClass(false)}
         target={item.openInNewTab ? '_blank' : undefined}
         rel={item.openInNewTab ? 'noopener noreferrer' : undefined}
         aria-label={item.openInNewTab ? `${item.label} (opens in new window)` : item.label}
+        whileHover={{ color: 'var(--color-accent)' }}
+        whileTap={{ scale: 0.98 }}
       >
         {item.label}
-      </a>
+      </motion.a>
     );
   }
 
   return (
-    <Link to={href} className={linkClass(active)}>
+    <MotionLink to={href} className={linkClass(active)} whileHover={{ color: 'var(--color-accent)' }} whileTap={{ scale: 0.98 }}>
       {item.label}
-    </Link>
+    </MotionLink>
   );
 }
 
@@ -124,56 +129,64 @@ export function NavLink({ item, currentPath, variant = 'header' }: NavLinkProps)
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <button
+      <motion.button
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-haspopup="true"
         aria-expanded={open}
         className={`${linkClass(false)} bg-transparent border-0 cursor-pointer font-inherit`}
+        whileHover={{ color: 'var(--color-accent)' }}
+        whileTap={{ scale: 0.98 }}
       >
         {item.label}
         <span
           className="ml-1 inline-block w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-current align-middle"
           aria-hidden
         />
-      </button>
+      </motion.button>
       {open && (
         <ul
           className="absolute left-0 top-full -mt-1 min-w-[180px] py-2 bg-bg border border-border rounded shadow-lg list-none m-0 z-10"
           role="menu"
         >
           <li role="none">
-            <Link
+            <MotionLink
               to={getHref(item.url)}
-              className="block px-4 py-2 text-fg hover:bg-border focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-inset rounded mx-2"
+              className="block px-4 py-2 text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-inset rounded mx-2"
               role="menuitem"
               onClick={() => setOpen(false)}
+              whileHover={{ backgroundColor: 'var(--color-border)' }}
+              whileTap={{ scale: 0.98 }}
             >
               {item.label}
-            </Link>
+            </MotionLink>
           </li>
           {item.subnav!.map((sub) => (
             <li key={sub.documentId} role="none">
               {sub.openInNewTab || !isInternal(sub.url) ? (
-                <a
+                <motion.a
                   href={getHref(sub.url)}
-                  className="block px-4 py-2 text-fg hover:bg-border focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-inset rounded mx-2"
+                  className="block px-4 py-2 text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-inset rounded mx-2"
                   role="menuitem"
                   target={sub.openInNewTab ? '_blank' : undefined}
                   rel={sub.openInNewTab ? 'noopener noreferrer' : undefined}
                   onClick={() => setOpen(false)}
+                  whileHover={{ backgroundColor: 'var(--color-border)' }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   {sub.label}
-                </a>
+                </motion.a>
               ) : (
-                <Link
+                <MotionLink
                   to={getHref(sub.url)}
-                  className="block px-4 py-2 text-fg hover:bg-border focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-inset rounded mx-2"
+                  className="block px-4 py-2 text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-inset rounded mx-2"
                   role="menuitem"
                   onClick={() => setOpen(false)}
+                  whileHover={{ backgroundColor: 'var(--color-border)' }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   {sub.label}
-                </Link>
+                </MotionLink>
               )}
             </li>
           ))}

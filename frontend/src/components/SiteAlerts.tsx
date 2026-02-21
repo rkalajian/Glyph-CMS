@@ -4,7 +4,10 @@
  */
 
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+
+const MotionLink = motion(Link);
 import { getSiteAlerts } from '../lib/strapi';
 import type { StrapiSiteAlert } from '../types/strapi';
 
@@ -22,7 +25,12 @@ export function SiteAlerts() {
   useEffect(() => {
     getSiteAlerts()
       .then(setAlerts)
-      .catch(() => setAlerts([]))
+      .catch((err) => {
+        if (import.meta.env.DEV) {
+          console.warn('[SiteAlerts] Failed to load alerts:', err);
+        }
+        setAlerts([]);
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -55,33 +63,39 @@ export function SiteAlerts() {
                   <span className="flex-1 min-w-0">{alert.message}</span>
                   {alert.linkUrl && (
                     alert.linkUrl.startsWith('http') ? (
-                      <a
+                      <motion.a
                         href={alert.linkUrl}
-                        className="shrink-0 font-semibold underline underline-offset-2 hover:no-underline focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded min-h-[44px] min-w-[44px] inline-flex items-center"
+                        className="shrink-0 font-semibold underline underline-offset-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded min-h-[44px] min-w-[44px] inline-flex items-center"
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={alert.linkLabel ? `${alert.linkLabel} (opens in new window)` : 'Learn more (opens in new window)'}
+                        whileHover={{ textDecoration: 'none' }}
+                        whileTap={{ scale: 0.98 }}
                       >
                         {alert.linkLabel ?? 'Learn more'}
-                      </a>
+                      </motion.a>
                     ) : (
-                      <Link
+                      <MotionLink
                         to={alert.linkUrl.startsWith('/') ? alert.linkUrl : `/${alert.linkUrl}`}
-                        className="shrink-0 font-semibold underline underline-offset-2 hover:no-underline focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded min-h-[44px] min-w-[44px] inline-flex items-center"
+                        className="shrink-0 font-semibold underline underline-offset-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded min-h-[44px] min-w-[44px] inline-flex items-center"
                         aria-label={alert.linkLabel ?? 'Learn more'}
+                        whileHover={{ textDecoration: 'none' }}
+                        whileTap={{ scale: 0.98 }}
                       >
                         {alert.linkLabel ?? 'Learn more'}
-                      </Link>
+                      </MotionLink>
                     )
                   )}
-                  <button
+                  <motion.button
                     type="button"
                     onClick={() => dismiss(alert.documentId)}
-                    className="shrink-0 p-2 -m-2 rounded text-xl leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center hover:opacity-80"
+                    className="shrink-0 p-2 -m-2 rounded text-xl leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center"
                     aria-label="Dismiss alert"
+                    whileHover={{ opacity: 0.8 }}
+                    whileTap={{ scale: 0.9 }}
                   >
                     <span aria-hidden>×</span>
-                  </button>
+                  </motion.button>
                 </div>
               </div>
             </li>

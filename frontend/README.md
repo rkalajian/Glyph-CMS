@@ -1,6 +1,11 @@
-# React + TypeScript + Vite
+# CMS Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + TypeScript + Vite frontend for the Strapi-powered CMS.
+
+## Build commands
+
+- `npm run build` – standard SPA build (client-side only)
+- `npm run build:static` – builds, then pre-renders HTML for `/`, `/blog`, `/press`, `/events`, `/contact`. Requires Strapi running (or `VITE_STRAPI_URL`) so the app can fetch content during prerender.
 
 Currently, two official plugins are available:
 
