@@ -1,10 +1,11 @@
 /**
  * Home page – editable in CMS.
- * Fetches the Page with slug "home". Falls back to defaults if none exists.
+ * Uses preloaded data when available (static build), otherwise fetches.
  */
 
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { usePreload } from '../../contexts/PreloadContext';
 import { getPage } from '../../lib/strapi';
 import { RichText } from '../../components/RichText';
 import { DocumentTitle } from '../../components/DocumentTitle';
@@ -13,13 +14,17 @@ import { LINK_ACCENT } from '../../utils/classes';
 import type { StrapiPage } from '../../types/strapi';
 
 export function HomePage() {
-  const [page, setPage] = useState<StrapiPage | null | undefined>(undefined);
+  const preload = usePreload();
+  const [page, setPage] = useState<StrapiPage | null | undefined>(
+    () => (preload?.route === '/' && preload?.page != null ? (preload.page as StrapiPage) : preload?.route === '/' ? null : undefined)
+  );
 
   useEffect(() => {
+    if (preload?.route === '/') return;
     getPage('home')
       .then(setPage)
       .catch(() => setPage(null));
-  }, []);
+  }, [preload]);
 
   if (page === undefined) {
     return (

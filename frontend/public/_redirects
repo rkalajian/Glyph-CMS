@@ -1,0 +1,7 @@
+# Trailing-slash redirects so prerendered /blog/, /press/, etc. are served
+/blog    /blog/    302
+/press   /press/   302
+/events  /events/   302
+/contact /contact/ 302
+# SPA fallback for dynamic routes (blog posts, pages, etc.)
+/*      /index.html    200

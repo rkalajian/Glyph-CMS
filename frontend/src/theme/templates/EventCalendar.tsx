@@ -5,7 +5,8 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { getPage, getEvents } from '../../lib/strapi';
+import { usePreload } from '../../contexts/PreloadContext';
+import { getPage, getEvents, getStrapiImageUrl } from '../../lib/strapi';
 import { RichText } from '../../components/RichText';
 import { DocumentTitle } from '../../components/DocumentTitle';
 import { Breadcrumb } from '../../components/Breadcrumb';
@@ -72,9 +73,11 @@ function formatTime(dateStr: string, allDay?: boolean): string {
 }
 
 export function EventCalendar() {
-  const [page, setPage] = useState<StrapiPage | null>(null);
-  const [events, setEvents] = useState<StrapiEvent[]>([]);
-  const [loading, setLoading] = useState(true);
+  const preload = usePreload();
+  const usePreloaded = preload?.route === '/events';
+  const [page, setPage] = useState<StrapiPage | null>(() => (usePreloaded && preload?.page != null ? (preload.page as StrapiPage) : null));
+  const [events, setEvents] = useState<StrapiEvent[]>(() => (usePreloaded && preload?.events ? (preload.events as StrapiEvent[]) : []));
+  const [loading, setLoading] = useState(!usePreloaded);
   const [error, setError] = useState<string | null>(null);
   const [viewDate, setViewDate] = useState(() => new Date());
 
@@ -82,6 +85,7 @@ export function EventCalendar() {
   const month = viewDate.getMonth();
 
   useEffect(() => {
+    if (usePreloaded) return;
     setLoading(true);
     setError(null);
     Promise.all([getPage('events'), getEvents()])
@@ -91,7 +95,7 @@ export function EventCalendar() {
       })
       .catch((err) => setError(err instanceof Error ? err.message : 'Failed to load'))
       .finally(() => setLoading(false));
-  }, []);
+  }, [usePreloaded]);
 
   const calendarDays = useMemo(() => getMonthDays(year, month), [year, month]);
 
@@ -236,8 +240,28 @@ export function EventCalendar() {
                                     )}
                                   </summary>
                                   <div className="mt-2 p-2 text-sm border-l-2 border-accent/50 pl-2">
+                                    {ev.image && getStrapiImageUrl(ev.image) && (
+                                      <img
+                                        src={getStrapiImageUrl(ev.image)!}
+                                        alt={ev.image.alternativeText ?? ev.title}
+                                        width={ev.image.width ?? 400}
+                                        height={ev.image.height ?? 200}
+                                        className="w-full rounded object-cover mb-2 max-h-32"
+                                        loading="lazy"
+                                      />
+                                    )}
                                     {ev.location && (
                                       <p className="text-muted">📍 {ev.location}</p>
+                                    )}
+                                    {ev.url && (
+                                      <a
+                                        href={ev.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-block mt-1 text-accent hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 rounded"
+                                      >
+                                        View event →
+                                      </a>
                                     )}
                                     {ev.description && (
                                       <div className="mt-1">

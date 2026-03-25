@@ -179,7 +179,7 @@ export async function getPressReleaseCategories(): Promise<StrapiPressReleaseCat
 
 export async function getEvents(): Promise<StrapiEvent[]> {
   const res = await fetchApi<StrapiEvent>(
-    '/api/events?status=published&sort=startDate:asc'
+    '/api/events?status=published&sort=startDate:asc&populate[0]=image'
   );
   return toArray(res.data) as StrapiEvent[];
 }
@@ -296,6 +296,7 @@ function normalizeThemeOptions(
     documentId: (obj.documentId ?? attrs.documentId) as string | undefined,
     siteName: (attrs.siteName ?? obj.siteName) as string | null | undefined,
     logo: (attrs.logo ?? obj.logo) as StrapiThemeOptions['logo'],
+    frontendMode: (attrs.frontendMode ?? obj.frontendMode ?? 'react') as 'react' | 'static' | null | undefined,
     showBreadcrumbs: (attrs.showBreadcrumbs ?? obj.showBreadcrumbs) as boolean | undefined,
     blogPostsPerPage: (attrs.blogPostsPerPage ?? obj.blogPostsPerPage) as number | undefined,
     pressReleasesPerPage: (attrs.pressReleasesPerPage ?? obj.pressReleasesPerPage) as number | undefined,

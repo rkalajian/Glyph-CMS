@@ -6,6 +6,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useSearchParams } from 'react-router-dom';
+import { usePreload } from '../../contexts/PreloadContext';
 import { getPage, getPressReleases, getPressReleaseCategories } from '../../lib/strapi';
 import { formatDate } from '../../utils/format';
 import { RichText } from '../../components/RichText';
@@ -20,18 +21,23 @@ const MotionLink = motion(Link);
 export function PressList() {
   const [searchParams] = useSearchParams();
   const themeOptions = useThemeOptions();
+  const preload = usePreload();
   const categorySlug = searchParams.get('category') ?? undefined;
   const pageNum = Math.max(1, parseInt(searchParams.get('page') ?? '1', 10) || 1);
   const pageSize = Math.max(1, Math.min(100, themeOptions?.pressReleasesPerPage ?? 12));
 
-  const [page, setPage] = useState<StrapiPage | null>(null);
-  const [releases, setReleases] = useState<StrapiPressRelease[]>([]);
-  const [pagination, setPagination] = useState<{ page: number; pageSize: number; pageCount: number; total: number } | null>(null);
-  const [categories, setCategories] = useState<StrapiPressReleaseCategory[]>([]);
-  const [loading, setLoading] = useState(true);
+  const usePreloaded = preload?.route === '/press' && pageNum === 1 && !categorySlug;
+  const [page, setPage] = useState<StrapiPage | null>(() => (usePreloaded && preload?.page != null ? (preload.page as StrapiPage) : null));
+  const [releases, setReleases] = useState<StrapiPressRelease[]>(() => (usePreloaded && preload?.releases ? (preload.releases as StrapiPressRelease[]) : []));
+  const [pagination, setPagination] = useState<{ page: number; pageSize: number; pageCount: number; total: number } | null>(
+    () => (usePreloaded && preload?.pagination ? preload.pagination : null)
+  );
+  const [categories, setCategories] = useState<StrapiPressReleaseCategory[]>(() => (usePreloaded && preload?.categories ? (preload.categories as StrapiPressReleaseCategory[]) : []));
+  const [loading, setLoading] = useState(!usePreloaded);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (usePreloaded) return;
     setLoading(true);
     setError(null);
     Promise.all([
@@ -47,7 +53,7 @@ export function PressList() {
       })
       .catch((err) => setError(err instanceof Error ? err.message : 'Failed to load'))
       .finally(() => setLoading(false));
-  }, [categorySlug, pageNum, pageSize]);
+  }, [categorySlug, pageNum, pageSize, usePreloaded]);
 
   if (loading) {
     return (

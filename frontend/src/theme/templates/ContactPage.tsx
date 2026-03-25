@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { usePreload } from '../../contexts/PreloadContext';
 import { getPage } from '../../lib/strapi';
 import { DocumentTitle } from '../../components/DocumentTitle';
 import { RichText } from '../../components/RichText';
@@ -6,13 +7,17 @@ import { Breadcrumb } from '../../components/Breadcrumb';
 import type { StrapiPage } from '../../types/strapi';
 
 export function ContactPage() {
-  const [page, setPage] = useState<StrapiPage | null>(null);
+  const preload = usePreload();
+  const [page, setPage] = useState<StrapiPage | null>(
+    () => (preload?.route === '/contact' ? ((preload.page as StrapiPage) ?? null) : null)
+  );
 
   useEffect(() => {
+    if (preload?.route === '/contact') return;
     getPage('contact')
       .then((p) => setPage(p ?? null))
       .catch(() => setPage(null));
-  }, []);
+  }, [preload]);
 
   const title = page?.seoTitle ?? page?.title ?? 'Contact';
   const displayTitle = page?.title ?? 'Contact';

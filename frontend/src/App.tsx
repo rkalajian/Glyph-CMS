@@ -5,6 +5,7 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Layout } from './components/Layout';
+import { PreloadProvider, getPreloadedData } from './contexts/PreloadContext';
 
 const HomePage = lazy(() => import('./theme/templates/HomePage').then((m) => ({ default: m.HomePage })));
 const PageTemplate = lazy(() => import('./theme/templates/PageTemplate').then((m) => ({ default: m.PageTemplate })));
@@ -26,9 +27,11 @@ function PageFallback() {
 }
 
 function App() {
+  const preload = getPreloadedData();
   return (
     <BrowserRouter>
-      <Routes>
+      <PreloadProvider value={preload}>
+        <Routes>
         <Route path="embed/form/:slug" element={<Suspense fallback={<div className="min-h-[200px] flex items-center justify-center p-6">Loading…</div>}><FormEmbedPage /></Suspense>} />
         <Route element={<Layout />}>
           <Route index element={<Suspense fallback={<PageFallback />}><HomePage /></Suspense>} />
@@ -42,6 +45,7 @@ function App() {
           <Route path="*" element={<Suspense fallback={<PageFallback />}><NotFound /></Suspense>} />
         </Route>
       </Routes>
+      </PreloadProvider>
     </BrowserRouter>
   );
 }

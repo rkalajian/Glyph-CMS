@@ -510,6 +510,9 @@ export interface StrapiEvent {
   allDay?: boolean;
   description?: string | StrapiBlock[] | null;
   location?: string | null;
+  url?: string | null;
+  image?: StrapiImage | null;
+  googleCalendarEventId?: string | null;
   publishedAt?: string | null;
   createdAt: string;
   updatedAt: string;
@@ -566,6 +569,8 @@ export interface StrapiThemeOptions {
   documentId?: string;
   siteName?: string | null;
   logo?: StrapiImage | null;
+  /** react = SPA (client-side). static = pre-rendered HTML at build time. */
+  frontendMode?: 'react' | 'static' | null;
   showBreadcrumbs?: boolean;
   blogPostsPerPage?: number;
   pressReleasesPerPage?: number;

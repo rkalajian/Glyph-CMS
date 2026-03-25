@@ -12,6 +12,7 @@ import { NavLink } from './NavLink';
 import { ThemeScripts } from './ThemeScripts';
 import { SocialLinks } from './SocialLinks';
 import { ThemeProvider } from '../contexts/ThemeContext';
+import { usePreload } from '../contexts/PreloadContext';
 import { getNavigation, getThemeOptions, getStrapiImageUrl } from '../lib/strapi';
 import type { StrapiNavItem, StrapiThemeOptions } from '../types/strapi';
 
@@ -39,14 +40,18 @@ const DEFAULT_FOOTER_NAV: Pick<StrapiNavItem, 'documentId' | 'label' | 'url' | '
 
 export function Layout() {
   const location = useLocation();
-  const [themeOptions, setThemeOptions] = useState<StrapiThemeOptions | null>(null);
+  const preload = usePreload();
+  const [themeOptions, setThemeOptions] = useState<StrapiThemeOptions | null>(
+    () => (preload?.themeOptions as StrapiThemeOptions) ?? null
+  );
   const [nav, setNav] = useState<{
     utilityNav: StrapiNavItem[];
     primaryNav: StrapiNavItem[];
     footerNav: StrapiNavItem[];
-  } | null>(null);
+  } | null>(() => (preload?.nav as { utilityNav: StrapiNavItem[]; primaryNav: StrapiNavItem[]; footerNav: StrapiNavItem[] } | undefined) ?? null);
 
   useEffect(() => {
+    if (preload?.nav && preload?.themeOptions) return;
     getNavigation()
       .then(setNav)
       .catch((err) => {
@@ -55,13 +60,10 @@ export function Layout() {
         }
         setNav(null);
       });
-  }, []);
-
-  useEffect(() => {
     getThemeOptions()
       .then(setThemeOptions)
       .catch(() => setThemeOptions(null));
-  }, []);
+  }, [preload]);
 
   const primaryNav: StrapiNavItem[] = nav?.primaryNav?.length
     ? nav.primaryNav

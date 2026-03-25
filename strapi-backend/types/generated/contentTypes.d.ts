@@ -850,6 +850,8 @@ export interface ApiThemeOptionsThemeOption extends Struct.SingleTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    frontendMode: Schema.Attribute.Enumeration<['react', 'static']> &
+      Schema.Attribute.DefaultTo<'react'>;
     gtm: Schema.Attribute.Component<'theme-option.gtm', false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<

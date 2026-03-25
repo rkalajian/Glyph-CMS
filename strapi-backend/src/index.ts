@@ -1,4 +1,5 @@
 import type { Core } from '@strapi/strapi';
+import { syncGoogleCalendar } from './google-calendar-sync';
 
 const THEME_OPTIONS_UID = 'api::theme-options.theme-option';
 const NAVIGATION_UID = 'api::navigation.navigation';
@@ -34,10 +35,11 @@ const CONTACT_FORM_FIELDS = [
   { type: 'textarea' as const, name: 'message', label: 'Message', required: true },
 ];
 
-/** Desired Theme Options edit layout order: Site Name, Logo, Breadcrumbs, Pagination, Social, Mailgun, GTM, Marker */
+/** Desired Theme Options edit layout order: Site Name, Logo, Frontend Mode, Breadcrumbs, Pagination, Social, Mailgun, GTM, Marker */
 const THEME_OPTIONS_EDIT_LAYOUT = [
   [{ name: 'siteName', size: 12 }],
   [{ name: 'logo', size: 12 }],
+  [{ name: 'frontendMode', size: 12 }],
   [{ name: 'showBreadcrumbs', size: 12 }],
   [{ name: 'blogPostsPerPage', size: 6 }, { name: 'pressReleasesPerPage', size: 6 }],
   [{ name: 'social', size: 12 }],
@@ -66,7 +68,17 @@ const PAGE_EDIT_LAYOUT = [
 ];
 
 export default {
-  register() {},
+  register({ strapi }: { strapi: Core.Strapi }) {
+    // Register Google Calendar sync cron job.
+    // Default: every hour. Override with GOOGLE_CALENDAR_SYNC_CRON env var.
+    const cronExpression = process.env.GOOGLE_CALENDAR_SYNC_CRON ?? '0 * * * *';
+    strapi.cron.add({
+      googleCalendarSync: {
+        task: async () => { await syncGoogleCalendar(strapi); },
+        options: { rule: cronExpression },
+      },
+    });
+  },
 
   async bootstrap({ strapi }: { strapi: Core.Strapi }) {
     // Ensure section pages exist (create if missing)
@@ -207,6 +219,9 @@ export default {
     } catch {
       // Ignore if content-manager not ready
     }
+
+    // Run Google Calendar sync on startup (after Strapi is fully ready)
+    setTimeout(() => syncGoogleCalendar(strapi), 5000);
 
     try {
       const formContentType = strapi.contentTypes[FORM_UID];

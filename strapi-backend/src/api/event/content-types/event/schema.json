@@ -37,6 +37,19 @@
     },
     "location": {
       "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "url": {
+      "type": "string"
+    },
+    "googleCalendarEventId": {
+      "type": "string",
+      "unique": true
     }
   }
 }
