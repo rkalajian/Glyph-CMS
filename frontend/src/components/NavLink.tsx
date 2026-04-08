@@ -1,14 +1,18 @@
+'use client';
+
 /**
  * Renders a nav link - internal (Link) or external (a).
  * When item has subnav, renders a dropdown; otherwise a simple link.
  */
 
 import { useState, useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+
+import type { StrapiNavItem } from '../types/strapi';
 
 const MotionLink = motion(Link);
-import type { StrapiNavItem } from '../types/strapi';
 
 const linkClass = (isActive: boolean) =>
   `py-2 text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${
@@ -26,7 +30,6 @@ function isInternal(url: string): boolean {
 
 interface NavLinkProps {
   item: Pick<StrapiNavItem, 'documentId' | 'label' | 'url' | 'openInNewTab' | 'subnav'>;
-  currentPath: string;
   variant?: 'header' | 'footer';
 }
 
@@ -36,11 +39,13 @@ function NavLinkSimple({
   currentPath,
 }: {
   item: Pick<StrapiNavItem, 'label' | 'url' | 'openInNewTab'>;
-  currentPath: string;
+  currentPath?: string;
 }) {
+  const pathname = usePathname();
+  const activePath = currentPath ?? pathname;
   const href = getHref(item.url);
   const active = isInternal(item.url)
-    ? currentPath === href || (href !== '/' && currentPath.startsWith(href))
+    ? activePath === href || (href !== '/' && activePath.startsWith(href))
     : false;
 
   if (item.openInNewTab || !isInternal(item.url)) {
@@ -60,15 +65,34 @@ function NavLinkSimple({
   }
 
   return (
-    <MotionLink to={href} className={linkClass(active)} whileHover={{ color: 'var(--color-accent)' }} whileTap={{ scale: 0.98 }}>
+    <MotionLink href={href} className={linkClass(active)} whileHover={{ color: 'var(--color-accent)' }} whileTap={{ scale: 0.98 }}>
       {item.label}
     </MotionLink>
   );
 }
 
-export function NavLink({ item, currentPath, variant = 'header' }: NavLinkProps) {
+export function NavLink({ item, variant = 'header' }: NavLinkProps) {
   const hasSubnav = item.subnav && item.subnav.length > 0;
   const [open, setOpen] = useState(false);
+  const currentPath = usePathname();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const leaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    if (open) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [open]);
+
+  useEffect(() => () => {
+    if (leaveTimerRef.current) clearTimeout(leaveTimerRef.current);
+  }, []);
 
   if (!hasSubnav) {
     return <NavLinkSimple item={item} currentPath={currentPath} />;
@@ -91,21 +115,6 @@ export function NavLink({ item, currentPath, variant = 'header' }: NavLinkProps)
   }
 
   // Header dropdown: hover + click for mobile
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const leaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    if (open) {
-      document.addEventListener('click', handleClickOutside);
-      return () => document.removeEventListener('click', handleClickOutside);
-    }
-  }, [open]);
-
   const handleMouseEnter = () => {
     if (leaveTimerRef.current) {
       clearTimeout(leaveTimerRef.current);
@@ -117,10 +126,6 @@ export function NavLink({ item, currentPath, variant = 'header' }: NavLinkProps)
   const handleMouseLeave = () => {
     leaveTimerRef.current = setTimeout(() => setOpen(false), 150);
   };
-
-  useEffect(() => () => {
-    if (leaveTimerRef.current) clearTimeout(leaveTimerRef.current);
-  }, []);
 
   return (
     <div
@@ -151,7 +156,7 @@ export function NavLink({ item, currentPath, variant = 'header' }: NavLinkProps)
         >
           <li role="none">
             <MotionLink
-              to={getHref(item.url)}
+              href={getHref(item.url)}
               className="block px-4 py-2 text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-inset rounded mx-2"
               role="menuitem"
               onClick={() => setOpen(false)}
@@ -178,7 +183,7 @@ export function NavLink({ item, currentPath, variant = 'header' }: NavLinkProps)
                 </motion.a>
               ) : (
                 <MotionLink
-                  to={getHref(sub.url)}
+                  href={getHref(sub.url)}
                   className="block px-4 py-2 text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-inset rounded mx-2"
                   role="menuitem"
                   onClick={() => setOpen(false)}

@@ -527,6 +527,8 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     description: Schema.Attribute.RichText;
     endDate: Schema.Attribute.DateTime;
+    googleCalendarEventId: Schema.Attribute.String & Schema.Attribute.Unique;
+    image: Schema.Attribute.Media<'images'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::event.event'> &
       Schema.Attribute.Private;
@@ -538,6 +540,7 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    url: Schema.Attribute.String;
   };
 }
 

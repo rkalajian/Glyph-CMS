@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Accordion block with 5 layout variations.
  * Renders customizable FAQ/accordion content from Strapi.

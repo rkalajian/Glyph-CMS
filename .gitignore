@@ -4,6 +4,8 @@ node_modules/
 # Build outputs
 dist/
 build/
+out/
+.next/
 *.tsbuildinfo
 
 # Strapi
@@ -34,6 +36,7 @@ lerna-debug.log*
 *.cache
 .vite/
 .turbo/
+next-env.d.ts
 
 # OS
 .DS_Store

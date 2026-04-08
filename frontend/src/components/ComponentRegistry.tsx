@@ -1,39 +1,20 @@
 /**
- * Registry of Tailgrids components from ./components.
- * Type = base name (e.g. Hero, Cta). Variation = number suffix (Hero2 = variation 2).
- * Block list: About, Accordion, Alerts, Avatar, Badge, Badges, Blog, BlogDetails, Brand,
- * Breadcrumb, Button, ButtonGroup, Buttons, Calendar, Card, Chart, ChatBox, ChatList,
- * Checkboxes, Checkout, Contact, Cookies, Cta, CustomerReview, DashboardDropdown, DataStats,
- * Drawer, Dropdown, ECommerceFooter, ECommerceHero, ECommerceNavbar, Error, Faq,
- * FeaturedProduct, Filter, Footer, FormElement, Forms, Hero, HorizontalMenu, List, Map,
- * Modal, Navbar, Newsletter, Notification, OrderSummary, PageTitles, Pagination, Popover,
- * Portfolio, Pricing, ProductCarousel, ProductDetails, ProductGrid, Profile, Progress,
- * PromoBanner, QuickView, RecentProduct, SelectBox, Service, SettingsPage, ShoppingCart,
- * Signin, Stats, Step, Switch, Switcher, Tab, Table, TableGrid, TableStack, Team,
- * Testimonial, Tooltip, VerticalNavbar, Video, Wishlist
+ * Registry of Tailgrids components.
+ * Component registry is generated at build time by scripts/generate-registry.mjs
  */
 
 import type { ComponentType } from 'react';
-
-const componentModules = import.meta.glob<{ default: ComponentType }>(
-  '../../../components/{About,Accordion,Alerts,Avatar,Badge,Badges,Blog,BlogDetails,Brand,Breadcrumb,Button,ButtonGroup,Buttons,Calendar,Card,Chart,ChatBox,ChatList,Checkboxes,Checkout,Contact,Cookies,Cta,CustomerReview,DashboardDropdown,DataStats,Drawer,Dropdown,ECommerceFooter,ECommerceHero,ECommerceNavbar,Error,Faq,FeaturedProduct,Filter,Footer,FormElement,Forms,Hero,HorizontalMenu,List,Map,Modal,Navbar,Newsletter,Notification,OrderSummary,PageTitles,Pagination,Popover,Portfolio,Pricing,ProductCarousel,ProductDetails,ProductGrid,Profile,Progress,PromoBanner,QuickView,RecentProduct,SelectBox,Service,SettingsPage,ShoppingCart,Signin,Stats,Step,Switch,Switcher,Tab,Table,TableGrid,TableStack,Team,Testimonial,Tooltip,VerticalNavbar,Video,Wishlist}*/index.jsx'
-);
-
-function parseComponentKey(path: string): { type: string; variation: number } {
-  const match = path.match(/components\/([^/]+)\/index\.jsx$/);
-  const name = match ? match[1] : '';
-  const numMatch = name.match(/^([A-Za-z]+)(\d*)$/);
-  const base = numMatch ? numMatch[1] : name;
-  const variationStr = numMatch ? numMatch[2] : '';
-  const variation = variationStr ? parseInt(variationStr, 10) : 1;
-  return { type: base, variation };
-}
+import { componentPaths, getComponentModule } from './component-registry.generated';
 
 const registry = new Map<string, () => Promise<{ default: ComponentType }>>();
 
-for (const [path, importFn] of Object.entries(componentModules)) {
-  const { type, variation } = parseComponentKey(path);
-  registry.set(`${type}:${variation}`, importFn as () => Promise<{ default: ComponentType }>);
+// Populate registry with lazy loaders
+for (const [key] of Object.entries(componentPaths)) {
+  registry.set(key, async () => {
+    const mod = await getComponentModule(key);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return mod ?? { default: null as any };
+  });
 }
 
 /** Get component by type and variation. Variation defaults to 1. */

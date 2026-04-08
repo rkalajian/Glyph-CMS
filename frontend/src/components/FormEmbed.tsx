@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Renders a form from the form builder by slug.
  * Used for embedding on any page or post.
@@ -5,8 +7,8 @@
  */
 
 import { useEffect, useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 import { getForm, getFormBySlug, submitForm } from '../lib/strapi';
 import type { StrapiForm, StrapiFormField } from '../types/strapi';
 
@@ -92,13 +94,14 @@ function FormFieldInput({ field }: { field: StrapiFormField }) {
 }
 
 export function FormEmbed({ slug, className = '' }: FormEmbedProps) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [form, setForm] = useState<StrapiForm | null>(null);
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
     getForm(slug)
       .then((f) => setForm(f ?? null))
@@ -135,7 +138,7 @@ export function FormEmbed({ slug, className = '' }: FormEmbedProps) {
           if (redirectUrl.startsWith('http://') || redirectUrl.startsWith('https://')) {
             window.location.href = redirectUrl;
           } else {
-            navigate(redirectUrl.startsWith('/') ? redirectUrl : `/${redirectUrl}`);
+            router.push(redirectUrl.startsWith('/') ? redirectUrl : `/${redirectUrl}`);
           }
           return;
         }
@@ -148,7 +151,7 @@ export function FormEmbed({ slug, className = '' }: FormEmbedProps) {
         setMessage(result.error ?? 'Something went wrong. Please try again.');
       }
     },
-    [form]
+    [form, router]
   );
 
   if (loading) {

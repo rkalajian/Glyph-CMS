@@ -1,40 +1,16 @@
-/**
- * Home page – editable in CMS.
- * Uses preloaded data when available (static build), otherwise fetches.
- */
+'use client';
 
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { usePreload } from '../../contexts/PreloadContext';
-import { getPage } from '../../lib/strapi';
+import Link from 'next/link';
 import { RichText } from '../../components/RichText';
-import { DocumentTitle } from '../../components/DocumentTitle';
 import { BlockRenderer } from '../../components/blocks/BlockRenderer';
 import { LINK_ACCENT } from '../../utils/classes';
 import type { StrapiPage } from '../../types/strapi';
 
-export function HomePage() {
-  const preload = usePreload();
-  const [page, setPage] = useState<StrapiPage | null | undefined>(
-    () => (preload?.route === '/' && preload?.page != null ? (preload.page as StrapiPage) : preload?.route === '/' ? null : undefined)
-  );
+interface HomePageProps {
+  page: StrapiPage | null;
+}
 
-  useEffect(() => {
-    if (preload?.route === '/') return;
-    getPage('home')
-      .then(setPage)
-      .catch(() => setPage(null));
-  }, [preload]);
-
-  if (page === undefined) {
-    return (
-      <article aria-busy="true">
-        <p>Loading…</p>
-      </article>
-    );
-  }
-
-  const title = page?.seoTitle ?? page?.title ?? 'Welcome';
+export function HomePage({ page }: HomePageProps) {
   const displayTitle = page?.title ?? 'Welcome';
   const subtitle = page?.subtitle ?? 'A simple, templatable CMS powered by Glyph.';
   const quickLinks = (page?.quickLinks?.length ? page.quickLinks : null) as Array<{
@@ -46,7 +22,6 @@ export function HomePage() {
   if (hasBlocks) {
     return (
       <article>
-        <DocumentTitle title={title} />
         <BlockRenderer blocks={page!.blocks} />
       </article>
     );
@@ -54,7 +29,6 @@ export function HomePage() {
 
   return (
     <article>
-      <DocumentTitle title={title} />
       <h1 className="text-3xl font-bold mb-4">{displayTitle}</h1>
       <p className="text-lg text-muted mb-6">{subtitle}</p>
       {page?.content && (
@@ -75,7 +49,7 @@ export function HomePage() {
                       {label}
                     </a>
                   ) : (
-                    <Link to={url} className={linkClass}>
+                    <Link href={url} className={linkClass}>
                       {label}
                     </Link>
                   )}

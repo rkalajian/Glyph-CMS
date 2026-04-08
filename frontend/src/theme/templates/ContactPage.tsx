@@ -1,31 +1,17 @@
-import { useEffect, useState } from 'react';
-import { usePreload } from '../../contexts/PreloadContext';
-import { getPage } from '../../lib/strapi';
-import { DocumentTitle } from '../../components/DocumentTitle';
 import { RichText } from '../../components/RichText';
 import { Breadcrumb } from '../../components/Breadcrumb';
 import type { StrapiPage } from '../../types/strapi';
 
-export function ContactPage() {
-  const preload = usePreload();
-  const [page, setPage] = useState<StrapiPage | null>(
-    () => (preload?.route === '/contact' ? ((preload.page as StrapiPage) ?? null) : null)
-  );
+interface ContactPageProps {
+  page: StrapiPage | null;
+}
 
-  useEffect(() => {
-    if (preload?.route === '/contact') return;
-    getPage('contact')
-      .then((p) => setPage(p ?? null))
-      .catch(() => setPage(null));
-  }, [preload]);
-
-  const title = page?.seoTitle ?? page?.title ?? 'Contact';
+export function ContactPage({ page }: ContactPageProps) {
   const displayTitle = page?.title ?? 'Contact';
   const subtitle = page?.subtitle ?? 'Have a question? Send us a message using the form below.';
 
   return (
     <article>
-      <DocumentTitle title={title} />
       <Breadcrumb items={[{ label: 'Home', url: '/' }, { label: displayTitle }]} />
       <h1 className="text-3xl font-bold mb-4">{displayTitle}</h1>
       <p className="text-muted mb-8">{subtitle}</p>

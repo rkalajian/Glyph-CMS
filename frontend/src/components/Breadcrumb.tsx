@@ -1,10 +1,11 @@
+'use client';
+
 /**
- * Breadcrumb navigation. Renders only when showBreadcrumbs is enabled in Theme Options.
+ * Breadcrumb navigation. Renders only when showBreadcrumbs is enabled.
  */
 
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { useThemeOptions } from '../contexts/ThemeContext';
+import Link from 'next/link';
 
 const MotionLink = motion(Link);
 
@@ -15,12 +16,12 @@ export interface BreadcrumbItem {
 
 interface BreadcrumbProps {
   items: BreadcrumbItem[];
+  showBreadcrumbs?: boolean;
   className?: string;
 }
 
-export function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
-  const themeOptions = useThemeOptions();
-  if (themeOptions?.showBreadcrumbs === false) return null;
+export function Breadcrumb({ items, showBreadcrumbs = true, className = '' }: BreadcrumbProps) {
+  if (showBreadcrumbs === false) return null;
   if (!items.length) return null;
 
   return (
@@ -33,7 +34,7 @@ export function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
           {i > 0 && <span aria-hidden="true">/</span>}
           {item.url ? (
             <MotionLink
-              to={item.url}
+              href={item.url}
               className="text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded"
               whileHover={{ textDecoration: 'underline' }}
               whileTap={{ scale: 0.98 }}

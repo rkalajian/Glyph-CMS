@@ -1,61 +1,24 @@
-/**
- * Single blog post template.
- * Fetches post by slug, renders cover image, metadata, and rich text content.
- */
+'use client';
 
-import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useParams, Link } from 'react-router-dom';
-import { getBlogPost, getStrapiImageUrl } from '../../lib/strapi';
+import Link from 'next/link';
+import { getStrapiImageUrl } from '../../lib/strapi';
 import { formatDate } from '../../utils/format';
-import { DocumentTitle } from '../../components/DocumentTitle';
 import { RichText } from '../../components/RichText';
 import { Breadcrumb } from '../../components/Breadcrumb';
 import type { StrapiBlogPost } from '../../types/strapi';
 
 const MotionLink = motion(Link);
 
-export function BlogPost() {
-  const { slug } = useParams<{ slug: string }>();
-  const [post, setPost] = useState<StrapiBlogPost | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+interface BlogPostProps {
+  post: StrapiBlogPost;
+}
 
-  useEffect(() => {
-    if (!slug) return;
-    setLoading(true);
-    setError(null);
-    getBlogPost(slug)
-      .then(setPost)
-      .catch((err) => setError(err instanceof Error ? err.message : 'Failed to load'))
-      .finally(() => setLoading(false));
-  }, [slug]);
-
-  if (loading) {
-    return (
-      <article aria-busy="true" aria-live="polite">
-        <p>Loading…</p>
-      </article>
-    );
-  }
-
-  if (error || !post) {
-    return (
-      <article>
-        <h1>Post not found</h1>
-        <p>{error ?? 'The requested post could not be found.'}</p>
-        <MotionLink to="/blog" className="text-accent" whileHover={{ textDecoration: 'underline' }} whileTap={{ scale: 0.98 }}>
-          Back to blog
-        </MotionLink>
-      </article>
-    );
-  }
-
+export function BlogPost({ post }: BlogPostProps) {
   const coverUrl = getStrapiImageUrl(post.coverImage);
 
   return (
     <article>
-      <DocumentTitle title={post.seoTitle ?? post.title} />
       <header className="mb-8">
         <Breadcrumb
           items={
@@ -83,7 +46,7 @@ export function BlogPost() {
                 {post.categories.map((cat) => (
                   <li key={cat.documentId}>
                     <MotionLink
-                      to={`/blog?category=${encodeURIComponent(cat.slug)}`}
+                      href={`/blog?category=${encodeURIComponent(cat.slug)}`}
                       className="text-accent"
                       whileHover={{ textDecoration: 'underline' }}
                       whileTap={{ scale: 0.98 }}

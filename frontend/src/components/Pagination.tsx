@@ -1,9 +1,11 @@
+'use client';
+
 /**
  * Pagination controls for blog and press listing pages.
  * Renders prev/next and numbered page links.
  */
 
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 
 const MotionLink = motion(Link);
@@ -46,7 +48,7 @@ export function Pagination({
     <nav aria-label="Pagination" className="mt-8 flex flex-wrap items-center justify-center gap-2">
       {page > 1 ? (
         <MotionLink
-          to={href(page - 1)}
+          href={href(page - 1)}
           className="inline-flex items-center px-3 py-2 rounded text-sm bg-border text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
           whileHover={{ backgroundColor: 'rgba(37, 99, 235, 0.2)' }}
           whileTap={{ scale: 0.98 }}
@@ -71,7 +73,7 @@ export function Pagination({
               </span>
             ) : (
               <MotionLink
-                to={href(p)}
+                href={href(p)}
                 className="inline-flex items-center justify-center min-w-9 px-3 py-2 rounded text-sm bg-border text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
                 whileHover={{ backgroundColor: 'rgba(37, 99, 235, 0.2)' }}
                 whileTap={{ scale: 0.98 }}
@@ -85,7 +87,7 @@ export function Pagination({
 
       {page < pageCount ? (
         <MotionLink
-          to={href(page + 1)}
+          href={href(page + 1)}
           className="inline-flex items-center px-3 py-2 rounded text-sm bg-border text-fg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
           whileHover={{ backgroundColor: 'rgba(37, 99, 235, 0.2)' }}
           whileTap={{ scale: 0.98 }}

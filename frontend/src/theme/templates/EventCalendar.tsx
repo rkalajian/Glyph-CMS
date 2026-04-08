@@ -1,14 +1,9 @@
-/**
- * Event calendar – month view, driven by Strapi
- * WCAG 2.2: Keyboard nav, focus visible, semantic table, aria-live for updates
- */
+'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { usePreload } from '../../contexts/PreloadContext';
-import { getPage, getEvents, getStrapiImageUrl } from '../../lib/strapi';
+import { getStrapiImageUrl } from '../../lib/strapi';
 import { RichText } from '../../components/RichText';
-import { DocumentTitle } from '../../components/DocumentTitle';
 import { Breadcrumb } from '../../components/Breadcrumb';
 import type { StrapiEvent, StrapiPage } from '../../types/strapi';
 
@@ -72,30 +67,16 @@ function formatTime(dateStr: string, allDay?: boolean): string {
   });
 }
 
-export function EventCalendar() {
-  const preload = usePreload();
-  const usePreloaded = preload?.route === '/events';
-  const [page, setPage] = useState<StrapiPage | null>(() => (usePreloaded && preload?.page != null ? (preload.page as StrapiPage) : null));
-  const [events, setEvents] = useState<StrapiEvent[]>(() => (usePreloaded && preload?.events ? (preload.events as StrapiEvent[]) : []));
-  const [loading, setLoading] = useState(!usePreloaded);
-  const [error, setError] = useState<string | null>(null);
+interface EventCalendarProps {
+  page: StrapiPage | null;
+  events: StrapiEvent[];
+}
+
+export function EventCalendar({ page, events }: EventCalendarProps) {
   const [viewDate, setViewDate] = useState(() => new Date());
 
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth();
-
-  useEffect(() => {
-    if (usePreloaded) return;
-    setLoading(true);
-    setError(null);
-    Promise.all([getPage('events'), getEvents()])
-      .then(([pageData, eventsData]) => {
-        setPage(pageData ?? null);
-        setEvents(eventsData);
-      })
-      .catch((err) => setError(err instanceof Error ? err.message : 'Failed to load'))
-      .finally(() => setLoading(false));
-  }, [usePreloaded]);
 
   const calendarDays = useMemo(() => getMonthDays(year, month), [year, month]);
 
@@ -103,30 +84,11 @@ export function EventCalendar() {
   const goNext = () => setViewDate((d) => new Date(d.getFullYear(), d.getMonth() + 1));
   const goToday = () => setViewDate(new Date());
 
-  if (loading) {
-    return (
-      <article aria-busy="true" aria-live="polite">
-        <p>Loading calendar…</p>
-      </article>
-    );
-  }
-
-  if (error) {
-    return (
-      <article>
-        <h1>Error</h1>
-        <p>{error}</p>
-      </article>
-    );
-  }
-
-  const title = page?.seoTitle ?? page?.title ?? 'Events';
   const displayTitle = page?.title ?? 'Event Calendar';
   const subtitle = page?.subtitle;
 
   return (
     <article>
-      <DocumentTitle title={title} />
       <header className="mb-8">
         <Breadcrumb items={[{ label: 'Home', url: '/' }, { label: displayTitle }]} />
         <h1 className="text-3xl font-bold mb-4">{displayTitle}</h1>
