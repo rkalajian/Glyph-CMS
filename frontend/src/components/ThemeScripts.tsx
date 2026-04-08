@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Injects GTM and Marker.io scripts from Theme Options.
  * Scripts are added to document.head in useEffect to avoid SSR/hydration issues.

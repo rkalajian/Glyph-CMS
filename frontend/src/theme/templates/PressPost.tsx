@@ -1,61 +1,24 @@
-/**
- * Single press release template.
- * Fetches release by slug, renders cover image, metadata, and rich text content.
- */
+'use client';
 
-import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useParams, Link } from 'react-router-dom';
-import { getPressRelease, getStrapiImageUrl } from '../../lib/strapi';
+import Link from 'next/link';
+import { getStrapiImageUrl } from '../../lib/strapi';
 import { formatDate } from '../../utils/format';
-import { DocumentTitle } from '../../components/DocumentTitle';
 import { RichText } from '../../components/RichText';
 import { Breadcrumb } from '../../components/Breadcrumb';
 import type { StrapiPressRelease } from '../../types/strapi';
 
 const MotionLink = motion(Link);
 
-export function PressPost() {
-  const { slug } = useParams<{ slug: string }>();
-  const [release, setRelease] = useState<StrapiPressRelease | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+interface PressPostProps {
+  release: StrapiPressRelease;
+}
 
-  useEffect(() => {
-    if (!slug) return;
-    setLoading(true);
-    setError(null);
-    getPressRelease(slug)
-      .then(setRelease)
-      .catch((err) => setError(err instanceof Error ? err.message : 'Failed to load'))
-      .finally(() => setLoading(false));
-  }, [slug]);
-
-  if (loading) {
-    return (
-      <article aria-busy="true" aria-live="polite">
-        <p>Loading…</p>
-      </article>
-    );
-  }
-
-  if (error || !release) {
-    return (
-      <article>
-        <h1>Press release not found</h1>
-        <p>{error ?? 'The requested press release could not be found.'}</p>
-        <MotionLink to="/press" className="text-accent" whileHover={{ textDecoration: 'underline' }} whileTap={{ scale: 0.98 }}>
-          Back to press
-        </MotionLink>
-      </article>
-    );
-  }
-
+export function PressPost({ release }: PressPostProps) {
   const coverUrl = getStrapiImageUrl(release.coverImage);
 
   return (
     <article>
-      <DocumentTitle title={release.seoTitle ?? release.title} />
       <header className="mb-8">
         <Breadcrumb
           items={[
@@ -76,7 +39,7 @@ export function PressPost() {
                 {release.categories.map((cat) => (
                   <li key={cat.documentId}>
                     <MotionLink
-                      to={`/press?category=${encodeURIComponent(cat.slug)}`}
+                      href={`/press?category=${encodeURIComponent(cat.slug)}`}
                       className="text-accent"
                       whileHover={{ textDecoration: 'underline' }}
                       whileTap={{ scale: 0.98 }}

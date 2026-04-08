@@ -1,8 +1,8 @@
 /**
  * Strapi REST API client
  *
- * In dev: uses relative /api so Vite proxy forwards to Strapi
- * In prod: uses VITE_STRAPI_URL (required for deploy)
+ * In dev: uses relative /api so Next.js proxy forwards to Strapi
+ * In prod: uses NEXT_PUBLIC_STRAPI_URL (required for deploy)
  *
  * Strapi 5 uses status=published (not publicationState=live) and
  * populate[0]=x&populate[1]=y for multiple relations.
@@ -27,10 +27,10 @@ import type {
   StrapiForm,
 } from '../types/strapi';
 
-/** Base URL for Strapi API. In dev, empty so Vite proxy works. */
+/** Base URL for Strapi API. In dev, empty so Next.js proxy works. */
 const STRAPI_URL =
-  import.meta.env.VITE_STRAPI_URL ??
-  (import.meta.env.DEV ? '' : 'http://localhost:1337');
+  process.env.NEXT_PUBLIC_STRAPI_URL ??
+  (process.env.NODE_ENV === 'development' ? '' : 'http://localhost:1337');
 
 // -----------------------------------------------------------------------------
 // Internal helpers
@@ -258,7 +258,7 @@ export async function getNavigation(): Promise<{
   // Single type: data is the document object directly
   const data = raw != null && !Array.isArray(raw) ? raw : Array.isArray(raw) && raw.length > 0 ? raw[0] : null;
   if (data == null || typeof data !== 'object') {
-    if (import.meta.env.DEV) {
+    if (process.env.NODE_ENV === 'development') {
       console.warn('[getNavigation] No data from Strapi — using defaults. Is Strapi running? (cd strapi-backend && npm run develop)');
     }
     return { utilityNav: [], primaryNav: [], footerNav: [] };
@@ -377,4 +377,12 @@ export async function getSiteAlerts(): Promise<StrapiSiteAlert[]> {
     const end = a.endDate ? new Date(a.endDate) : null;
     return start <= now && (!end || end >= now);
   });
+}
+
+// getForms is needed for generateStaticParams in /embed/form/[slug]/page.tsx
+export async function getForms(): Promise<StrapiForm[]> {
+  const res = await fetchApi<StrapiForm>(
+    '/api/forms?status=published&sort=slug:asc'
+  );
+  return toArray(res.data) as StrapiForm[];
 }

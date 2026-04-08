@@ -1,14 +1,15 @@
+'use client';
+
 /**
  * Site alerts banner – scheduled start/end, displayed at top of layout
  * WCAG 2.2: role="alert", aria-live for screen reader announcements
  */
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 const MotionLink = motion(Link);
-import { getSiteAlerts } from '../lib/strapi';
 import type { StrapiSiteAlert } from '../types/strapi';
 
 const severityStyles: Record<string, string> = {
@@ -17,30 +18,20 @@ const severityStyles: Record<string, string> = {
   critical: 'bg-red-100 dark:bg-red-900/40 text-red-900 dark:text-red-100 border-red-200 dark:border-red-800',
 };
 
-export function SiteAlerts() {
-  const [alerts, setAlerts] = useState<StrapiSiteAlert[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [dismissed, setDismissed] = useState<Set<string>>(() => new Set());
+interface SiteAlertsProps {
+  initialAlerts?: StrapiSiteAlert[];
+}
 
-  useEffect(() => {
-    getSiteAlerts()
-      .then(setAlerts)
-      .catch((err) => {
-        if (import.meta.env.DEV) {
-          console.warn('[SiteAlerts] Failed to load alerts:', err);
-        }
-        setAlerts([]);
-      })
-      .finally(() => setLoading(false));
-  }, []);
+export function SiteAlerts({ initialAlerts = [] }: SiteAlertsProps) {
+  const [dismissed, setDismissed] = useState<Set<string>>(() => new Set());
 
   const dismiss = (documentId: string) => {
     setDismissed((prev) => new Set(prev).add(documentId));
   };
 
-  const visibleAlerts = alerts.filter((a) => !dismissed.has(a.documentId));
+  const visibleAlerts = initialAlerts.filter((a) => !dismissed.has(a.documentId));
 
-  if (loading || visibleAlerts.length === 0) return null;
+  if (visibleAlerts.length === 0) return null;
 
   return (
     <div
@@ -76,7 +67,7 @@ export function SiteAlerts() {
                       </motion.a>
                     ) : (
                       <MotionLink
-                        to={alert.linkUrl.startsWith('/') ? alert.linkUrl : `/${alert.linkUrl}`}
+                        href={alert.linkUrl.startsWith('/') ? alert.linkUrl : `/${alert.linkUrl}`}
                         className="shrink-0 font-semibold underline underline-offset-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 rounded min-h-[44px] min-w-[44px] inline-flex items-center"
                         aria-label={alert.linkLabel ?? 'Learn more'}
                         whileHover={{ textDecoration: 'none' }}

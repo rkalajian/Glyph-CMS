@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Renders Strapi rich text content: Markdown, Blocks (ProseMirror), or plain.
  * Handles images, headings, paragraphs, lists, blockquotes, code.
@@ -10,10 +12,10 @@ import ReactMarkdown from 'react-markdown';
 import { FormEmbed } from './FormEmbed';
 import type { StrapiBlock } from '../types/strapi';
 
-/** Base URL for Strapi assets. In dev without VITE_STRAPI_URL, empty so proxy works. */
+/** Base URL for Strapi assets. In dev without NEXT_PUBLIC_STRAPI_URL, empty so proxy works. */
 const STRAPI_BASE =
-  import.meta.env.VITE_STRAPI_URL ??
-  (import.meta.env.DEV ? '' : 'http://localhost:1337');
+  process.env.NEXT_PUBLIC_STRAPI_URL ??
+  (process.env.NODE_ENV === 'development' ? '' : 'http://localhost:1337');
 
 function resolveImageUrl(url: string | undefined | null): string {
   if (!url?.trim()) return '';

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Dynamically loads and renders a Tailgrids component by type and variation.
  */

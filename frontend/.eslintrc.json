@@ -1,0 +1,14 @@
+{
+  "extends": ["next/core-web-vitals"],
+  "ignorePatterns": ["node_modules/", ".next/", "out/", "src/components/component-registry.generated.ts"],
+  "rules": {
+    "react/no-unescaped-entities": "warn",
+    "@next/next/no-img-element": "warn",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/set-state-in-effect": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "react-hooks/preserve-manual-memoization": "off",
+    "react-refresh/only-export-components": "off",
+    "react/display-name": "off"
+  }
+}
