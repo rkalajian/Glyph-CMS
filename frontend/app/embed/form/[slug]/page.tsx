@@ -5,10 +5,9 @@ import { FormEmbedPage as FormEmbedPageTemplate } from '@/theme/templates/FormEm
 
 export async function generateStaticParams() {
   const forms = await getForms();
+  if (forms.length === 0) return [{ slug: '__placeholder' }];
   return forms.map((f) => ({ slug: f.slug }));
 }
-
-export const dynamicParams = false;
 
 export async function generateMetadata() {
   return buildPageMetadata('Form');

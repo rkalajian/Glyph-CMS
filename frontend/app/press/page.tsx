@@ -1,4 +1,3 @@
-/* eslint-disable react-refresh/only-export-components */
 import { Suspense } from 'react';
 import { getPage, getPressReleaseCategories, getThemeOptions } from '@/lib/strapi';
 import { buildPageMetadata } from '@/lib/metadata';

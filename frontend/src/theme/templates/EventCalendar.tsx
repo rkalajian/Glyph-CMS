@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { getStrapiImageUrl } from '../../lib/strapi';
 import { RichText } from '../../components/RichText';

@@ -15,13 +15,13 @@ export async function generateStaticParams() {
     page++;
   }
 
+  if (slugs.length === 0) return [{ slug: '__placeholder' }];
   return slugs.map((slug) => ({ slug }));
 }
 
-export const dynamicParams = false;
-
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  if (slug === '__placeholder') return buildPageMetadata('Blog');
   const post = await getBlogPost(slug);
   return buildPageMetadata(post?.title, {
     description: post?.excerpt,
@@ -30,6 +30,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  if (slug === '__placeholder') return notFound();
   const post = await getBlogPost(slug);
   if (!post) notFound();
   return <BlogPostTemplate post={post} />;
