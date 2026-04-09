@@ -12,6 +12,11 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin =>
 
   return {
     'strapi-cloud': { enabled: false },
+    'users-permissions': {
+      config: {
+        jwtSecret: env('JWT_SECRET'),
+      },
+    },
     upload: useCloudinary
       ? {
           config: {
