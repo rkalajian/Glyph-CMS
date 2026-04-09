@@ -99,10 +99,17 @@ export async function getPage(slug: string): Promise<StrapiPage | null> {
 }
 
 export async function getPages(): Promise<StrapiPage[]> {
-  const res = await fetchApi<StrapiPage>(
-    '/api/pages?status=published&sort=title:asc'
-  );
-  return toArray(res.data) as StrapiPage[];
+  let page = 1;
+  const all: StrapiPage[] = [];
+  while (true) {
+    const res = await fetchApi<StrapiPage>(
+      `/api/pages?status=published&sort=title:asc&pagination[pageSize]=100&pagination[page]=${page}`
+    );
+    all.push(...(toArray(res.data) as StrapiPage[]));
+    if (page >= (res.meta?.pagination?.pageCount ?? 1)) break;
+    page++;
+  }
+  return all;
 }
 
 export async function getBlogPost(slug: string): Promise<StrapiBlogPost | null> {
