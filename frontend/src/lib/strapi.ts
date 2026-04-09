@@ -247,13 +247,22 @@ export async function getNavigation(): Promise<{
   primaryNav: StrapiNavItem[];
   footerNav: StrapiNavItem[];
 }> {
-  const res = await fetchApi<{
+  let res: Awaited<ReturnType<typeof fetchApi<{
     utilityNav?: NavLinkInput[];
     primaryNav?: NavLinkInput[];
     footerNav?: NavLinkInput[];
-  }>(
-    '/api/navigation?status=published&populate=*'
-  );
+  }>>>;
+  try {
+    res = await fetchApi<{
+      utilityNav?: NavLinkInput[];
+      primaryNav?: NavLinkInput[];
+      footerNav?: NavLinkInput[];
+    }>(
+      '/api/navigation?status=published&populate=*'
+    );
+  } catch {
+    return { utilityNav: [], primaryNav: [], footerNav: [] };
+  }
   const raw = res?.data;
   // Single type: data is the document object directly
   const data = raw != null && !Array.isArray(raw) ? raw : Array.isArray(raw) && raw.length > 0 ? raw[0] : null;
@@ -309,12 +318,16 @@ function normalizeThemeOptions(
 }
 
 export async function getThemeOptions(): Promise<StrapiThemeOptions | null> {
-  const res = await fetchApi<unknown>(
-    '/api/theme-option?status=published&populate=*'
-  );
-  const data = res.data;
-  if (data == null) return null;
-  return normalizeThemeOptions(data);
+  try {
+    const res = await fetchApi<unknown>(
+      '/api/theme-option?status=published&populate=*'
+    );
+    const data = res.data;
+    if (data == null) return null;
+    return normalizeThemeOptions(data);
+  } catch {
+    return null;
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -366,9 +379,14 @@ export async function submitForm(formSlug: string, data: Record<string, string |
 // -----------------------------------------------------------------------------
 
 export async function getSiteAlerts(): Promise<StrapiSiteAlert[]> {
-  const raw = await fetchApi<unknown>(
-    '/api/site-alerts?status=published&sort[0]=startDate:asc'
-  );
+  let raw: Awaited<ReturnType<typeof fetchApi<unknown>>>;
+  try {
+    raw = await fetchApi<unknown>(
+      '/api/site-alerts?status=published&sort[0]=startDate:asc'
+    );
+  } catch {
+    return [];
+  }
   const parsed = parseStrapiResponse(raw, strapiSiteAlertSchema, '[getSiteAlerts]');
   const alerts = (parsed ? toArray(parsed.data) : []) as StrapiSiteAlert[];
   const now = new Date();
