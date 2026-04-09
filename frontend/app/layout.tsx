@@ -72,7 +72,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                     className="h-10 w-auto"
                   />
                 )}
-                <span className="font-semibold text-lg hidden sm:inline">{siteName}</span>
+                {!logo && <span className="font-semibold text-lg">{siteName}</span>}
               </Link>
 
               {/* Desktop Nav */}
@@ -102,7 +102,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
         {/* Main Content */}
         <main id="main-content" className="flex-1">
-          {children}
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+            {children}
+          </div>
         </main>
 
         {/* Footer */}
