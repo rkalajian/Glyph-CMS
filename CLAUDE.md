@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Headless CMS with a **Strapi 5 backend** and **React 19 + TypeScript + Next.js 15 (App Router) + Tailwind CSS 4** frontend. Generates static HTML for all routes via `next build` (no Puppeteer), deploys to Netlify, supports Netlify Forms, WCAG 2.2 accessibility, and Lighthouse 90+ scores.
+Headless CMS with a **Strapi 5 backend** and **React 19 + TypeScript + Next.js 15 (App Router) + Tailwind CSS 4** frontend. Generates static HTML for all routes via `next build` (no Puppeteer), deploys to Netlify (static) + Render (Strapi) + Neon (PostgreSQL), supports Netlify Forms, WCAG 2.2 accessibility, and Lighthouse 90+ scores.
 
 ## Repository Structure
 
@@ -32,10 +32,12 @@ cms/
 │   ├── public/            # Static assets (glyph.svg)
 │   ├── next.config.ts     # Next.js config (output: 'export', trailingSlash: true)
 │   └── postcss.config.mjs # Tailwind CSS 4 PostCSS plugin
-└── strapi-backend/    # Strapi 5 CMS (unchanged)
-    └── src/
-        ├── api/           # Content types (page, blog-post, event, form, etc.)
-        └── components/blocks/  # 398 Tailgrids components
+└── strapi-backend/    # Strapi 5 CMS
+    ├── config/            # database.ts, plugins.ts, server.ts, middlewares.ts
+    ├── src/
+    │   ├── api/           # Content types (page, blog-post, event, form, etc.)
+    │   └── components/blocks/  # 398 Tailgrids components
+    └── .env.example       # All required env vars documented
 ```
 
 ## Dev Commands
@@ -53,8 +55,10 @@ npm run build            # Build and prerender all static routes to out/
 npm run build:strapi
 ```
 
-Environment variables (set in `.env.local` or Netlify):
-- `NEXT_PUBLIC_STRAPI_URL=https://your-strapi-instance.com` (production Strapi URL; omit in dev to use Next.js proxy)
+Environment variables:
+- **Frontend** (`frontend/.env.local` or Netlify dashboard): `NEXT_PUBLIC_STRAPI_URL=https://your-strapi.onrender.com`
+- **Backend** (`strapi-backend/.env` locally, Render dashboard in production): see `strapi-backend/.env.example`
+- In dev, omit `NEXT_PUBLIC_STRAPI_URL` — Next.js proxies `/api` → `localhost:1337` automatically
 
 ## Code Standards
 
@@ -153,9 +157,30 @@ These functions were added to `lib/strapi.ts` for Next.js static generation:
 - `getPages()` — fetches all pages for `/pages/[slug]` static param generation
 - `getForms()` — fetches all forms for `/embed/form/[slug]` static param generation
 
+## Deployment Architecture
+
+- **Netlify** — serves `frontend/out/` (fully static HTML, no server)
+  - Build command: `cd frontend && npm install && npm run build`
+  - Strapi must be reachable during build for `generateStaticParams` to fetch slugs
+  - Add a Netlify build hook to Strapi Webhooks for automatic content-triggered rebuilds
+- **Render** — runs Strapi (Node.js web service, `strapi-backend/`)
+  - Free tier spins down after 15 min inactivity; fine since Netlify only hits it at build time
+  - All env vars set in Render dashboard (`.env` is not read in production)
+- **Neon** — PostgreSQL database (free tier)
+  - Use the **pooler** host (not direct host) for connection pooling
+  - `DATABASE_SSL=true` required
+- **Cloudinary** — file uploads (optional, free tier 25GB)
+  - Without Cloudinary, uploads use local disk — lost on every Render redeploy
+  - Configure via `CLOUDINARY_NAME`, `CLOUDINARY_KEY`, `CLOUDINARY_SECRET` in Render env vars
+
+### Empty content type builds
+
+If a content type (e.g. press releases) has 0 published items, `generateStaticParams` returns `[{ slug: '__placeholder' }]` to satisfy Next.js `output: 'export'` requirements. The `__placeholder` slug renders `notFound()`. This is intentional — do not remove it.
+
 ## Documentation Updates
 
 **After any major change** (new content type, new route, new block, changed API, changed build process, changed env vars), update:
-1. `frontend/README.md` — build commands, env vars, new route static param generation
-2. Relevant inline comments in `strapi-backend/src/index.ts` bootstrap defaults
-3. This `CLAUDE.md` if architectural conventions change
+1. `README.md` — build commands, env vars, new route, new content type URLs
+2. `strapi-backend/.env.example` — any new env vars
+3. Relevant inline comments in `strapi-backend/src/index.ts` bootstrap defaults
+4. This `CLAUDE.md` if architectural conventions change

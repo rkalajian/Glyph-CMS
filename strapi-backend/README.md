@@ -1,61 +1,38 @@
-# 🚀 Getting started with Strapi
+# Glyph CMS — Strapi Backend
 
-Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
+Strapi 5 headless CMS. See the [root README](../README.md) for full project setup.
 
-### `develop`
+## Dev
 
-Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)
-
-```
-npm run develop
-# or
-yarn develop
+```bash
+npm install
+npm run develop   # http://localhost:1337/admin
 ```
 
-### `start`
+## Build & Start (production)
 
-Start your Strapi application with autoReload disabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-start)
-
-```
-npm run start
-# or
-yarn start
-```
-
-### `build`
-
-Build your admin panel. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-build)
-
-```
+```bash
 npm run build
-# or
-yarn build
+npm run start
 ```
 
-## ⚙️ Deployment
+## Environment Variables
 
-Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
+Copy `.env.example` to `.env` and fill in values. See `.env.example` for all variables.
 
-```
-yarn strapi deploy
-```
+For production (Render), set env vars in the Render dashboard — `.env` files are not read in production.
 
-## 📚 Learn more
+## Database
 
-- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
-- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
-- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Strapi blog](https://strapi.io/blog) - Official Strapi blog containing articles made by the Strapi team and the community.
-- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
+Defaults to SQLite in dev. For production, set `DATABASE_CLIENT=postgres` and provide Neon (or any PostgreSQL) connection details.
 
-Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
+## File Uploads
 
-## ✨ Community
+Defaults to local disk storage. For persistent uploads on Render (filesystem resets on redeploy), configure Cloudinary via `CLOUDINARY_NAME`, `CLOUDINARY_KEY`, `CLOUDINARY_SECRET`.
 
-- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
-- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
-- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
+## After First Deploy
 
----
-
-<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+1. Visit `/admin` and create your admin user
+2. Go to **Settings → Users & Permissions → Roles → Public**
+3. Enable `find` and `findOne` for all content types the frontend needs
+4. Create initial content in Content Manager
