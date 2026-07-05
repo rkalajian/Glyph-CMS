@@ -9,6 +9,9 @@ import { MobileMenu } from '@/components/MobileMenu';
 import { ThemeScripts } from '@/components/ThemeScripts';
 import { SiteAlerts } from '@/components/SiteAlerts';
 import { SocialLinks } from '@/components/SocialLinks';
+import { CookieConsentProvider } from '@/components/CookieConsentProvider';
+import { CookieConsentBanner } from '@/components/CookieConsentBanner';
+import { CookieSettingsButton } from '@/components/CookieSettingsButton';
 import Link from 'next/link';
 import type { StrapiNavItem } from '@/types/strapi';
 
@@ -24,6 +27,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   ]);
 
   const logo = themeOptions?.logo ? getStrapiImageUrl(themeOptions.logo) : '/glyph.svg';
+  const favicon = themeOptions?.favicon ? getStrapiImageUrl(themeOptions.favicon) : null;
   const siteName = themeOptions?.siteName || 'Glyph';
 
   return (
@@ -31,8 +35,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {favicon && <link rel="icon" href={favicon} />}
       </head>
       <body>
+        <CookieConsentProvider>
         <ThemeScripts options={themeOptions} />
         <SiteAlerts initialAlerts={alerts} />
 
@@ -143,9 +149,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             {/* Copyright */}
             <div className="border-t border-border pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted">
               <p>&copy; {new Date().getFullYear()} {siteName}. All rights reserved.</p>
+              <CookieSettingsButton />
             </div>
           </div>
         </footer>
+        <CookieConsentBanner />
+        </CookieConsentProvider>
       </body>
     </html>
   );

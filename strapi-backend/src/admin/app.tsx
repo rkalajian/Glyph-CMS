@@ -3,6 +3,9 @@ import type { StrapiApp } from '@strapi/strapi/admin';
 // @ts-expect-error – SVG import
 import Logo from './extensions/glyph.svg';
 import { FormAttachPanel } from './extensions/FormAttachPanel';
+import { initPageTreeList } from './extensions/PageTreeList';
+import { initPageSlugPrefix } from './extensions/PageSlugPrefix';
+import { initWysiwygSubSup } from './extensions/WysiwygSubSup';
 import './extensions/custom-button-styles.css';
 
 // -----------------------------------------------------------------------------
@@ -89,6 +92,10 @@ export default {
       const apis = cmPlugin.apis as { addEditViewSidePanel: (panels: unknown[]) => void };
       apis.addEditViewSidePanel([FormAttachPanel]);
     }
+
+    initPageTreeList();
+    initPageSlugPrefix();
+    initWysiwygSubSup();
 
     if (typeof document !== 'undefined') {
       document.body.classList.add('custom-admin-buttons');

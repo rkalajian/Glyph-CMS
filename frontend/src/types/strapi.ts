@@ -31,6 +31,10 @@ export interface StrapiImage {
   caption?: string | null;
   width?: number;
   height?: number;
+  /** MIME type (e.g. image/webp, video/mp4) — StrapiMedia renders <video> for video/* */
+  mime?: string | null;
+  /** Optional focal point (percentages) for object-position cropping */
+  focalPoint?: { x?: number | null; y?: number | null } | null;
 }
 
 // -----------------------------------------------------------------------------
@@ -569,6 +573,7 @@ export interface StrapiThemeOptions {
   documentId?: string;
   siteName?: string | null;
   logo?: StrapiImage | null;
+  favicon?: StrapiImage | null;
   /** react = SPA (client-side). static = pre-rendered HTML at build time. */
   frontendMode?: 'react' | 'static' | null;
   showBreadcrumbs?: boolean;
@@ -577,8 +582,35 @@ export interface StrapiThemeOptions {
   marker?: StrapiThemeOptionMarker | null;
   gtm?: StrapiThemeOptionGtm | null;
   social?: StrapiThemeOptionSocial | null;
+  /** reCAPTCHA v2 site key (public). Secret key stays server-side in Strapi. */
+  recaptchaSiteKey?: string | null;
+  searchConfig?: StrapiSearchContentTypeConfig[] | null;
   publishedAt?: string | null;
   updatedAt?: string;
+}
+
+export interface StrapiSearchContentTypeConfig {
+  contentType: string;
+  label?: string | null;
+  enabled?: boolean;
+  /** Comma-separated field names to search; blank = defaults */
+  fields?: string | null;
+}
+
+export interface StrapiSearchResult {
+  type: string;
+  label: string;
+  documentId: string;
+  title: string;
+  slug: string;
+  url: string;
+  excerpt?: string;
+  image?: StrapiImage | null;
+}
+
+export interface StrapiSearchResponse {
+  data: StrapiSearchResult[];
+  meta: { total: number; query: string };
 }
 
 export interface StrapiSiteAlert {

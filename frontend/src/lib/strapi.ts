@@ -25,6 +25,7 @@ import type {
   StrapiThemeOptions,
   StrapiImage,
   StrapiForm,
+  StrapiSearchResponse,
 } from '../types/strapi';
 
 /** Base URL for Strapi API. In dev, empty so Next.js proxy works. */
@@ -76,6 +77,15 @@ function toArray<T>(data: T | T[] | null | undefined): T[] {
  * Resolves a Strapi image to a full URL.
  * Handles absolute URLs and relative paths (e.g. /uploads/...).
  */
+/** CSS object-position from an image's focal point, if one is set. */
+export function getFocalPointStyle(
+  image: StrapiImage | null | undefined
+): { objectPosition: string } | undefined {
+  const fp = image?.focalPoint;
+  if (!fp || fp.x == null || fp.y == null) return undefined;
+  return { objectPosition: `${fp.x}% ${fp.y}%` };
+}
+
 export function getStrapiImageUrl(
   image: StrapiImage | null | undefined
 ): string | null {
@@ -185,10 +195,19 @@ export async function getPressReleaseCategories(): Promise<StrapiPressReleaseCat
 }
 
 export async function getEvents(): Promise<StrapiEvent[]> {
+  // Explicit pageSize — without it Strapi silently caps results at its default (25)
   const res = await fetchApi<StrapiEvent>(
-    '/api/events?status=published&sort=startDate:asc&populate[0]=image'
+    '/api/events?status=published&sort=startDate:asc&populate[0]=image&pagination[pageSize]=500'
   );
   return toArray(res.data) as StrapiEvent[];
+}
+
+export async function getEvent(slug: string): Promise<StrapiEvent | null> {
+  const res = await fetchApi<StrapiEvent>(
+    `/api/events?status=published&filters[slug][$eq]=${encodeURIComponent(slug)}&populate[0]=image`
+  );
+  const items = toArray(res.data) as StrapiEvent[];
+  return items[0] ?? null;
 }
 
 // -----------------------------------------------------------------------------
@@ -312,6 +331,9 @@ function normalizeThemeOptions(
     documentId: (obj.documentId ?? attrs.documentId) as string | undefined,
     siteName: (attrs.siteName ?? obj.siteName) as string | null | undefined,
     logo: (attrs.logo ?? obj.logo) as StrapiThemeOptions['logo'],
+    favicon: (attrs.favicon ?? obj.favicon) as StrapiThemeOptions['favicon'],
+    recaptchaSiteKey: (attrs.recaptchaSiteKey ?? obj.recaptchaSiteKey) as string | null | undefined,
+    searchConfig: (attrs.searchConfig ?? obj.searchConfig) as StrapiThemeOptions['searchConfig'],
     frontendMode: (attrs.frontendMode ?? obj.frontendMode ?? 'react') as 'react' | 'static' | null | undefined,
     showBreadcrumbs: (attrs.showBreadcrumbs ?? obj.showBreadcrumbs) as boolean | undefined,
     blogPostsPerPage: (attrs.blogPostsPerPage ?? obj.blogPostsPerPage) as number | undefined,
@@ -338,8 +360,20 @@ export async function getThemeOptions(): Promise<StrapiThemeOptions | null> {
 }
 
 // -----------------------------------------------------------------------------
-// Site alerts (scheduled banners)
+// Site search (custom /api/search endpoint, configured in Theme Options)
 // -----------------------------------------------------------------------------
+
+export async function search(q: string, types?: string[]): Promise<StrapiSearchResponse> {
+  const params = new URLSearchParams({ q });
+  if (types?.length) params.set('types', types.join(','));
+  try {
+    const res = await fetch(`${STRAPI_URL}/api/search?${params}`);
+    if (!res.ok) return { data: [], meta: { total: 0, query: q } };
+    return res.json() as Promise<StrapiSearchResponse>;
+  } catch {
+    return { data: [], meta: { total: 0, query: q } };
+  }
+}
 
 // -----------------------------------------------------------------------------
 // Forms (form builder, embeddable)
@@ -362,13 +396,17 @@ export async function getFormBySlug(slug: string): Promise<StrapiForm | null> {
   return forms[0] ?? null;
 }
 
-export async function submitForm(formSlug: string, data: Record<string, string | number | boolean>): Promise<{ ok: boolean; error?: string }> {
+export async function submitForm(
+  formSlug: string,
+  data: Record<string, string | number | boolean>,
+  recaptchaToken?: string
+): Promise<{ ok: boolean; error?: string }> {
   try {
     const res = await fetch(`${STRAPI_URL}/api/form-submissions`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        data: { form: formSlug, ...data },
+        data: { form: formSlug, ...data, ...(recaptchaToken ? { recaptchaToken } : {}) },
       }),
     });
     if (!res.ok) {

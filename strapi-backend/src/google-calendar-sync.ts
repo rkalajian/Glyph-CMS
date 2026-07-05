@@ -47,6 +47,21 @@ function slugify(text: string): string {
     .slice(0, 60);
 }
 
+/**
+ * Short deterministic hash of a Google Calendar event id, used as a slug suffix.
+ *
+ * Must hash the FULL id, not a trailing slice — recurring-event instance ids
+ * look like `<seriesId>_<YYYYMMDD>T<HHMMSS>Z`, and for a daily series at a
+ * fixed time, the last 8 characters (the `HHMMSSZ` portion) are IDENTICAL
+ * across every occurrence. Slicing collided across instances and caused
+ * "attribute must be unique" slug errors that aborted the whole sync run.
+ */
+function hashId(id: string): string {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+  return h.toString(36);
+}
+
 /** Resolve start/end datetimes and allDay flag from a Google Calendar event */
 function resolveDates(ev: GoogleCalendarEvent): {
   startDate: string;
@@ -56,10 +71,12 @@ function resolveDates(ev: GoogleCalendarEvent): {
   const allDay = !ev.start.dateTime;
 
   if (allDay) {
-    // All-day: Google gives YYYY-MM-DD, store as midnight UTC
-    const startDate = new Date(ev.start.date + 'T00:00:00Z').toISOString();
+    // All-day: Google gives YYYY-MM-DD with no time-of-day. Anchor at noon UTC
+    // (not midnight) so the date survives conversion to America/New_York
+    // (UTC-4/-5) on the frontend without rolling back to the previous day.
+    const startDate = new Date(ev.start.date + 'T12:00:00Z').toISOString();
     const endDate = ev.end?.date
-      ? new Date(ev.end.date + 'T00:00:00Z').toISOString()
+      ? new Date(ev.end.date + 'T12:00:00Z').toISOString()
       : null;
     return { startDate, endDate, allDay: true };
   }
@@ -157,9 +174,9 @@ async function upsertEvent(
     return 'updated';
   }
 
-  // New event — generate a stable slug from title + last 8 chars of gcal id
+  // New event — generate a stable slug from title + a hash of the full gcal id
   const baseSlug = slugify(title) || 'event';
-  const slug = `${baseSlug}-${gcalEvent.id.slice(-8)}`;
+  const slug = `${baseSlug}-${hashId(gcalEvent.id)}`;
 
   await docService.create({
     data: {
@@ -178,13 +195,46 @@ async function upsertEvent(
   return 'created';
 }
 
+/** Load calendar config from Theme Options, falling back to env vars */
+async function loadConfig(strapi: Core.Strapi): Promise<{
+  calendarId: string;
+  apiKey: string;
+  syncEnabled: boolean;
+} | null> {
+  try {
+    const settings = await strapi.documents('api::theme-options.theme-option' as Parameters<typeof strapi.documents>[0]).findFirst({}) as {
+      googleCalendarId?: string | null;
+      googleCalendarApiKey?: string | null;
+      googleCalendarSyncEnabled?: boolean | null;
+    } | null;
+
+    const calendarId = settings?.googleCalendarId?.trim() || process.env.GOOGLE_CALENDAR_ID;
+    const apiKey = settings?.googleCalendarApiKey?.trim() || process.env.GOOGLE_CALENDAR_API_KEY;
+    const syncEnabled = settings?.googleCalendarSyncEnabled ?? true;
+
+    if (!calendarId || !apiKey) return null;
+    return { calendarId, apiKey, syncEnabled };
+  } catch {
+    const calendarId = process.env.GOOGLE_CALENDAR_ID;
+    const apiKey = process.env.GOOGLE_CALENDAR_API_KEY;
+    if (!calendarId || !apiKey) return null;
+    return { calendarId, apiKey, syncEnabled: true };
+  }
+}
+
 /** Main sync entrypoint — call this from bootstrap and from the cron job */
 export async function syncGoogleCalendar(strapi: Core.Strapi): Promise<void> {
-  const calendarId = process.env.GOOGLE_CALENDAR_ID;
-  const apiKey = process.env.GOOGLE_CALENDAR_API_KEY;
+  const config = await loadConfig(strapi);
 
-  if (!calendarId || !apiKey) {
+  if (!config) {
     // Not configured — skip silently (feature is opt-in)
+    return;
+  }
+
+  const { calendarId, apiKey, syncEnabled } = config;
+
+  if (!syncEnabled) {
+    strapi.log.info('[gcal-sync] Sync disabled in Event Feed settings — skipping');
     return;
   }
 
@@ -196,13 +246,21 @@ export async function syncGoogleCalendar(strapi: Core.Strapi): Promise<void> {
 
     let created = 0;
     let updated = 0;
+    let failed = 0;
 
+    // Each event is upserted independently — one bad event (e.g. a stale
+    // slug collision) must not abort the rest of the batch.
     for (const ev of gcalEvents) {
-      const result = await upsertEvent(ev, strapi);
-      if (result === 'updated') updated++; else created++;
+      try {
+        const result = await upsertEvent(ev, strapi);
+        if (result === 'updated') updated++; else created++;
+      } catch (err) {
+        failed++;
+        strapi.log.error(`[gcal-sync] Failed to sync event "${ev.summary ?? ev.id}" (${ev.id}):`, err);
+      }
     }
 
-    strapi.log.info(`[gcal-sync] Done — ${created} created, ${updated} updated`);
+    strapi.log.info(`[gcal-sync] Done — ${created} created, ${updated} updated, ${failed} failed`);
   } catch (err) {
     strapi.log.error('[gcal-sync] Sync failed:', err);
   }

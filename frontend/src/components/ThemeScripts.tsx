@@ -8,6 +8,18 @@
 
 import { useEffect } from 'react';
 import type { StrapiThemeOptions } from '../types/strapi';
+import { useCookieConsent } from './CookieConsentProvider';
+
+function extractGtmId(snippet: string): string | null {
+  if (/^GTM-[A-Z0-9]+$/i.test(snippet.trim())) return snippet.trim().toUpperCase();
+  const match = snippet.match(/GTM-[A-Z0-9]+/i);
+  return match ? match[0].toUpperCase() : null;
+}
+
+function extractScriptContent(snippet: string): string {
+  const match = snippet.match(/<script[^>]*>([\s\S]*?)<\/script>/i);
+  return match ? match[1].trim() : snippet.trim();
+}
 
 function isValidMarkerioUrl(url: string): boolean {
   try {
@@ -52,10 +64,12 @@ function injectMarkerSnippet(snippet: string): boolean {
     return true;
   }
 
-  // Inline script content
+  // Inline script content — strip outer <script> wrapper if present
+  const scriptContentMatch = s.match(/<script[^>]*>([\s\S]*?)<\/script>/i);
+  const content = scriptContentMatch ? scriptContentMatch[1].trim() : s;
   const script = document.createElement('script');
   script.id = 'markerio-script';
-  script.innerHTML = s;
+  script.innerHTML = content;
   document.head.appendChild(script);
   return true;
 }
@@ -67,30 +81,32 @@ interface ThemeScriptsProps {
 export function ThemeScripts({ options }: ThemeScriptsProps) {
   const gtm = options?.gtm;
   const marker = options?.marker;
+  const { consent } = useCookieConsent();
 
   useEffect(() => {
     if (!options) return;
 
     const toRemove: string[] = [];
 
-    // Google Tag Manager – header script (ID e.g. GTM-XXX or full snippet)
+    // Google Tag Manager — only inject after user accepts cookies
     const gtmHeaderSnippet = gtm?.gtmHeaderSnippet?.trim();
-    if (gtmHeaderSnippet) {
+    if (gtmHeaderSnippet && consent === 'accepted') {
       const script = document.createElement('script');
       script.id = 'gtm-script';
-      const isGtmId = /^GTM-[A-Z0-9]+$/i.test(gtmHeaderSnippet);
-      script.innerHTML = isGtmId
+      const gtmId = extractGtmId(gtmHeaderSnippet);
+      script.innerHTML = gtmId
         ? `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','${gtmHeaderSnippet}');`
-        : gtmHeaderSnippet;
+        })(window,document,'script','dataLayer','${gtmId}');`
+        : extractScriptContent(gtmHeaderSnippet);
       document.head.appendChild(script);
       toRemove.push('gtm-script');
     }
 
-    // Marker.io – feedback widget (URL or snippet from Theme Options)
+    // Marker.io — feedback widget; intentionally not gated behind cookie consent
+    // (session feedback tool, not analytics/advertising)
     const markerSnippet = marker?.markerSnippet?.trim();
     if (markerSnippet && injectMarkerSnippet(markerSnippet)) {
       toRemove.push('markerio-script');
@@ -99,12 +115,12 @@ export function ThemeScripts({ options }: ThemeScriptsProps) {
     return () => {
       toRemove.forEach((id) => document.getElementById(id)?.remove());
     };
-  }, [gtm?.gtmHeaderSnippet, marker?.markerSnippet]);
+  }, [gtm?.gtmHeaderSnippet, marker?.markerSnippet, consent]);
 
-  // GTM noscript iframe – fallback when JavaScript is disabled
+  // GTM noscript iframe — only render when consent given
   const gtmBodySnippet = gtm?.gtmBodySnippet?.trim() || gtm?.gtmHeaderSnippet?.trim();
-  const gtmBodyId = gtmBodySnippet && /^GTM-[A-Z0-9]+$/i.test(gtmBodySnippet) ? gtmBodySnippet : null;
-  if (!gtmBodyId) return null;
+  const gtmBodyId = gtmBodySnippet ? extractGtmId(gtmBodySnippet) : null;
+  if (!gtmBodyId || consent !== 'accepted') return null;
 
   return (
     <noscript>

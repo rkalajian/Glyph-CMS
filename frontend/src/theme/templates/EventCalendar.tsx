@@ -215,16 +215,12 @@ export function EventCalendar({ page, events }: EventCalendarProps) {
                                     {ev.location && (
                                       <p className="text-muted">📍 {ev.location}</p>
                                     )}
-                                    {ev.url && (
-                                      <a
-                                        href={ev.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="inline-block mt-1 text-accent hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 rounded"
-                                      >
-                                        View event →
-                                      </a>
-                                    )}
+                                    <a
+                                      href={`/events/${ev.slug}/`}
+                                      className="inline-block mt-1 text-accent hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 rounded"
+                                    >
+                                      View event →
+                                    </a>
                                     {ev.description && (
                                       <div className="mt-1">
                                         <RichText content={ev.description} />

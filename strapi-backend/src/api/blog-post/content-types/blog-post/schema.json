@@ -31,6 +31,10 @@
     "publishedAt": {
       "type": "datetime"
     },
+    "scheduledPublishAt": {
+      "type": "datetime",
+      "description": "If set on a draft, the post is auto-published at this time"
+    },
     "coverImage": {
       "type": "media",
       "multiple": false,

@@ -15,6 +15,10 @@
     "excerpt": { "type": "text" },
     "content": { "type": "richtext", "required": true },
     "publishedAt": { "type": "datetime" },
+    "scheduledPublishAt": {
+      "type": "datetime",
+      "description": "If set on a draft, the release is auto-published at this time"
+    },
     "coverImage": {
       "type": "media",
       "multiple": false,

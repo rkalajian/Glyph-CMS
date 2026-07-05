@@ -6,7 +6,8 @@
   },
   "attributes": {
     "apiKey": {
-      "type": "password",
+      "type": "string",
+      "private": true,
       "displayName": "API Key",
       "description": "Mailgun API key (private key). Prefer setting MAILGUN_API_KEY env var for security."
     },

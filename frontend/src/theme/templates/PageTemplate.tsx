@@ -1,6 +1,7 @@
 import { RichText } from '../../components/RichText';
 import { Breadcrumb } from '../../components/Breadcrumb';
 import { BlockRenderer } from '../../components/blocks/BlockRenderer';
+import { ChildPagesList } from '../../components/ChildPagesList';
 import type { StrapiPage } from '../../types/strapi';
 
 interface PageTemplateProps {
@@ -25,6 +26,7 @@ export function PageTemplate({ page }: PageTemplateProps) {
         {!hasBlocks && <h1 className="text-3xl font-bold">{page.title}</h1>}
       </header>
       {hasBlocks ? <BlockRenderer blocks={page.blocks} /> : <RichText content={page.content} />}
+      <ChildPagesList pages={page.children ?? []} />
     </article>
   );
 }

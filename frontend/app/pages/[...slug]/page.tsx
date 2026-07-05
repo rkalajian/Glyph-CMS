@@ -4,21 +4,23 @@ import { getPage, getPages } from '@/lib/strapi';
 import { buildPageMetadata } from '@/lib/metadata';
 import { PageTemplate as PageTemplateComponent } from '@/theme/templates/PageTemplate';
 
+// Catch-all: child pages have parent-prefixed slugs (e.g. "about-us/careers"),
+// so a page URL may span multiple segments.
 export async function generateStaticParams() {
   const pages = await getPages();
-  if (pages.length === 0) return [{ slug: '__placeholder' }];
-  return pages.map((p) => ({ slug: p.slug }));
+  if (pages.length === 0) return [{ slug: ['__placeholder'] }];
+  return pages.map((p) => ({ slug: p.slug.split('/') }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+export async function generateMetadata({ params }: { params: Promise<{ slug: string[] }> }) {
+  const slug = (await params).slug.join('/');
   if (slug === '__placeholder') return buildPageMetadata('Page');
   const page = await getPage(slug);
   return buildPageMetadata(page?.title);
 }
 
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+export default async function Page({ params }: { params: Promise<{ slug: string[] }> }) {
+  const slug = (await params).slug.join('/');
   if (slug === '__placeholder') return notFound();
   const page = await getPage(slug);
   if (!page) notFound();

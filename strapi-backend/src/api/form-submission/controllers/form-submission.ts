@@ -53,7 +53,26 @@ export default factories.createCoreController(
         return ctx.badRequest('Form not found or not published');
       }
 
-      const { form: _f, ...submissionData } = inputData;
+      // Verify reCAPTCHA if secret key is configured
+      const themeOptions = await (strapi.documents('api::theme-options.theme-option' as any) as any).findFirst({ status: 'published' }) as Record<string, unknown> | null;
+      const recaptchaSecretKey = themeOptions?.recaptchaSecretKey as string | undefined;
+      if (recaptchaSecretKey) {
+        const recaptchaToken = inputData['recaptchaToken'] as string | undefined;
+        if (!recaptchaToken) {
+          return ctx.badRequest('reCAPTCHA verification required');
+        }
+        const verifyRes = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ secret: recaptchaSecretKey, response: recaptchaToken }).toString(),
+        });
+        const verifyData = await verifyRes.json() as { success: boolean };
+        if (!verifyData.success) {
+          return ctx.badRequest('reCAPTCHA verification failed. Please try again.');
+        }
+      }
+
+      const { form: _f, recaptchaToken: _r, ...submissionData } = inputData as SubmissionInput & { recaptchaToken?: string };
 
       const submission = await strapi.documents('api::form-submission.form-submission').create({
         data: {

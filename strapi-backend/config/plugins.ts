@@ -20,6 +20,7 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin =>
     upload: useCloudinary
       ? {
           config: {
+            sizeLimit: 314572800, // 300 MB
             provider: '@strapi/provider-upload-cloudinary',
             providerOptions: {
               cloud_name: cloudinaryName,
@@ -27,13 +28,40 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin =>
               api_secret: cloudinarySecret,
             },
             actionOptions: {
-              upload: {},
-              uploadStream: {},
+              upload: {
+                resource_type: 'auto',
+                // Auto-select quality and serve WebP/AVIF based on browser support
+                transformation: [{ quality: 'auto:good', fetch_format: 'auto' }],
+                eager: [
+                  { width: 1920, crop: 'limit', quality: 'auto:good', fetch_format: 'auto' },
+                  { width: 1000, crop: 'limit', quality: 'auto:good', fetch_format: 'auto' },
+                  { width: 750, crop: 'limit', quality: 'auto:good', fetch_format: 'auto' },
+                  { width: 500, crop: 'limit', quality: 'auto:good', fetch_format: 'auto' },
+                ],
+                eager_async: true,
+              },
+              uploadStream: {
+                resource_type: 'auto',
+                transformation: [{ quality: 'auto:good', fetch_format: 'auto' }],
+              },
               delete: {},
             },
           },
         }
-      : {},
+      : {
+          config: {
+            sizeLimit: 314572800, // 300 MB
+            sizeOptimization: true,
+            autoOrientation: true,
+            breakpoints: {
+              xlarge: 1920,
+              large: 1000,
+              medium: 750,
+              small: 500,
+              xsmall: 64,
+            },
+          },
+        },
     email: useMailgun
       ? {
           config: {

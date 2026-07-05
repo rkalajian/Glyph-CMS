@@ -6,16 +6,25 @@
  * WCAG 2.2: Labels, error identification, focus management.
  */
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { getForm, getFormBySlug, submitForm } from '../lib/strapi';
+import { getForm, getFormBySlug, getThemeOptions, submitForm } from '../lib/strapi';
 import type { StrapiForm, StrapiFormField } from '../types/strapi';
 
 interface FormEmbedProps {
   slug: string;
+  /** reCAPTCHA v2 site key from Theme Options — renders a checkbox widget when set */
+  recaptchaSiteKey?: string | null;
   className?: string;
 }
+
+type Grecaptcha = {
+  render: (el: HTMLElement, opts: { sitekey: string }) => number;
+  ready: (cb: () => void) => void;
+  getResponse: (id?: number) => string;
+  reset: (id?: number) => void;
+};
 
 const inputClasses =
   'w-full px-3 py-2 border border-border rounded bg-bg text-fg min-h-[44px] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2';
@@ -93,12 +102,25 @@ function FormFieldInput({ field }: { field: StrapiFormField }) {
   );
 }
 
-export function FormEmbed({ slug, className = '' }: FormEmbedProps) {
+export function FormEmbed({ slug, recaptchaSiteKey: siteKeyProp, className = '' }: FormEmbedProps) {
   const router = useRouter();
   const [form, setForm] = useState<StrapiForm | null>(null);
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
+  const [fetchedSiteKey, setFetchedSiteKey] = useState<string | null>(null);
+  const recaptchaContainerRef = useRef<HTMLDivElement>(null);
+  const recaptchaWidgetIdRef = useRef<number | null>(null);
+  // Prop wins; otherwise look the key up from Theme Options so embedded
+  // usages (RichText shortcodes) don't need prop drilling.
+  const recaptchaSiteKey = siteKeyProp ?? fetchedSiteKey;
+
+  useEffect(() => {
+    if (siteKeyProp !== undefined) return;
+    getThemeOptions()
+      .then((opts) => setFetchedSiteKey(opts?.recaptchaSiteKey?.trim() || null))
+      .catch(() => setFetchedSiteKey(null));
+  }, [siteKeyProp]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -111,10 +133,53 @@ export function FormEmbed({ slug, className = '' }: FormEmbedProps) {
       .finally(() => setLoading(false));
   }, [slug]);
 
+  useEffect(() => {
+    if (!recaptchaSiteKey) return;
+
+    const doRender = () => {
+      if (!recaptchaContainerRef.current || recaptchaWidgetIdRef.current !== null) return;
+      const gr = (window as { grecaptcha?: Grecaptcha }).grecaptcha;
+      if (!gr) return;
+      gr.ready(() => {
+        if (!recaptchaContainerRef.current || recaptchaWidgetIdRef.current !== null) return;
+        try {
+          recaptchaWidgetIdRef.current = gr.render(recaptchaContainerRef.current, { sitekey: recaptchaSiteKey });
+        } catch { /* already rendered */ }
+      });
+    };
+
+    const scriptId = 'google-recaptcha-v2';
+
+    if (document.getElementById(scriptId)) {
+      doRender();
+    } else {
+      const script = document.createElement('script');
+      script.id = scriptId;
+      script.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
+      script.async = true;
+      script.defer = true;
+      script.addEventListener('load', doRender);
+      document.head.appendChild(script);
+    }
+  }, [recaptchaSiteKey, form]);
+
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (!form) return;
+
+      const gr = (window as { grecaptcha?: Grecaptcha }).grecaptcha;
+      const readToken = () =>
+        recaptchaWidgetIdRef.current !== null
+          ? gr?.getResponse(recaptchaWidgetIdRef.current)
+          : gr?.getResponse();
+
+      if (recaptchaSiteKey && !readToken()) {
+        setStatus('error');
+        setMessage('Please complete the reCAPTCHA verification.');
+        return;
+      }
+
       setStatus('submitting');
       setMessage('');
 
@@ -128,9 +193,17 @@ export function FormEmbed({ slug, className = '' }: FormEmbedProps) {
         }
       });
 
-      const result = await submitForm(form.slug, data);
+      const recaptchaToken = recaptchaSiteKey ? readToken() : undefined;
+      const result = await submitForm(form.slug, data, recaptchaToken || undefined);
+
+      const resetRecaptcha = () => {
+        if (recaptchaSiteKey && recaptchaWidgetIdRef.current !== null) {
+          gr?.reset(recaptchaWidgetIdRef.current);
+        }
+      };
 
       if (result.ok) {
+        resetRecaptcha();
         const successType = form.successType ?? 'message';
         const redirectUrl = form.successRedirectUrl?.trim();
 
@@ -147,11 +220,12 @@ export function FormEmbed({ slug, className = '' }: FormEmbedProps) {
         setMessage(form.successMessage ?? 'Thank you! Your submission has been received.');
         formEl.reset();
       } else {
+        resetRecaptcha();
         setStatus('error');
         setMessage(result.error ?? 'Something went wrong. Please try again.');
       }
     },
-    [form, router]
+    [form, router, recaptchaSiteKey]
   );
 
   if (loading) {
@@ -212,6 +286,10 @@ export function FormEmbed({ slug, className = '' }: FormEmbedProps) {
               <FormFieldInput field={field} />
             </div>
           ))}
+
+          {recaptchaSiteKey && (
+            <div ref={recaptchaContainerRef} className="min-h-[78px]" />
+          )}
 
           <motion.button
             type="submit"
