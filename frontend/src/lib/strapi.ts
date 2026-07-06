@@ -30,10 +30,19 @@ import type {
   StrapiFooterOptions,
 } from '../types/strapi';
 
-/** Base URL for Strapi API. In dev, empty so Next.js proxy works. */
+/**
+ * Base URL for Strapi API.
+ * In dev: browser uses '' so the Next.js proxy handles /api; the server (Node)
+ * can't parse relative URLs, so it hits localhost:1337 directly.
+ * In prod: NEXT_PUBLIC_STRAPI_URL (required for deploy).
+ */
 const STRAPI_URL =
   process.env.NEXT_PUBLIC_STRAPI_URL ??
-  (process.env.NODE_ENV === 'development' ? '' : 'http://localhost:1337');
+  (process.env.NODE_ENV === 'development'
+    ? typeof window === 'undefined'
+      ? 'http://localhost:1337'
+      : ''
+    : 'http://localhost:1337');
 
 // -----------------------------------------------------------------------------
 // Internal helpers
