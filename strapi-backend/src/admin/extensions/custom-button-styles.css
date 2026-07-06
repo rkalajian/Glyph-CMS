@@ -2,6 +2,36 @@
  * Strapi admin button overrides – Rebellion Group branding.
  */
 
+/* Force light mode globally */
+* {
+  --strapi-colors-neutral0: #ffffff !important;
+  --strapi-colors-neutral100: #fafafa !important;
+  --strapi-colors-neutral150: #f5f5f5 !important;
+  --strapi-colors-neutral200: #e5e5e5 !important;
+  --strapi-colors-neutral300: #d4d4d4 !important;
+  --strapi-colors-neutral400: #a3a3a3 !important;
+  --strapi-colors-neutral500: #737373 !important;
+  --strapi-colors-neutral600: #525252 !important;
+  --strapi-colors-neutral700: #404040 !important;
+  --strapi-colors-neutral800: #262626 !important;
+  --strapi-colors-neutral900: #171717 !important;
+  --strapi-colors-neutral1000: #0a0a0a !important;
+  --strapi-colors-primary100: #f5f5f5 !important;
+  --strapi-colors-primary200: #e5e5e5 !important;
+  --strapi-colors-primary500: #d4d4d4 !important;
+  --strapi-colors-primary600: #e5e5e5 !important;
+  --strapi-colors-primary700: #f5f5f5 !important;
+}
+
+/* Override any hardcoded dark backgrounds */
+[style*="rgb(10, 10, 10)"],
+[style*="#0a0a0a"],
+[style*="rgb(17, 17, 17)"],
+[style*="#111111"] {
+  background-color: #f5f5f5 !important;
+  color: #0a0a0a !important;
+}
+
 /* Remove borders from all buttons and button-like links */
 .custom-admin-buttons button,
 .custom-admin-buttons a[role="button"] {
