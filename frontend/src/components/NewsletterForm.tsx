@@ -52,8 +52,11 @@ export function NewsletterForm({ provider, actionUrl }: NewsletterFormProps) {
   const [loading, setLoading] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
-  const isMailchimp = provider === 'mailchimp' && !!actionUrl;
-  const isCC = provider === 'constantContact' && !!actionUrl;
+  // Only https action URLs — the Mailchimp path injects a JSONP <script>
+  // pointing at this URL, and Constant Contact posts the form to it.
+  const safeActionUrl = actionUrl?.startsWith('https://') ? actionUrl : null;
+  const isMailchimp = provider === 'mailchimp' && !!safeActionUrl;
+  const isCC = provider === 'constantContact' && !!safeActionUrl;
 
   const handleSubmit = (e: React.FormEvent) => {
     if (isMailchimp) {
@@ -61,7 +64,7 @@ export function NewsletterForm({ provider, actionUrl }: NewsletterFormProps) {
       setLoading(true);
       setError(null);
       subscribeMailchimp(
-        actionUrl!,
+        safeActionUrl!,
         email,
         () => setSubmitted(true),
         (msg) => setError(msg),
@@ -90,7 +93,7 @@ export function NewsletterForm({ provider, actionUrl }: NewsletterFormProps) {
         className="newsletter-form"
         onSubmit={handleSubmit}
         aria-label="Newsletter signup"
-        action={isCC ? actionUrl! : undefined}
+        action={isCC ? safeActionUrl! : undefined}
         method={isCC ? 'post' : undefined}
         target={isCC ? 'newsletter-cc-target' : undefined}
       >

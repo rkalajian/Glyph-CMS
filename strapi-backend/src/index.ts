@@ -259,7 +259,7 @@ export default {
 
     // Site search — queries enabled content types configured in Theme Options.
     (strapi.server.router as any).get('/api/search', async (ctx: any) => {
-      const q = (ctx.query.q as string | undefined)?.trim() ?? '';
+      const q = ((ctx.query.q as string | undefined)?.trim() ?? '').slice(0, 200);
       const typeFilter = ctx.query.types as string | undefined;
 
       if (q.length < 2) {

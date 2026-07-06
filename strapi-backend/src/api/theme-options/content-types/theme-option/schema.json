@@ -19,17 +19,24 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ]
     },
     "favicon": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ]
     },
     "frontendMode": {
       "type": "enumeration",
-      "enum": ["react", "static"],
+      "enum": [
+        "react",
+        "static"
+      ],
       "default": "react",
       "displayName": "Frontend mode",
       "description": "React = SPA (client-side). Static = pre-rendered HTML at build time."
@@ -82,7 +89,8 @@
     },
     "googleCalendarApiKey": {
       "type": "string",
-      "description": "Google Calendar API key (keep secret — not exposed publicly)"
+      "description": "Google Calendar API key (private — never sent to browser)",
+      "private": true
     },
     "googleCalendarSyncEnabled": {
       "type": "boolean",

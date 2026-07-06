@@ -1021,7 +1021,7 @@ export interface ApiThemeOptionsThemeOption extends Struct.SingleTypeSchema {
     favicon: Schema.Attribute.Media<'images'>;
     frontendMode: Schema.Attribute.Enumeration<['react', 'static']> &
       Schema.Attribute.DefaultTo<'react'>;
-    googleCalendarApiKey: Schema.Attribute.String;
+    googleCalendarApiKey: Schema.Attribute.String & Schema.Attribute.Private;
     googleCalendarId: Schema.Attribute.String;
     googleCalendarSyncEnabled: Schema.Attribute.Boolean &
       Schema.Attribute.DefaultTo<true>;

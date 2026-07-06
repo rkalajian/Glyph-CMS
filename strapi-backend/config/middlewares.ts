@@ -14,16 +14,17 @@ const config: Core.Config.Middlewares = [
       origin: corsOrigins,
     },
   },
-  'strapi::poweredBy',
   'strapi::query',
   {
     name: 'strapi::body',
     config: {
-      formLimit: '300mb',
-      jsonLimit: '300mb',
-      textLimit: '300mb',
+      // JSON/form/text bodies stay small — only multipart uploads need 300 MB.
+      // Large non-file limits let anyone POST huge payloads to any endpoint.
+      formLimit: '5mb',
+      jsonLimit: '5mb',
+      textLimit: '5mb',
       formidable: {
-        maxFileSize: 314572800, // 300 MB
+        maxFileSize: 314572800, // 300 MB (media uploads)
       },
     },
   },

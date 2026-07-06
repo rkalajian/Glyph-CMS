@@ -63,7 +63,7 @@ export function parseStrapiResponse<T>(
   }).passthrough().safeParse(raw);
 
   if (!result.success) {
-    if (import.meta.env.DEV) {
+    if (process.env.NODE_ENV === 'development') {
       console.warn(`${logPrefix} Validation failed:`, result.error.flatten());
     }
     return null;

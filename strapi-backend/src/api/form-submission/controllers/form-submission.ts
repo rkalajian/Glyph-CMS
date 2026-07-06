@@ -15,6 +15,16 @@ interface FormWithEmailOptions {
   fields?: Array<{ name: string; type: string }>;
 }
 
+/** Escape user-submitted values before interpolating into email HTML. */
+function escapeHtml(value: unknown): string {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function buildSubmissionEmailBody(
   formName: string,
   data: Record<string, unknown>
@@ -22,13 +32,16 @@ function buildSubmissionEmailBody(
   const entries = Object.entries(data).filter(([, v]) => v != null && String(v).trim() !== '');
   const text = `New form submission: ${formName}\n\n${entries.map(([k, v]) => `${k}: ${String(v)}`).join('\n')}`;
   const html = `
-    <h2>New form submission: ${formName}</h2>
+    <h2>New form submission: ${escapeHtml(formName)}</h2>
     <table cellpadding="8" cellspacing="0" border="1" style="border-collapse:collapse;">
-      ${entries.map(([k, v]) => `<tr><td><strong>${k}</strong></td><td>${String(v)}</td></tr>`).join('')}
+      ${entries.map(([k, v]) => `<tr><td><strong>${escapeHtml(k)}</strong></td><td>${escapeHtml(v)}</td></tr>`).join('')}
     </table>
   `.trim();
   return { text, html };
 }
+
+/** Max characters accepted per submitted field value. */
+const MAX_FIELD_LENGTH = 10_000;
 
 export default factories.createCoreController(
   'api::form-submission.form-submission',
@@ -43,8 +56,8 @@ export default factories.createCoreController(
 
       const docService = strapi.documents('api::form.form');
       const form = await docService.findFirst({
+        status: 'published',
         filters: {
-          status: 'published',
           $or: [{ documentId: formRef }, { slug: formRef }],
         },
       } as object) as unknown as FormWithEmailOptions | null;
@@ -61,18 +74,38 @@ export default factories.createCoreController(
         if (!recaptchaToken) {
           return ctx.badRequest('reCAPTCHA verification required');
         }
-        const verifyRes = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams({ secret: recaptchaSecretKey, response: recaptchaToken }).toString(),
-        });
-        const verifyData = await verifyRes.json() as { success: boolean };
-        if (!verifyData.success) {
+        let verified = false;
+        try {
+          const verifyRes = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ secret: recaptchaSecretKey, response: recaptchaToken }).toString(),
+          });
+          verified = ((await verifyRes.json()) as { success?: boolean }).success === true;
+        } catch (err) {
+          strapi.log.warn('[form-submission] reCAPTCHA verify request failed:', err);
+        }
+        if (!verified) {
           return ctx.badRequest('reCAPTCHA verification failed. Please try again.');
         }
       }
 
-      const { form: _f, recaptchaToken: _r, ...submissionData } = inputData as SubmissionInput & { recaptchaToken?: string };
+      const { form: _f, recaptchaToken: _r, ...rawData } = inputData as SubmissionInput & { recaptchaToken?: string };
+
+      // Only accept fields defined on the form; cap value length. Prevents
+      // arbitrary-payload storage and oversized notification emails.
+      const allowedNames = new Set((form.fields ?? []).map((f) => f.name));
+      const submissionData: Record<string, unknown> = {};
+      for (const [key, value] of Object.entries(rawData)) {
+        if (allowedNames.size > 0 && !allowedNames.has(key)) continue;
+        if (value == null) continue;
+        if (typeof value === 'number' || typeof value === 'boolean') {
+          submissionData[key] = value;
+        } else if (typeof value === 'string') {
+          submissionData[key] = value.slice(0, MAX_FIELD_LENGTH);
+        }
+        // objects/arrays are dropped — form fields only produce scalars
+      }
 
       const submission = await strapi.documents('api::form-submission.form-submission').create({
         data: {
