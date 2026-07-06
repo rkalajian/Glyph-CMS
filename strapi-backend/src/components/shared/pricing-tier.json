@@ -1,0 +1,34 @@
+{
+  "collectionName": "components_shared_pricing_tiers",
+  "info": {
+    "displayName": "Pricing Tier",
+    "description": "A single membership tier card with name, price, description, and optional link"
+  },
+  "attributes": {
+    "tierName": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "description": {
+      "type": "customField",
+      "customField": "plugin::ckeditor5.CKEditor",
+      "options": {
+        "preset": "defaultHtml"
+      }
+    },
+    "price": {
+      "type": "string",
+      "required": true
+    },
+    "period": {
+      "type": "string",
+      "default": "Yearly"
+    },
+    "linkUrl": {
+      "type": "string"
+    }
+  }
+}

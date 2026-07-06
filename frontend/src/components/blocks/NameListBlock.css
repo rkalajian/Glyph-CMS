@@ -1,0 +1,51 @@
+@reference "../../../app/globals.css";
+
+.name-list {
+  @apply bg-surface pt-[50px] pb-[100px];
+}
+
+.name-list__inner {
+  @apply max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[100px];
+}
+
+.name-list__header {
+  @apply flex flex-col gap-[8px];
+}
+
+.name-list__heading {
+  @apply font-sans font-bold text-[30px] leading-[40px] lg:text-[44px] lg:leading-[54px] text-ink;
+}
+
+.name-list__description {
+  @apply font-sans font-normal text-[16px] leading-[24px];
+}
+
+.name-list__description p { @apply text-ink; }
+
+.name-list__divider {
+  @apply h-px bg-accent border-0 mt-[40px] mb-[40px];
+}
+
+.name-list__grid {
+  @apply grid grid-cols-2 lg:grid-cols-4 gap-x-[20px] gap-y-[24px] list-none p-0 m-0;
+}
+
+.name-list__sections {
+  @apply flex flex-col gap-[48px];
+}
+
+.name-list__section-title {
+  @apply font-sans font-bold text-[22px] leading-[30px] text-accent mb-[20px];
+}
+
+.name-list__member {
+  @apply flex flex-col gap-[2px];
+}
+
+.name-list__name {
+  @apply font-sans font-normal text-[16px] leading-[24px] lg:text-[20px] lg:leading-[28px] text-ink;
+}
+
+.name-list__organization {
+  @apply font-sans italic text-[13px] leading-[20px] lg:text-[15px] lg:leading-[22px] text-ink opacity-70;
+}

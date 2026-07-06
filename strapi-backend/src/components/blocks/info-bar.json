@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_blocks_info_bars",
+  "info": {
+    "displayName": "Info Bar",
+    "description": "Full-width accent-alt bar with text and CTA; floats as pill when scrolled past"
+  },
+  "attributes": {
+    "text": {
+      "type": "string",
+      "required": true
+    },
+    "floatingText": {
+      "type": "string"
+    },
+    "ctaText": {
+      "type": "string"
+    },
+    "ctaUrl": {
+      "type": "string"
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

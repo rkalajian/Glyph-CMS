@@ -1,0 +1,61 @@
+{
+  "collectionName": "components_blocks_promo_cards",
+  "info": {
+    "displayName": "Promo Cards",
+    "description": "Surface bg: two side-by-side promo cards (image + Accent heading + arrow + body), links to internal sections"
+  },
+  "options": {},
+  "attributes": {
+    "leftHeading": {
+      "type": "string"
+    },
+    "leftBody": {
+      "type": "customField",
+      "customField": "plugin::ckeditor5.CKEditor",
+      "options": {
+        "preset": "defaultHtml"
+      }
+    },
+    "leftLinkUrl": {
+      "type": "string"
+    },
+    "leftImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "rightHeading": {
+      "type": "string"
+    },
+    "rightBody": {
+      "type": "customField",
+      "customField": "plugin::ckeditor5.CKEditor",
+      "options": {
+        "preset": "defaultHtml"
+      }
+    },
+    "rightLinkUrl": {
+      "type": "string"
+    },
+    "rightImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "anchorId": {
+      "type": "string"
+    },
+    "headingLevel": {
+      "type": "enumeration",
+      "enum": [
+        "h2",
+        "h3"
+      ],
+      "default": "h3"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_blocks_event_calendars",
+  "info": {
+    "displayName": "Event Calendar",
+    "icon": "calendar",
+    "description": "Interactive monthly calendar showing all published events"
+  },
+  "options": {},
+  "attributes": {
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

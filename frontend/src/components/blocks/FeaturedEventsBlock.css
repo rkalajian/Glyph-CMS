@@ -1,0 +1,192 @@
+@reference "../../../app/globals.css";
+
+/* ── Section ─────────────────────────────────────────────── */
+
+.featured-events {
+  @apply bg-surface py-[50px];
+}
+
+/* ── Content container ───────────────────────────────────── */
+
+.featured-events__inner {
+  @apply max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[100px] flex flex-col gap-[40px];
+}
+
+/* ── Section heading (above card) ────────────────────────── */
+
+.featured-events__section-heading {
+  @apply font-sans font-bold text-ink text-[30px] leading-[40px] w-full shrink-0;
+}
+
+/* ── Card wrapper ────────────────────────────────────────── */
+
+.featured-events__card {
+  @apply flex flex-col w-full shadow-[0px_4px_7px_rgba(0,0,0,0.1)] rounded-[20px];
+}
+
+/* ── Photo (mobile: in-flow, top corners rounded) ────────── */
+
+.featured-events__photo {
+  @apply relative overflow-hidden shrink-0 w-full h-[340px] rounded-t-[20px];
+}
+
+.featured-events__slide {
+  @apply absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700;
+}
+
+.featured-events__slide--active {
+  @apply opacity-100;
+}
+
+/* ── Panel (mobile: solid secondary, bottom corners rounded) ─── */
+
+.featured-events__panel {
+  @apply bg-secondary flex flex-col p-[40px] rounded-b-[20px];
+}
+
+.featured-events__panel-top {
+  @apply flex flex-col gap-[24px] flex-1;
+}
+
+/* ── Event title row ─────────────────────────────────────── */
+
+.featured-events__title-row {
+  @apply flex items-center gap-[24px] w-full;
+}
+
+.featured-events__event-link {
+  @apply flex items-center gap-[24px] w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-highlight rounded-lg;
+}
+
+.featured-events__event-title {
+  @apply font-sans font-bold text-highlight text-[30px] leading-[40px];
+  flex: 1 0 0; /* kept: no clean Tailwind equivalent */
+}
+
+.featured-events__arrow-icon {
+  @apply text-highlight shrink-0 transition-transform duration-300 size-9;
+}
+
+.featured-events__event-link:hover .featured-events__arrow-icon {
+  @apply rotate-45;
+}
+
+/* ── Description ─────────────────────────────────────────── */
+
+.featured-events__description {
+  @apply font-sans font-normal text-surface text-[16px] leading-[24px];
+}
+
+/* ── Nav shared ──────────────────────────────────────────── */
+
+.featured-events__dots {
+  @apply flex gap-[5px] items-center;
+}
+
+.featured-events__dot {
+  @apply cursor-pointer border-0 p-0 rounded-[11px] transition-all duration-300 focus:outline-none h-1 w-4 bg-secondary/30;
+}
+
+.featured-events__dot--active {
+  @apply w-[22px] bg-secondary;
+}
+
+.featured-events__nav-btn {
+  @apply cursor-pointer shrink-0 inline-flex items-center justify-center rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary size-[30px] text-secondary bg-transparent transition-[background,color] duration-200;
+  border: 1.5px solid currentColor; /* kept: 1.5px not in Tailwind scale */
+}
+
+.featured-events__nav-btn:hover {
+  @apply bg-secondary text-surface;
+}
+
+/* ── Mobile nav (below card) ─────────────────────────────── */
+
+.featured-events__nav-mobile {
+  @apply flex items-center justify-center gap-[20px] w-full;
+}
+
+/* ── Desktop nav (inside panel) — hidden on mobile ────────── */
+
+.featured-events__nav-desktop {
+  @apply hidden;
+}
+
+/* ── Empty state ─────────────────────────────────────────── */
+
+.featured-events__empty {
+  @apply font-sans text-ink text-center opacity-60 py-12;
+}
+
+/* ── Desktop ─────────────────────────────────────────────── */
+
+@media (min-width: 1024px) {
+  .featured-events {
+    @apply pt-[100px] pb-[50px];
+  }
+
+  .featured-events__section-heading {
+    @apply text-[44px] leading-[54px];
+  }
+
+  /* Card: relative container, photo fills absolutely */
+  .featured-events__card {
+    @apply relative overflow-hidden mx-auto w-full flex max-w-[1440px] h-[661px] rounded-[20px] shadow-none;
+  }
+
+  /* Photo: absolute, fills whole card */
+  .featured-events__photo {
+    @apply absolute inset-0 overflow-hidden h-full rounded-[20px];
+  }
+
+  /* Panel: in-flow, sits over photo on left, semi-transparent */
+  .featured-events__panel {
+    @apply relative shrink-0 flex flex-col justify-between w-[347px] h-[661px] bg-secondary/90 rounded-[10px];
+  }
+
+  .featured-events__panel-top {
+    flex: initial; /* kept: no clean Tailwind equivalent */
+  }
+
+  /* Title row: items-end, gap-4 on desktop */
+  .featured-events__title-row {
+    @apply items-end gap-4;
+  }
+
+  .featured-events__event-link {
+    @apply gap-4;
+  }
+
+  .featured-events__event-title {
+    flex: initial; /* kept: no clean Tailwind equivalent */
+  }
+
+  /* Desktop nav: inside panel, visible */
+  .featured-events__nav-desktop {
+    @apply flex items-center justify-between;
+  }
+
+  /* Mobile nav: hidden on desktop */
+  .featured-events__nav-mobile {
+    @apply hidden;
+  }
+
+  /* Dots: surface on dark panel */
+  .featured-events__dot {
+    @apply bg-surface/30;
+  }
+
+  .featured-events__dot--active {
+    @apply bg-surface;
+  }
+
+  /* Nav buttons: outlined white on dark panel */
+  .featured-events__nav-btn {
+    @apply text-surface;
+    border-color: rgba(248, 242, 232, 0.6); /* kept: raw border-color with opacity */
+  }
+
+  .featured-events__nav-btn:hover {
+    @apply bg-surface/[15%] text-surface;
+  }
+}

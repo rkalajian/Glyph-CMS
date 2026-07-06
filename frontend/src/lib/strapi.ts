@@ -26,6 +26,8 @@ import type {
   StrapiImage,
   StrapiForm,
   StrapiSearchResponse,
+  StrapiHeaderOptions,
+  StrapiFooterOptions,
 } from '../types/strapi';
 
 /** Base URL for Strapi API. In dev, empty so Next.js proxy works. */
@@ -448,4 +450,118 @@ export async function getForms(): Promise<StrapiForm[]> {
     '/api/forms?status=published&sort=slug:asc'
   );
   return toArray(res.data) as StrapiForm[];
+}
+
+// -----------------------------------------------------------------------------
+// Block-system data helpers
+// -----------------------------------------------------------------------------
+
+export async function getFeaturedBlogPosts(limit = 4): Promise<StrapiBlogPost[]> {
+  const res = await fetchApi<StrapiBlogPost>(
+    `/api/blog-posts?status=published&filters[featured][$eq]=true&sort=publishedAt:desc&populate[0]=coverImage&populate[1]=categories&pagination[pageSize]=${Math.max(2, Math.min(10, limit))}`
+  );
+  return toArray(res.data) as StrapiBlogPost[];
+}
+
+export async function getRecentBlogPosts(): Promise<StrapiBlogPost[]> {
+  const res = await fetchApi<StrapiBlogPost>(
+    '/api/blog-posts?status=published&sort=publishedAt:desc&populate[0]=coverImage&populate[1]=categories&pagination[pageSize]=500'
+  );
+  return toArray(res.data) as StrapiBlogPost[];
+}
+
+export async function getLatestPressReleases(limit = 4): Promise<StrapiPressRelease[]> {
+  const res = await fetchApi<StrapiPressRelease>(
+    `/api/press-releases?status=published&sort=publishedAt:desc&populate[0]=coverImage&populate[1]=categories&pagination[pageSize]=${Math.max(2, Math.min(10, limit))}`
+  );
+  return toArray(res.data) as StrapiPressRelease[];
+}
+
+export async function getRecentPressReleases(): Promise<StrapiPressRelease[]> {
+  const res = await fetchApi<StrapiPressRelease>(
+    '/api/press-releases?status=published&sort=publishedAt:desc&populate[0]=coverImage&populate[1]=categories&pagination[pageSize]=500'
+  );
+  return toArray(res.data) as StrapiPressRelease[];
+}
+
+export async function getUpcomingEvents(limit = 6): Promise<StrapiEvent[]> {
+  const now = new Date().toISOString();
+  const res = await fetchApi<StrapiEvent>(
+    `/api/events?status=published&sort=startDate:asc&filters[startDate][$gte]=${encodeURIComponent(now)}&pagination[limit]=${limit}&populate[0]=image`
+  );
+  return toArray(res.data) as StrapiEvent[];
+}
+
+export async function getFeaturedEvents(limit = 5): Promise<StrapiEvent[]> {
+  const res = await fetchApi<StrapiEvent>(
+    `/api/events?status=published&sort=startDate:asc&filters[featured][$eq]=true&pagination[limit]=${limit}&populate[0]=image`
+  );
+  return toArray(res.data) as StrapiEvent[];
+}
+
+// -----------------------------------------------------------------------------
+// Header / Footer Options (single types)
+// -----------------------------------------------------------------------------
+
+function normalizeHeaderOptions(raw: unknown): StrapiHeaderOptions | null {
+  if (raw == null || typeof raw !== 'object' || Array.isArray(raw)) return null;
+  const obj = raw as Record<string, unknown>;
+  const attrs = (obj.attributes ?? obj) as Record<string, unknown>;
+  return {
+    documentId: (obj.documentId ?? attrs.documentId) as string | undefined,
+    logo: (attrs.logo ?? obj.logo) as StrapiHeaderOptions['logo'],
+    ctaUrl: (attrs.ctaUrl ?? obj.ctaUrl) as string | null | undefined,
+    ctaLabel: (attrs.ctaLabel ?? obj.ctaLabel) as string | null | undefined,
+    publishedAt: (attrs.publishedAt ?? obj.publishedAt) as string | null | undefined,
+    updatedAt: (attrs.updatedAt ?? obj.updatedAt) as string | undefined,
+  };
+}
+
+function normalizeFooterOptions(raw: unknown): StrapiFooterOptions | null {
+  if (raw == null || typeof raw !== 'object' || Array.isArray(raw)) return null;
+  const obj = raw as Record<string, unknown>;
+  const attrs = (obj.attributes ?? obj) as Record<string, unknown>;
+  return {
+    documentId: (obj.documentId ?? attrs.documentId) as string | undefined,
+    footerLogo: (attrs.footerLogo ?? obj.footerLogo) as StrapiFooterOptions['footerLogo'],
+    siteHours: (attrs.siteHours ?? obj.siteHours) as string | null | undefined,
+    phone: (attrs.phone ?? obj.phone) as string | null | undefined,
+    email: (attrs.email ?? obj.email) as string | null | undefined,
+    address: (attrs.address ?? obj.address) as string | null | undefined,
+    social: (attrs.social ?? obj.social) as StrapiFooterOptions['social'],
+    newsletterHeading: (attrs.newsletterHeading ?? obj.newsletterHeading) as string | null | undefined,
+    newsletterDescription: (attrs.newsletterDescription ?? obj.newsletterDescription) as string | null | undefined,
+    newsletterProvider: (attrs.newsletterProvider ?? obj.newsletterProvider) as StrapiFooterOptions['newsletterProvider'],
+    newsletterActionUrl: (attrs.newsletterActionUrl ?? obj.newsletterActionUrl) as string | null | undefined,
+    footerLegalText: (attrs.footerLegalText ?? obj.footerLegalText) as string | null | undefined,
+    footerColumns: (attrs.footerColumns ?? obj.footerColumns) as StrapiFooterOptions['footerColumns'],
+    partnerLogos: (attrs.partnerLogos ?? obj.partnerLogos) as StrapiFooterOptions['partnerLogos'],
+    copyrightText: (attrs.copyrightText ?? obj.copyrightText) as string | null | undefined,
+    publishedAt: (attrs.publishedAt ?? obj.publishedAt) as string | null | undefined,
+    updatedAt: (attrs.updatedAt ?? obj.updatedAt) as string | undefined,
+  };
+}
+
+export async function getHeaderOptions(): Promise<StrapiHeaderOptions | null> {
+  try {
+    const res = await fetchApi<unknown>('/api/header-option?status=published&populate=*');
+    return normalizeHeaderOptions(res.data);
+  } catch { return null; }
+}
+
+export async function getFooterOptions(): Promise<StrapiFooterOptions | null> {
+  try {
+    const res = await fetchApi<unknown>(
+      '/api/footer-option?status=published' +
+      '&populate[footerLogo]=true' +
+      '&populate[social]=true' +
+      '&populate[footerColumns][populate][page][fields][0]=slug' +
+      '&populate[footerColumns][populate][links][populate][page][fields][0]=slug' +
+      '&populate[partnerLogos][populate][image][fields][0]=url' +
+      '&populate[partnerLogos][populate][image][fields][1]=width' +
+      '&populate[partnerLogos][populate][image][fields][2]=height' +
+      '&populate[partnerLogos][populate][image][fields][3]=alternativeText'
+    );
+    return normalizeFooterOptions(res.data);
+  } catch { return null; }
 }

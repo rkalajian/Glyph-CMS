@@ -1,0 +1,41 @@
+{
+  "kind": "collectionType",
+  "collectionName": "redirects",
+  "info": {
+    "singularName": "redirect",
+    "pluralName": "redirects",
+    "displayName": "Redirect",
+    "description": "URL redirects written to the Netlify _redirects file at build time"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "fromPath": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "regex": "^/.*$",
+      "description": "Source path, must start with / (e.g. /old-page). Supports Netlify placeholders like /blog/:slug and splats like /news/*"
+    },
+    "toPath": {
+      "type": "string",
+      "required": true,
+      "description": "Destination path or absolute URL (e.g. /new-page or https://example.com). Use :slug or :splat to carry over placeholders"
+    },
+    "statusCode": {
+      "type": "enumeration",
+      "enum": [
+        "permanent",
+        "temporary"
+      ],
+      "default": "permanent",
+      "description": "permanent = 301, temporary = 302"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

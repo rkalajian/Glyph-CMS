@@ -1,0 +1,39 @@
+@reference "../../../app/globals.css";
+
+.contact-panels {
+  @apply py-[50px] lg:py-[100px] px-6 md:px-16 lg:px-[100px] bg-surface;
+}
+
+.contact-panels__card {
+  @apply bg-primary rounded-3xl px-4 py-12 md:px-[100px] overflow-hidden;
+}
+
+.contact-panels__heading {
+  @apply font-sans font-bold text-highlight text-center mb-10
+         text-[24px] leading-[32px] md:text-[30px] md:leading-[40px];
+}
+
+.contact-panels__grid {
+  @apply flex flex-col md:flex-row;
+}
+
+.contact-panels__panel {
+  @apply flex flex-col gap-4 items-center text-center flex-1 px-8
+         border-b border-highlight/30 pb-10 mb-10
+         last:border-b-0 last:pb-0 last:mb-0
+         md:border-b-0 md:border-r md:pb-0 md:mb-0
+         md:last:border-r-0;
+}
+
+.contact-panels__panel-title {
+  @apply font-sans font-bold uppercase text-surface
+         text-[20px] leading-[28px] md:text-[24px] md:leading-[32px];
+}
+
+.contact-panels__panel-body {
+  @apply flex flex-col gap-1 font-sans text-[16px] leading-[24px] text-surface;
+}
+
+.contact-panels__panel-email {
+  @apply underline text-surface hover:text-highlight transition-colors;
+}

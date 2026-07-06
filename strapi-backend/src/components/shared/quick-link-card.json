@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_shared_quick_link_cards",
+  "info": {
+    "displayName": "Quick Link Card",
+    "description": "Image card with title and arrow link"
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "url": {
+      "type": "string",
+      "required": true
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}

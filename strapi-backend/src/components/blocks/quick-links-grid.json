@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_blocks_quick_links_grids",
+  "info": {
+    "displayName": "Quick Links Grid",
+    "description": "Row of image cards with title and arrow — each card links to a page"
+  },
+  "attributes": {
+    "cards": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.quick-link-card"
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

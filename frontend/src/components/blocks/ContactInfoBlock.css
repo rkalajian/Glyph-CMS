@@ -1,0 +1,29 @@
+@reference "../../../app/globals.css";
+
+.contact-info {
+  @apply bg-surface py-12 lg:py-[80px];
+}
+
+.contact-info__inner {
+  @apply max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[100px] flex flex-col gap-[80px];
+}
+
+.contact-info__heading {
+  @apply font-sans font-bold text-[30px] leading-[40px] lg:text-[44px] lg:leading-[54px] text-ink lg:text-center;
+}
+
+.contact-info__grid {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-10;
+}
+
+.contact-info__card-title {
+  @apply font-sans font-bold text-[30px] leading-[40px] text-ink mb-[14px];
+}
+
+.contact-info__card-body {
+  @apply font-sans font-normal text-[16px] leading-[24px] text-ink;
+}
+
+.contact-info__card-body p + p {
+  @apply mt-5;
+}

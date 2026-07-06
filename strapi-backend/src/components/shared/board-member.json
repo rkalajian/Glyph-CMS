@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_shared_board_members",
+  "info": {
+    "displayName": "Board Member",
+    "description": "A single board of directors member"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "organization": {
+      "type": "string"
+    }
+  }
+}

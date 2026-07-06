@@ -1,0 +1,10 @@
+{
+  "collectionName": "components_shared_cta_panels",
+  "info": { "displayName": "CTA Panel" },
+  "attributes": {
+    "title": { "type": "string", "required": true },
+    "body": { "type": "blocks" },
+    "buttonText": { "type": "string" },
+    "buttonUrl": { "type": "string" }
+  }
+}

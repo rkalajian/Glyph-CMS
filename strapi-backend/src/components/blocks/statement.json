@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_blocks_statements",
+  "info": {
+    "displayName": "Statement",
+    "description": "Centered article column: H2 heading + multi-paragraph body (paragraphs separated by blank lines)"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string"
+    },
+    "body": {
+      "type": "customField",
+      "customField": "plugin::ckeditor5.CKEditor",
+      "options": {
+        "preset": "defaultHtml"
+      }
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

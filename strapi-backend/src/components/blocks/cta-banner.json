@@ -1,0 +1,40 @@
+{
+  "collectionName": "components_blocks_cta_banners",
+  "info": {
+    "displayName": "CTA Banner",
+    "description": "Primary card with Highlight heading, body text, and ghost button — stacks on mobile"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string"
+    },
+    "body": {
+      "type": "customField",
+      "customField": "plugin::ckeditor5.CKEditor",
+      "options": {
+        "preset": "defaultHtml"
+      }
+    },
+    "buttonText": {
+      "type": "string"
+    },
+    "buttonUrl": {
+      "type": "string"
+    },
+    "backgroundColor": {
+      "type": "enumeration",
+      "enum": [
+        "primary",
+        "accent",
+        "secondary",
+        "ink",
+        "highlight"
+      ],
+      "default": "primary"
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

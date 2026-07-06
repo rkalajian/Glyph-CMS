@@ -49,7 +49,37 @@
         "blocks.tab",
         "blocks.table",
         "blocks.team",
-        "blocks.video"
+        "blocks.video",
+        "blocks.carousel-section",
+        "blocks.contact-form",
+        "blocks.contact-info",
+        "blocks.contact-panels",
+        "blocks.content-card-grid",
+        "blocks.content-image",
+        "blocks.cta-banner",
+        "blocks.embed-section",
+        "blocks.event-calendar",
+        "blocks.featured-blog-posts",
+        "blocks.featured-carousel",
+        "blocks.featured-events",
+        "blocks.homepage-hero",
+        "blocks.info-bar",
+        "blocks.leadership-grid",
+        "blocks.board-of-directors",
+        "blocks.media-cards",
+        "blocks.membership-pricing",
+        "blocks.mission-priorities",
+        "blocks.photo-gallery",
+        "blocks.promo-cards",
+        "blocks.quick-links-grid",
+        "blocks.recent-blog-posts",
+        "blocks.split-cta",
+        "blocks.split-panel",
+        "blocks.statement",
+        "blocks.subpage-hero",
+        "blocks.tertiary-hero",
+        "blocks.two-column-content",
+        "blocks.upcoming-events"
       ]
     },
     "subtitle": {
@@ -67,7 +97,11 @@
       "type": "text"
     },
     "content": {
-      "type": "richtext"
+      "type": "customField",
+      "customField": "plugin::ckeditor5.CKEditor",
+      "options": {
+        "preset": "defaultHtml"
+      }
     },
     "parent": {
       "type": "relation",

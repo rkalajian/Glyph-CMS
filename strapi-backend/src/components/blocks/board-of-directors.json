@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_blocks_board_of_directors",
+  "info": {
+    "displayName": "Board of Directors",
+    "description": "Surface bg: H2 heading + description + Accent divider + 4-col name grid (2-col mobile)"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string"
+    },
+    "description": {
+      "type": "customField",
+      "customField": "plugin::ckeditor5.CKEditor",
+      "options": {
+        "preset": "defaultHtml"
+      }
+    },
+    "sections": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.board-section"
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

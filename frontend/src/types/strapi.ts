@@ -34,7 +34,7 @@ export interface StrapiImage {
   /** MIME type (e.g. image/webp, video/mp4) — StrapiMedia renders <video> for video/* */
   mime?: string | null;
   /** Optional focal point (percentages) for object-position cropping */
-  focalPoint?: { x?: number | null; y?: number | null } | null;
+  focalPoint?: { x: number; y: number } | null;
 }
 
 // -----------------------------------------------------------------------------
@@ -430,7 +430,37 @@ export type StrapiPageBlock =
   | StrapiBlockRichText
   | StrapiBlockTailgridsComponent
   | StrapiBlockVideo
-  | StrapiBlockRow;
+  | StrapiBlockRow
+  | StrapiBlockSubpageHero
+  | StrapiBlockTertiaryHero
+  | StrapiBlockSplitCta
+  | StrapiBlockPhotoGallery
+  | StrapiBlockContentImage
+  | StrapiBlockQuickLinksGrid
+  | StrapiBlockInfoBar
+  | StrapiBlockHomepageHero
+  | StrapiBlockProfileCarousel
+  | StrapiBlockNameList
+  | StrapiBlockFeaturePriority
+  | StrapiBlockTwoColumnContent
+  | StrapiBlockMediaCards
+  | StrapiBlockFeaturedEvents
+  | StrapiBlockFeaturedBlogPosts
+  | StrapiBlockRecentBlogPosts
+  | StrapiBlockUpcomingEvents
+  | StrapiBlockSplitPanel
+  | StrapiBlockFeaturedCarousel
+  | StrapiBlockContentCardGrid
+  | StrapiBlockCarouselSection
+  | StrapiBlockContactPanels
+  | StrapiBlockContactInfo
+  | StrapiBlockMembershipPricing
+  | StrapiBlockEventCalendar
+  | StrapiBlockContactForm
+  | StrapiBlockCtaBanner
+  | StrapiBlockStatement
+  | StrapiBlockEmbedSection
+  | StrapiBlockOverlayPair;
 
 export interface StrapiPage {
   id: number;
@@ -465,6 +495,7 @@ export interface StrapiBlogPost {
   documentId: string;
   title: string;
   slug: string;
+  featured?: boolean;
   excerpt?: string | null;
   content: string | StrapiBlock[];
   publishedAt?: string | null;
@@ -509,6 +540,7 @@ export interface StrapiEvent {
   documentId: string;
   title: string;
   slug: string;
+  featured?: boolean;
   startDate: string;
   endDate?: string | null;
   allDay?: boolean;
@@ -659,4 +691,504 @@ export interface StrapiResponse<T> {
   data: T | T[] | null;
   meta?: StrapiMeta;
   error?: { message: string };
+}
+
+// ---------------------------------------------------------------------------
+// Block types ported from the production block system
+// ---------------------------------------------------------------------------
+
+export interface StrapiBlockSubpageHero {
+  __component: 'blocks.subpage-hero';
+  anchorId?: string | null;
+  title: string;
+  subtitle?: string | null;
+  image?: StrapiImage | null;
+  ctaText?: string | null;
+  ctaUrl?: string | null;
+}
+
+/** Adoption card (used inside AnimalAdoptionGrid) */
+
+export interface StrapiBlockTertiaryHero {
+  __component: 'blocks.tertiary-hero';
+  anchorId?: string | null;
+  title: string;
+  subtitle?: string | null;
+  image?: StrapiImage | null;
+}
+
+/** Page block: Event type card (used inside EventTypeGrid) */
+
+export interface StrapiBlockCtaPanel {
+  id?: number;
+  title: string;
+  body?: StrapiBlock[] | null;
+  buttonText?: string | null;
+  buttonUrl?: string | null;
+}
+
+/** Page block: Split CTA */
+export interface StrapiBlockSplitCta {
+  __component: 'blocks.split-cta';
+  anchorId?: string | null;
+  backgroundColor?: 'primary' | 'surface' | 'ink' | 'highlight' | null;
+  heading?: string | null;
+  description?: StrapiBlock[] | null;
+  panels?: StrapiBlockCtaPanel[] | null;
+}
+
+/** Page block: Icon Grid */
+
+export interface StrapiGalleryImage {
+  id?: number;
+  image?: StrapiImage | null;
+  linkUrl?: string | null;
+  linkLabel?: string | null;
+}
+
+/** Page block: Photo Gallery */
+export interface StrapiBlockPhotoGallery {
+  __component: 'blocks.photo-gallery';
+  anchorId?: string | null;
+  variant?: 'default' | 'grid' | null;
+  heading?: string | null;
+  description?: StrapiBlock[] | null;
+  galleryImages?: StrapiGalleryImage[] | null;
+}
+
+/** Page block: Content + Image */
+export interface StrapiBlockContentImage {
+  __component: 'blocks.content-image';
+  anchorId?: string | null;
+  heading?: string | null;
+  body?: string | null;
+  buttonText?: string | null;
+  buttonUrl?: string | null;
+  secondaryButtonText?: string | null;
+  secondaryButtonUrl?: string | null;
+  image?: StrapiImage | null;
+  imagePosition?: 'left' | 'right' | null;
+  imageObjectFit?: 'cover' | 'contain' | null;
+}
+
+export interface StrapiQuickLinkCard {
+  id?: number;
+  title: string;
+  url: string;
+  image?: StrapiImage | null;
+}
+
+export interface StrapiBlockImageLinkGrid {
+  __component: 'blocks.quick-links-grid';
+  anchorId?: string | null;
+  id?: number;
+  cards?: StrapiQuickLinkCard[] | null;
+}
+
+
+export interface StrapiBlockInfoBar {
+  __component: 'blocks.info-bar';
+  anchorId?: string | null;
+  id?: number;
+  text: string;
+  floatingText?: string | null;
+  ctaText?: string | null;
+  ctaUrl?: string | null;
+}
+
+
+export interface StrapiHeroSlide {
+  id?: number;
+  image: StrapiImage;
+  heading: string;
+  ctaText?: string | null;
+  ctaUrl?: string | null;
+}
+
+export interface StrapiBlockHeroCarousel {
+  __component: 'blocks.homepage-hero';
+  anchorId?: string | null;
+  id?: number;
+  slides?: StrapiHeroSlide[] | null;
+}
+
+
+export interface StrapiPriorityCard {
+  id?: number;
+  title: string;
+  body: StrapiBlock[] | null;
+}
+
+export interface StrapiLeadershipMember {
+  id?: number;
+  name: string;
+  role: string;
+  bio?: string | null;
+  image?: StrapiImage | null;
+  linkedinUrl?: string | null;
+}
+
+export interface StrapiBlockProfileCarousel {
+  __component: 'blocks.leadership-grid';
+  anchorId?: string | null;
+  id?: number;
+  heading?: string | null;
+  description?: string | null;
+  members?: StrapiLeadershipMember[] | null;
+}
+
+export interface StrapiBoardMember {
+  id?: number;
+  name: string;
+  organization?: string | null;
+}
+
+export interface StrapiBoardSection {
+  id?: number;
+  title: string;
+  members?: StrapiBoardMember[] | null;
+}
+
+export interface StrapiBlockNameList {
+  __component: 'blocks.board-of-directors';
+  anchorId?: string | null;
+  id?: number;
+  heading?: string | null;
+  description?: string | null;
+  sections?: StrapiBoardSection[] | null;
+}
+
+
+export interface StrapiBlockFeaturePriority {
+  __component: 'blocks.mission-priorities';
+  anchorId?: string | null;
+  id?: number;
+  image?: StrapiImage | null;
+  missionHeading?: string | null;
+  missionBody?: string | null;
+  sectionHeading?: string | null;
+  priorities?: StrapiPriorityCard[] | null;
+}
+
+
+export interface StrapiBlockTwoColumnContent {
+  __component: 'blocks.two-column-content';
+  anchorId?: string | null;
+  id?: number;
+  variant?: 'default' | 'text-links' | null;
+  leftHeading?: string | null;
+  leftBody?: StrapiBlock[] | null;
+  leftButtonPrimaryText?: string | null;
+  leftButtonPrimaryUrl?: string | null;
+  leftButtonSecondaryText?: string | null;
+  leftButtonSecondaryUrl?: string | null;
+  rightHeading?: string | null;
+  rightBody?: StrapiBlock[] | null;
+  rightButtonPrimaryText?: string | null;
+  rightButtonPrimaryUrl?: string | null;
+  rightButtonSecondaryText?: string | null;
+  rightButtonSecondaryUrl?: string | null;
+  image?: StrapiImage | null;
+}
+
+
+export interface StrapiMediaCard {
+  id?: number;
+  title: string;
+  body?: string | null;
+  image?: StrapiImage | null;
+  linkUrl?: string | null;
+}
+
+export interface StrapiBlockMediaCards {
+  __component: 'blocks.media-cards';
+  anchorId?: string | null;
+  id?: number;
+  cards?: StrapiMediaCard[] | null;
+}
+
+
+export interface StrapiBlockFeaturedEvents {
+  __component: 'blocks.featured-events';
+  anchorId?: string | null;
+  id?: number;
+  heading?: string | null;
+  limit?: number | null;
+}
+
+export interface StrapiBlockFeaturedBlogPosts {
+  __component: 'blocks.featured-blog-posts';
+  anchorId?: string | null;
+  id?: number;
+  heading?: string | null;
+  description?: string | null;
+  limit?: number | null;
+  contentType?: 'blog' | 'press-release' | null;
+}
+
+export interface StrapiBlockRecentBlogPosts {
+  __component: 'blocks.recent-blog-posts';
+  anchorId?: string | null;
+  id?: number;
+  heading?: string | null;
+  description?: string | null;
+  postsPerPage?: number | null;
+  contentType?: 'blog' | 'press-release' | null;
+}
+
+
+export interface StrapiBlockEvents {
+  __component: 'blocks.upcoming-events';
+  anchorId?: string | null;
+  id?: number;
+  variant?: 'homepage' | 'events' | null;
+  heading?: string | null;
+  description?: StrapiBlock[] | string | null;
+  limit?: number | null;
+  ctaText?: string | null;
+  ctaUrl?: string | null;
+}
+
+export interface StrapiBlockSplitPanel {
+  __component: 'blocks.split-panel';
+  anchorId?: string | null;
+  id?: number;
+  heading: string;
+  body?: string | null;
+  ctaText?: string | null;
+  ctaUrl?: string | null;
+  image?: StrapiImage | null;
+  videoAutoplay?: boolean | null;
+  bgColor?: 'primary' | 'secondary' | 'accent' | 'ink' | null;
+  imagePosition?: 'left' | 'right' | null;
+}
+
+
+export interface StrapiBlockFeaturedCarouselSlide {
+  id?: number;
+  image: StrapiImage;
+  heading: string;
+  body?: string | null;
+  linkUrl?: string | null;
+}
+
+export interface StrapiBlockFeaturedCarousel {
+  __component: 'blocks.featured-carousel';
+  anchorId?: string | null;
+  id?: number;
+  slides?: StrapiBlockFeaturedCarouselSlide[] | null;
+}
+
+
+export interface StrapiStatItem {
+  id?: number;
+  value: string;
+  label: string;
+}
+
+export interface StrapiProgramCard {
+  id?: number;
+  title: string;
+  description?: string | null;
+  linkText?: string | null;
+  linkUrl?: string | null;
+  image?: StrapiImage | null;
+}
+
+export interface StrapiBlockContentCardGrid {
+  __component: 'blocks.content-card-grid';
+  anchorId?: string | null;
+  id?: number;
+  backgroundColor?: 'primary' | 'surface' | 'ink' | 'highlight' | null;
+  cardBackgroundColor?: 'highlight' | 'surface' | 'primary' | 'ink' | null;
+  heading?: string | null;
+  description?: string | null;
+  programs?: StrapiProgramCard[] | null;
+}
+
+export interface StrapiBlockCarouselSection {
+  __component: 'blocks.carousel-section';
+  anchorId?: string | null;
+  id?: number;
+  heading?: string | null;
+  description?: string | null;
+  programs?: StrapiProgramCard[] | null;
+}
+
+
+export interface StrapiContactPanel {
+  id?: number;
+  title: string;
+  contactName?: string | null;
+  email?: string | null;
+  phone?: string | null;
+}
+
+/** Page block: Contact Panels */
+export interface StrapiBlockContactPanels {
+  __component: 'blocks.contact-panels';
+  anchorId?: string | null;
+  id?: number;
+  heading?: string | null;
+  panels?: StrapiContactPanel[] | null;
+}
+
+/** Contact entry within an accordion item */
+
+export interface StrapiContactInfoItem {
+  id?: number;
+  title: string;
+  body?: string | StrapiBlock[] | null;
+}
+
+/** Page block: Contact Info */
+export interface StrapiBlockContactInfo {
+  __component: 'blocks.contact-info';
+  anchorId?: string | null;
+  id?: number;
+  heading?: string | null;
+  items?: StrapiContactInfoItem[] | null;
+}
+
+/** Pricing tier card (used inside MembershipPricing) */
+export interface StrapiPricingTier {
+  id?: number;
+  tierName: string;
+  subtitle?: string | null;
+  description?: string | null;
+  price: string;
+  period?: string | null;
+  linkUrl?: string | null;
+}
+
+/** Page block: Membership Pricing */
+export interface StrapiBlockMembershipPricing {
+  __component: 'blocks.membership-pricing';
+  anchorId?: string | null;
+  id?: number;
+  heading?: string | null;
+  description?: string | null;
+  tiers?: StrapiPricingTier[] | null;
+  footerContent?: string | null;
+}
+
+export interface StrapiBlockEventCalendar {
+  __component: 'blocks.event-calendar';
+  anchorId?: string | null;
+  id?: number;
+}
+
+export interface StrapiBlockContactForm {
+  __component: 'blocks.contact-form';
+  anchorId?: string | null;
+  id?: number;
+  heading?: string | null;
+  description?: string | null;
+  form?: StrapiForm | null;
+  mapEmbedUrl?: string | null;
+}
+
+
+export interface StrapiBlockCtaBanner {
+  __component: 'blocks.cta-banner';
+  anchorId?: string | null;
+  id?: number;
+  heading?: string | null;
+  body?: StrapiBlock[] | null;
+  buttonText?: string | null;
+  buttonUrl?: string | null;
+  backgroundColor?: 'primary' | 'accent' | 'secondary' | 'ink' | 'highlight' | null;
+}
+
+export interface StrapiBlockStatement {
+  __component: 'blocks.statement';
+  anchorId?: string | null;
+  id?: number;
+  heading?: string | null;
+  body?: string | null;
+}
+
+export interface StrapiBlockEmbedSection {
+  __component: 'blocks.embed-section';
+  anchorId?: string | null;
+  id?: number;
+  heading?: string | null;
+  embedCode?: string | null;
+  description?: string | null;
+}
+
+export interface StrapiBlockOverlayPair {
+  __component: 'blocks.promo-cards';
+  anchorId?: string | null;
+  id?: number;
+  leftHeading?: string | null;
+  leftBody?: string | null;
+  leftLinkUrl?: string | null;
+  leftImage?: StrapiImage | null;
+  rightHeading?: string | null;
+  rightBody?: string | null;
+  rightLinkUrl?: string | null;
+  rightImage?: StrapiImage | null;
+  headingLevel?: 'h2' | 'h3' | null;
+}
+
+
+export type StrapiBlockHomepageHero = StrapiBlockHeroCarousel;
+export type StrapiBlockQuickLinksGrid = StrapiBlockImageLinkGrid;
+export type StrapiBlockUpcomingEvents = StrapiBlockEvents;
+
+// -----------------------------------------------------------------------------
+// Header / Footer Options (single types)
+// -----------------------------------------------------------------------------
+
+export interface StrapiFooterLink {
+  label: string;
+  url?: string | null;
+  page?: { slug: string } | null;
+  openInNewTab?: boolean;
+}
+
+export interface StrapiFooterColumn {
+  id?: number;
+  title: string;
+  url?: string | null;
+  page?: { slug: string } | null;
+  openInNewTab?: boolean;
+  links?: StrapiFooterLink[] | null;
+}
+
+export interface StrapiPartnerLogo {
+  id?: number;
+  image: StrapiImage;
+  altText?: string | null;
+  linkUrl?: string | null;
+}
+
+export interface StrapiHeaderOptions {
+  documentId?: string;
+  logo?: StrapiImage | null;
+  ctaUrl?: string | null;
+  ctaLabel?: string | null;
+  publishedAt?: string | null;
+  updatedAt?: string;
+}
+
+export interface StrapiFooterOptions {
+  documentId?: string;
+  footerLogo?: StrapiImage | null;
+  siteHours?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  address?: string | null;
+  social?: StrapiThemeOptionSocial | null;
+  newsletterHeading?: string | null;
+  newsletterDescription?: string | null;
+  newsletterProvider?: 'none' | 'mailchimp' | 'constantContact' | null;
+  newsletterActionUrl?: string | null;
+  footerLegalText?: string | null;
+  footerColumns?: StrapiFooterColumn[] | null;
+  partnerLogos?: StrapiPartnerLogo[] | null;
+  copyrightText?: string | null;
+  publishedAt?: string | null;
+  updatedAt?: string;
 }

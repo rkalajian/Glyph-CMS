@@ -1,0 +1,47 @@
+{
+  "collectionName": "components_blocks_content_card_grids",
+  "info": {
+    "displayName": "Content Card Grid",
+    "description": "3-col grid of program/content cards with image, title, body, and CTA link"
+  },
+  "attributes": {
+    "backgroundColor": {
+      "type": "enumeration",
+      "enum": [
+        "primary",
+        "surface",
+        "ink",
+        "highlight"
+      ],
+      "default": "primary"
+    },
+    "cardBackgroundColor": {
+      "type": "enumeration",
+      "enum": [
+        "highlight",
+        "surface",
+        "primary",
+        "ink"
+      ],
+      "default": "highlight"
+    },
+    "heading": {
+      "type": "string"
+    },
+    "description": {
+      "type": "customField",
+      "customField": "plugin::ckeditor5.CKEditor",
+      "options": {
+        "preset": "defaultHtml"
+      }
+    },
+    "programs": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.program-card"
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

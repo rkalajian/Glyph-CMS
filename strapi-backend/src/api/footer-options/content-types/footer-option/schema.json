@@ -1,0 +1,86 @@
+{
+  "kind": "singleType",
+  "collectionName": "footer_options",
+  "info": {
+    "singularName": "footer-option",
+    "pluralName": "footer-options",
+    "displayName": "Footer Options",
+    "description": "Footer content: contact info, social links, navigation columns, newsletter, partner logos, copyright"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "footerLogo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "siteHours": {
+      "type": "string",
+      "displayName": "Site Hours",
+      "description": "e.g. Open 9am-4pm daily"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "address": {
+      "type": "text"
+    },
+    "social": {
+      "type": "component",
+      "repeatable": false,
+      "component": "theme-option.social",
+      "displayName": "Social Links"
+    },
+    "newsletterHeading": {
+      "type": "string",
+      "displayName": "Newsletter Heading"
+    },
+    "newsletterDescription": {
+      "type": "text",
+      "displayName": "Newsletter Description"
+    },
+    "footerLegalText": {
+      "type": "text",
+      "displayName": "Footer Legal Text",
+      "description": "Disclaimer below newsletter form; separate paragraphs with a blank line"
+    },
+    "footerColumns": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.footer-column",
+      "displayName": "Footer Columns"
+    },
+    "partnerLogos": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.partner-logo",
+      "displayName": "Partner Logos"
+    },
+    "copyrightText": {
+      "type": "string",
+      "displayName": "Copyright Text",
+      "description": "Overrides default copyright line"
+    },
+    "newsletterProvider": {
+      "type": "enumeration",
+      "enum": ["none", "mailchimp", "constantContact"],
+      "default": "none",
+      "displayName": "Newsletter Provider",
+      "description": "Select the email marketing platform for the footer newsletter form"
+    },
+    "newsletterActionUrl": {
+      "type": "string",
+      "displayName": "Newsletter Action URL",
+      "description": "Mailchimp: paste the form action URL from Audience → Signup forms → Embedded forms. Constant Contact: paste the form action URL from the embed code."
+    }
+  }
+}

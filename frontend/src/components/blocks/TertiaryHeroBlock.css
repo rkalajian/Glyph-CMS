@@ -1,0 +1,55 @@
+@reference "../../../app/globals.css";
+
+.tertiary-hero {
+  @apply relative w-full max-w-[1728px] mx-auto overflow-hidden min-h-[280px];
+}
+
+@media (min-width: 1024px) {
+  .tertiary-hero {
+    @apply h-[400px];
+  }
+}
+
+.tertiary-hero__image {
+  @apply absolute inset-0 w-full h-full object-cover;
+}
+
+.tertiary-hero__overlay {
+  @apply absolute inset-0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.75) 68.333%);
+}
+
+.tertiary-hero__content {
+  @apply absolute inset-0 flex items-end;
+}
+
+.tertiary-hero__content-inner {
+  @apply w-full max-w-[1440px] mx-auto px-6 pb-10 flex flex-col gap-4;
+}
+
+@media (min-width: 768px) {
+  .tertiary-hero__content-inner {
+    @apply px-16;
+  }
+}
+
+@media (min-width: 1024px) {
+  .tertiary-hero__content-inner {
+    @apply px-[100px] pb-[40px] gap-[16px];
+  }
+}
+
+.tertiary-hero__title {
+  @apply font-sans font-bold text-surface text-[50px] leading-[1.2];
+  text-shadow: 4px 4px 20px rgba(0, 0, 0, 0.45);
+}
+
+@media (min-width: 1024px) {
+  .tertiary-hero__title {
+    @apply text-[100px];
+  }
+}
+
+.tertiary-hero__subtitle {
+  @apply font-sans font-normal text-surface text-[22px] leading-[32px];
+}

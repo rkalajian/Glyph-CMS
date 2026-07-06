@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_blocks_media_cards",
+  "info": {
+    "displayName": "Media Cards",
+    "description": "3-column grid of image + title + body cards with optional links"
+  },
+  "options": {},
+  "attributes": {
+    "cards": {
+      "type": "component",
+      "component": "shared.media-card",
+      "repeatable": true
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

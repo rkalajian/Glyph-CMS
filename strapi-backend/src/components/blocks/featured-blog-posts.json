@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_blocks_featured_blog_posts",
+  "info": {
+    "displayName": "Featured Blog Posts",
+    "icon": "star",
+    "description": "Large featured post card + sidebar list of recent posts"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "default": "Featured"
+    },
+    "description": {
+      "type": "text"
+    },
+    "limit": {
+      "type": "integer",
+      "default": 4,
+      "min": 2,
+      "max": 10
+    },
+    "contentType": {
+      "type": "enumeration",
+      "enum": [
+        "blog",
+        "press-release"
+      ],
+      "default": "blog"
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

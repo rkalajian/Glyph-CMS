@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_blocks_leadership_grids",
+  "info": {
+    "displayName": "Leadership Grid",
+    "description": "Section heading + grid of leadership member cards with mobile carousel"
+  },
+  "attributes": {
+    "heading": {
+      "type": "string"
+    },
+    "description": {
+      "type": "customField",
+      "customField": "plugin::ckeditor5.CKEditor",
+      "options": {
+        "preset": "defaultHtml"
+      }
+    },
+    "members": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.leadership-member"
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

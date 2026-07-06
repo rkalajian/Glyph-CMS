@@ -1,0 +1,29 @@
+@reference "../../app/globals.css";
+
+.newsletter-form {
+  @apply flex gap-3;
+}
+
+.newsletter-form__input {
+  @apply flex-1 bg-bg border border-border text-fg placeholder-muted font-sans text-[16px] leading-[24px] px-3 h-[48px] rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-accent min-w-0;
+}
+
+.newsletter-form__btn {
+  @apply bg-accent text-white border border-accent font-sans font-semibold text-[15px] leading-[24px] px-5 h-[48px] rounded shrink-0 whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 transition-colors hover:bg-accent-hover disabled:opacity-60 disabled:cursor-not-allowed;
+}
+
+.newsletter-form__input:disabled {
+  @apply opacity-60 cursor-not-allowed;
+}
+
+.newsletter-form__success {
+  @apply font-sans text-sm text-fg;
+}
+
+.newsletter-form__error {
+  @apply font-sans text-sm text-red-700 mt-2;
+}
+
+.newsletter-form__cc-iframe {
+  @apply hidden;
+}

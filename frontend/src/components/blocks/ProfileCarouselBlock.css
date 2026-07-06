@@ -1,0 +1,145 @@
+@reference "../../../app/globals.css";
+
+.profile-carousel {
+  @apply bg-surface pt-[80px] lg:pt-[100px] pb-[50px];
+}
+
+.profile-carousel__inner {
+  @apply max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[100px] flex flex-col gap-[32px];
+}
+
+.profile-carousel__header {
+  @apply flex flex-col gap-[16px] max-w-[640px];
+}
+
+.profile-carousel__heading {
+  @apply font-sans font-bold text-[30px] leading-[40px] lg:text-[44px] lg:leading-[54px] text-ink;
+}
+
+.profile-carousel__description {
+  @apply font-sans font-normal text-[16px] leading-[24px];
+}
+
+.profile-carousel__description p { @apply text-ink; }
+
+/* Card scroll container — mobile: horizontal snap, desktop: grid */
+.profile-carousel__cards {
+  @apply flex gap-[20px] overflow-x-auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.profile-carousel__cards::-webkit-scrollbar {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .profile-carousel__cards {
+    @apply grid grid-cols-4 overflow-visible;
+    scroll-snap-type: none;
+  }
+}
+
+/* Individual card */
+.profile-carousel__card {
+  @apply flex flex-col overflow-hidden rounded-[10px] bg-white shrink-0 w-[280px];
+  scroll-snap-align: start;
+}
+
+@media (min-width: 1024px) {
+  .profile-carousel__card {
+    @apply w-auto;
+    scroll-snap-align: none;
+  }
+}
+
+.profile-carousel__card-image {
+  @apply w-full object-cover shrink-0 h-[224px];
+}
+
+.profile-carousel__card-image-placeholder {
+  @apply w-full bg-ink/10 shrink-0 h-[224px];
+}
+
+.profile-carousel__card-content {
+  @apply flex flex-col gap-[16px] p-[24px] flex-1 justify-between;
+}
+
+.profile-carousel__card-name {
+  @apply font-sans font-bold text-[22px] leading-[28px] text-accent;
+}
+
+.profile-carousel__card-role {
+  @apply font-sans font-normal text-[14px] leading-[22px] text-ink;
+}
+
+/* "ABOUT [NAME] ↗" button */
+.profile-carousel__about-btn {
+  @apply inline-flex items-center gap-[6px] font-sans font-bold text-[14px] leading-[22px] text-primary;
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-sm;
+  @apply pt-[4px];
+}
+
+.profile-carousel__about-arrow {
+  @apply transition-transform duration-200;
+}
+
+.profile-carousel__about-btn:hover .profile-carousel__about-arrow {
+  /* rotate ↗ (−45°) to → (0°) */
+  transform: rotate(45deg);
+}
+
+/* Mobile carousel nav */
+.profile-carousel__nav {
+  @apply flex items-center gap-[20px] lg:hidden;
+}
+
+.profile-carousel__nav-arrow {
+  @apply flex items-center justify-center rounded-full bg-accent text-surface shrink-0;
+  @apply size-[30px] transition-opacity hover:opacity-80;
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:opacity-40;
+}
+
+.profile-carousel__nav-dots {
+  @apply flex items-center gap-[5px] flex-1 justify-center md:justify-start;
+}
+
+.profile-carousel__nav-dot {
+  @apply h-[4px] w-4 rounded-full bg-accent opacity-30 transition-all duration-200;
+}
+
+.profile-carousel__nav-dot--active {
+  @apply opacity-100 w-[22px];
+}
+
+/* Modal */
+.profile-carousel__modal-backdrop {
+  @apply fixed inset-0 z-50 flex items-center justify-center bg-ink/60 p-4;
+}
+
+.profile-carousel__modal {
+  @apply relative bg-white rounded-[10px] overflow-hidden w-full max-w-[560px] max-h-[90vh] overflow-y-auto;
+  @apply shadow-2xl;
+}
+
+.profile-carousel__modal-close {
+  @apply absolute top-4 right-4 z-10 flex items-center justify-center rounded-full bg-white/90 text-ink size-[36px];
+  @apply transition-opacity hover:opacity-70;
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2;
+}
+
+.profile-carousel__modal-body {
+  @apply flex flex-col gap-[16px] p-[32px];
+}
+
+.profile-carousel__modal-bio {
+  @apply font-sans font-normal text-[16px] leading-[24px];
+}
+
+.profile-carousel__modal-bio p { @apply text-ink; }
+
+.profile-carousel__modal-linkedin {
+  @apply inline-flex items-center gap-[8px] font-sans font-bold text-[14px] leading-[22px] text-accent;
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded-sm;
+}

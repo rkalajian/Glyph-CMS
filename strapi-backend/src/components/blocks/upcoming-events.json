@@ -1,0 +1,48 @@
+{
+  "collectionName": "components_blocks_upcoming_events",
+  "info": {
+    "displayName": "Upcoming Events",
+    "description": "Fetches upcoming events from the Events content type"
+  },
+  "options": {},
+  "attributes": {
+    "variant": {
+      "type": "enumeration",
+      "enum": [
+        "homepage",
+        "events"
+      ],
+      "default": "homepage",
+      "displayName": "Variant",
+      "description": "homepage: centered heading, CTA below cards. events: left-aligned heading + description, CTA above grid (desktop) / below carousel (mobile)."
+    },
+    "heading": {
+      "type": "string",
+      "default": "Upcoming Events"
+    },
+    "description": {
+      "type": "customField",
+      "customField": "plugin::ckeditor5.CKEditor",
+      "options": {
+        "preset": "defaultHtml"
+      },
+      "displayName": "Description",
+      "description": "Optional intro text shown below the heading (events variant only)"
+    },
+    "limit": {
+      "type": "integer",
+      "default": 6,
+      "min": 1,
+      "max": 12
+    },
+    "ctaText": {
+      "type": "string"
+    },
+    "ctaUrl": {
+      "type": "string"
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

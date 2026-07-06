@@ -1,0 +1,63 @@
+{
+  "collectionName": "components_blocks_two_column_contents",
+  "info": {
+    "displayName": "Two Column Content",
+    "description": "Two-column layout: heading/body/buttons per column + optional full-width image below"
+  },
+  "attributes": {
+    "variant": {
+      "type": "enumeration",
+      "default": "default",
+      "enum": [
+        "default",
+        "text-links"
+      ]
+    },
+    "leftHeading": {
+      "type": "text"
+    },
+    "leftBody": {
+      "type": "blocks"
+    },
+    "leftButtonPrimaryText": {
+      "type": "text"
+    },
+    "leftButtonPrimaryUrl": {
+      "type": "text"
+    },
+    "leftButtonSecondaryText": {
+      "type": "text"
+    },
+    "leftButtonSecondaryUrl": {
+      "type": "text"
+    },
+    "rightHeading": {
+      "type": "text"
+    },
+    "rightBody": {
+      "type": "blocks"
+    },
+    "rightButtonPrimaryText": {
+      "type": "text"
+    },
+    "rightButtonPrimaryUrl": {
+      "type": "text"
+    },
+    "rightButtonSecondaryText": {
+      "type": "text"
+    },
+    "rightButtonSecondaryUrl": {
+      "type": "text"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

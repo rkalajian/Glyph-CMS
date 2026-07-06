@@ -1,0 +1,98 @@
+@reference "../../../app/globals.css";
+
+/* ── Mobile: stack image top, panel below ────────────────── */
+
+.split-panel {
+  @apply flex flex-col w-full max-w-[1728px] mx-auto;
+}
+
+/* Color variants */
+.split-panel--primary { @apply bg-primary text-surface; }
+.split-panel--secondary  { @apply bg-secondary text-surface; }
+.split-panel--accent  { @apply bg-accent text-surface; }
+.split-panel--ink  { @apply bg-ink text-surface; }
+
+.split-panel__image {
+  @apply relative w-full overflow-hidden shrink-0 h-[341px];
+}
+
+.split-panel__img {
+  @apply absolute inset-0 w-full h-full object-cover;
+}
+
+.split-panel__video {
+  @apply absolute inset-0 w-full h-full object-cover;
+}
+
+.split-panel__content {
+  @apply flex flex-col gap-[24px] px-[24px] py-[40px];
+}
+
+.split-panel__heading {
+  @apply font-sans font-bold text-highlight text-[30px] leading-[40px];
+}
+
+.split-panel--ink .split-panel__heading { @apply text-surface; }
+
+.split-panel--ink .split-panel__body ul,
+.split-panel--ink .split-panel__body ol,
+.split-panel--ink .split-panel__body li { @apply text-surface; }
+
+.split-panel__body {
+  @apply font-sans font-normal text-[16px] leading-[24px];
+}
+
+.split-panel__body p { @apply text-surface; }
+.split-panel__body strong { @apply text-surface; }
+
+.split-panel__body a {
+  @apply text-white underline underline-offset-2 transition-all focus:outline-none;
+}
+
+.split-panel__body a:hover {
+  @apply text-white font-bold;
+}
+
+.split-panel__body a:focus-visible {
+  @apply ring-2 ring-highlight ring-offset-2 rounded-sm;
+}
+
+.split-panel__cta-wrap {
+  @apply pt-[8px];
+}
+
+.split-panel__cta {
+  @apply inline-flex items-center justify-center border border-surface text-surface font-sans font-bold text-[16px] leading-[24px] px-[25px] py-[12px] rounded-[10px] uppercase tracking-wide transition-colors hover:bg-surface hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-surface focus-visible:ring-offset-2;
+}
+
+/* ── Desktop: side-by-side ───────────────────────────────── */
+
+@media (min-width: 1024px) {
+  .split-panel {
+    @apply flex-row h-[550px];
+  }
+
+  /* Image right: content first, image second */
+  .split-panel--img-right {
+    @apply flex-row-reverse;
+  }
+
+.split-panel__image {
+    /* Override w-full from mobile, force exactly 50% width, and stop flex resizing */
+    @apply w-1/2 h-full flex-none;
+  }
+
+  .split-panel__content {
+    /* Force exactly 50% width and stop flex resizing */
+    @apply w-1/2 flex-none justify-center gap-[24px] pl-[80px] pr-[100px] py-0;
+  }
+
+  /* When image is on the right, swap padding so content is left-padded from page edge */
+  .split-panel--img-right .split-panel__content {
+    @apply pl-[100px] pr-[80px];
+  }
+
+  .split-panel__heading {
+    @apply text-[44px] leading-[54px];
+  }
+}

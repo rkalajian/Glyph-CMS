@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import type { Metadata } from 'next';
-import { getNavigation, getThemeOptions, getSiteAlerts, getStrapiImageUrl } from '@/lib/strapi';
+import { getNavigation, getThemeOptions, getSiteAlerts, getHeaderOptions, getFooterOptions, getStrapiImageUrl } from '@/lib/strapi';
 import '../src/theme/index.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './globals.css';
@@ -9,9 +9,9 @@ import { MobileMenu } from '@/components/MobileMenu';
 import { ThemeScripts } from '@/components/ThemeScripts';
 import { SiteAlerts } from '@/components/SiteAlerts';
 import { SocialLinks } from '@/components/SocialLinks';
+import { SiteFooter } from '@/components/SiteFooter';
 import { CookieConsentProvider } from '@/components/CookieConsentProvider';
 import { CookieConsentBanner } from '@/components/CookieConsentBanner';
-import { CookieSettingsButton } from '@/components/CookieSettingsButton';
 import Link from 'next/link';
 import type { StrapiNavItem } from '@/types/strapi';
 
@@ -20,13 +20,18 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const [nav, themeOptions, alerts] = await Promise.all([
+  const [nav, themeOptions, alerts, headerOptions, footerOptions] = await Promise.all([
     getNavigation(),
     getThemeOptions(),
     getSiteAlerts(),
+    getHeaderOptions(),
+    getFooterOptions(),
   ]);
 
-  const logo = themeOptions?.logo ? getStrapiImageUrl(themeOptions.logo) : '/glyph.svg';
+  const headerLogo = headerOptions?.logo ? getStrapiImageUrl(headerOptions.logo) : null;
+  const logo = headerLogo ?? (themeOptions?.logo ? getStrapiImageUrl(themeOptions.logo) : '/glyph.svg');
+  const ctaUrl = headerOptions?.ctaUrl?.trim() || null;
+  const ctaLabel = headerOptions?.ctaLabel?.trim() || 'Get Started';
   const favicon = themeOptions?.favicon ? getStrapiImageUrl(themeOptions.favicon) : null;
   const siteName = themeOptions?.siteName || 'Glyph';
 
@@ -95,6 +100,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                     <SocialLinks social={themeOptions.social} />
                   )}
                 </div>
+                {ctaUrl && (
+                  <Link
+                    href={ctaUrl}
+                    className="hidden md:inline-flex items-center bg-accent text-white font-medium text-sm px-4 min-h-[44px] rounded hover:bg-accent-hover transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                  >
+                    {ctaLabel}
+                  </Link>
+                )}
                 <MobileMenu
                   primaryNav={nav.primaryNav || []}
                   utilityNav={nav.utilityNav || []}
@@ -114,45 +127,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </main>
 
         {/* Footer */}
-        <footer className="bg-bg border-t border-border mt-12">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-8">
-              {/* Branding */}
-              <div>
-                {logo && (
-                  <img
-                    src={logo}
-                    alt={siteName}
-                    width={40}
-                    height={40}
-                    className="h-10 w-auto mb-2"
-                  />
-                )}
-                <p className="text-sm text-muted">{siteName}</p>
-              </div>
-
-              {/* Footer Nav */}
-              {nav.footerNav && nav.footerNav.length > 0 && (
-                <nav aria-label="Footer navigation">
-                  <h3 className="font-semibold mb-3 text-sm">Links</h3>
-                  <ul className="space-y-2 list-none m-0 p-0">
-                    {nav.footerNav.map((item: StrapiNavItem) => (
-                      <li key={item.documentId}>
-                        <NavLink item={item} variant="footer" />
-                      </li>
-                    ))}
-                  </ul>
-                </nav>
-              )}
-            </div>
-
-            {/* Copyright */}
-            <div className="border-t border-border pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted">
-              <p>&copy; {new Date().getFullYear()} {siteName}. All rights reserved.</p>
-              <CookieSettingsButton />
-            </div>
-          </div>
-        </footer>
+        <SiteFooter
+          footerOptions={footerOptions}
+          themeOptions={themeOptions}
+          footerNav={nav.footerNav || []}
+          logo={logo}
+          siteName={siteName}
+        />
         <CookieConsentBanner />
         </CookieConsentProvider>
       </body>

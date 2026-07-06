@@ -1,0 +1,17 @@
+{
+  "kind": "singleType",
+  "collectionName": "header_options",
+  "info": {
+    "singularName": "header-option",
+    "pluralName": "header-options",
+    "displayName": "Header Options",
+    "description": "Header settings: site logo, call-to-action button URL and label"
+  },
+  "options": { "draftAndPublish": true },
+  "pluginOptions": {},
+  "attributes": {
+    "logo":         { "type": "media", "multiple": false, "required": false, "allowedTypes": ["images"] },
+    "ctaUrl":   { "type": "string", "displayName": "CTA URL" },
+    "ctaLabel": { "type": "string", "displayName": "CTA Label", "description": "Button text for the header CTA" }
+  }
+}

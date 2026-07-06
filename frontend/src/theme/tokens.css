@@ -14,4 +14,13 @@
   --color-accent-hover: #1d4ed8;
   --color-muted: #4b5563;
   --color-border: #e5e7eb;
+
+  /* Block palette — used by page-builder blocks (bg-primary, text-ink, etc.)
+     Rename-safe: change the values, keep the names. */
+  --color-primary: #1e3a8a;
+  --color-ink: #1a1a1a;
+  --color-surface: #f4f4f5;
+  --color-secondary: #0b4470;
+  --color-highlight: #dbeafe;
+  --color-accent-alt: #c2410c;
 }

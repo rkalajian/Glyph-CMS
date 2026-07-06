@@ -118,7 +118,7 @@ The frontend proxies `/api` → `localhost:1337` in dev. Set `NEXT_PUBLIC_STRAPI
 
 After any Strapi schema change, run `npm run build:strapi` and regenerate types if needed.
 
-**Public permissions** must be enabled in Strapi admin (Settings → Users & Permissions → Public) for: Page, Blog Post, Blog Category, Event, Site Alert, Navigation, Theme Option, Press Release, Press Release Category, Form.
+**Public permissions** must be enabled in Strapi admin (Settings → Users & Permissions → Public) for: Page, Blog Post, Blog Category, Event, Site Alert, Navigation, Theme Option, Press Release, Press Release Category, Form, Header Options, Footer Options, Redirect.
 
 ## Static Generation
 
@@ -177,7 +177,17 @@ Custom Strapi endpoints (registered in `src/index.ts` / api routes):
 - **Admin UX** — `PageTreeList` (hierarchical Pages list), `PageSlugPrefix` (locked parent-prefix segment on slug input), `WysiwygSubSup` (sub/sup buttons in the markdown editor)
 - **gcal-sync hardening** — per-event failure isolation, full-id slug hashing (recurring-event collisions), all-day dates anchored noon UTC, config via Theme Options with env fallback
 
-Intentionally **not** ported: Animal/Plant content types, redirects, the zoo's custom block system/header-footer options (Glyph keeps the Tailgrids registry), the VPS webhook build service.
+**Second-wave port (block system, header/footer options, CKEditor, redirects):**
+
+- **Section blocks** — ~30 production block components live alongside the Tailgrids registry. Strapi schemas in `strapi-backend/src/components/blocks/`, frontend in `frontend/src/components/blocks/*Block.tsx` (each block imports its own CSS file using Tailwind `@apply`). `BlockRenderer` dispatches: `renderPortedBlock()` handles section blocks (full-width, self-styled), everything else falls through to the Tailgrids `DynamicBlock` registry. Zoo-specific blocks (animal-*, conservation-*, google-reviews, event-type-grid, field-programs, rental-pricing-table, third-party-embed) were **not** ported.
+- **Block palette** — brand colors renamed to generic tokens: forest→`primary`, earth→`ink`, sand→`surface`, tiger→`accent`, otter→`secondary`, frog→`highlight`, pumpkin→`accent-alt`. Values live in `frontend/src/theme/tokens.css`; schema enums and CSS classes use the generic names. When porting future block updates from the production repo, apply the same rename.
+- **CKEditor 5** — `@_sh/strapi-plugin-ckeditor` (self-registers as `ckeditor5`, no plugin config needed). `content` fields on Page/Blog Post/Press Release and rich-text block fields use `plugin::ckeditor5.CKEditor` with the `defaultHtml` preset. `RichText` (frontend) renders the HTML via `rehype-raw`.
+- **Header/Footer Options** — single types. Header: logo override + CTA button (`ctaUrl`/`ctaLabel`). Footer: contact info, link columns, newsletter (Mailchimp JSONP / Constant Contact iframe post), partner logos, legal text, copyright; rendered by `SiteFooter`, falls back to the simple footer when the single type is empty.
+- **Redirect manager** — `Redirect` collection type + `frontend/scripts/generate-redirects.mjs` (postbuild) writes `out/_redirects` for Netlify. Redirect lines are forced (`!`). Uses `permanent`/`temporary` enum values (Strapi enums can't start with a digit, so not `301`/`302`).
+- **`featured` flag** — added to Blog Post and Event for the featured-blog-posts / featured-events blocks.
+- Local build gotcha: Next's fetch cache persists in `.next/cache` across builds — if content changes don't show up in a local rebuild, `rm -rf .next` first. (Netlify builds run in fresh containers, so production is unaffected.)
+
+Intentionally **not** ported: Animal/Plant content types, zoo-specific blocks (see above), google-reviews sync, the VPS webhook build service.
 
 ## Deployment Architecture
 

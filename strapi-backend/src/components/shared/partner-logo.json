@@ -1,0 +1,9 @@
+{
+  "collectionName": "components_shared_partner_logos",
+  "info": { "displayName": "Partner Logo" },
+  "attributes": {
+    "image": { "type": "media", "multiple": false, "required": true, "allowedTypes": ["images"] },
+    "altText": { "type": "string" },
+    "linkUrl": { "type": "string" }
+  }
+}

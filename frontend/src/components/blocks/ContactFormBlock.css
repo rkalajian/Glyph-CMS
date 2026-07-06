@@ -1,0 +1,30 @@
+@reference "../../../app/globals.css";
+
+.contact-form-block {
+  @apply bg-surface py-16 lg:py-[80px];
+}
+
+.contact-form-block__inner {
+  @apply max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[100px];
+  @apply flex flex-col lg:flex-row lg:items-stretch gap-10 lg:gap-16;
+}
+
+.contact-form-block__form-col {
+  @apply flex-1 min-w-0 flex flex-col;
+}
+
+.contact-form-block__heading {
+  @apply font-sans font-bold text-[30px] leading-[40px] md:text-[44px] md:leading-[54px] text-ink mb-4;
+}
+
+.contact-form-block__description {
+  @apply font-sans font-normal text-[16px] leading-[24px] text-ink mb-8;
+}
+
+.contact-form-block__map-col {
+  @apply relative w-full h-[366px] lg:w-[45%] lg:h-auto lg:flex-shrink-0 rounded-[20px] overflow-hidden;
+}
+
+.contact-form-block__map {
+  @apply absolute inset-0 w-full h-full border-0;
+}

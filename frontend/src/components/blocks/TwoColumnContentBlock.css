@@ -1,0 +1,115 @@
+@reference "../../../app/globals.css";
+
+.two-col-content {
+  @apply py-16 lg:py-[80px] bg-surface;
+}
+
+.two-col-content__inner {
+  @apply max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[100px] flex flex-col gap-8;
+}
+
+.two-col-content__columns {
+  @apply flex flex-col gap-[30px] md:flex-row md:gap-[80px];
+}
+
+.two-col-content__col {
+  @apply flex flex-col gap-6 flex-1;
+}
+
+.two-col-content__heading {
+  @apply font-sans font-bold text-[30px] leading-[40px] md:text-[44px] md:leading-[54px] text-ink;
+}
+
+/* RichText body — normal (right col) */
+.two-col-content__rich-body p,
+.two-col-content__rich-body li {
+  @apply font-sans font-normal text-ink text-[16px] leading-[24px];
+}
+
+.two-col-content__rich-body ul,
+.two-col-content__rich-body ol {
+  @apply pl-5 space-y-5;
+}
+
+.two-col-content__rich-body ul {
+  @apply list-disc;
+}
+
+.two-col-content__rich-body ol {
+  @apply list-decimal;
+}
+
+.two-col-content__rich-body li ul,
+.two-col-content__rich-body li ol {
+  @apply mt-2 pl-4 space-y-2;
+}
+
+.two-col-content__rich-body li ul {
+  @apply list-[circle];
+}
+
+.two-col-content__rich-body li ol {
+  @apply list-[lower-alpha];
+}
+
+/* RichText body — large (left col) */
+.two-col-content__rich-body--large p {
+  @apply font-sans font-normal text-ink text-[18px] leading-[28px] md:text-[22px] md:leading-[32px];
+}
+
+.two-col-content__rich-body--large strong,
+.two-col-content__rich-body--large b {
+  @apply font-bold;
+}
+
+/* Buttons */
+.two-col-content__buttons {
+  @apply flex flex-wrap gap-6 pt-5 uppercase;
+}
+
+.two-col-content__btn-primary {
+  @apply inline-flex items-center justify-center font-sans font-bold text-white text-[16px] leading-[24px]
+    bg-accent-alt border border-accent-alt rounded-[10px] px-[25px] py-[12px]
+    hover:bg-white hover:text-accent-alt transition-colors whitespace-nowrap
+    focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-alt focus-visible:ring-offset-2;
+}
+
+.two-col-content__btn-secondary {
+  @apply inline-flex items-center justify-center font-sans font-bold text-accent text-[16px] leading-[24px]
+    border border-accent rounded-[10px] px-[25px] py-[12px]
+    hover:bg-accent hover:text-white transition-colors whitespace-nowrap
+    focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2;
+}
+
+.two-col-content--text-links {
+  @apply pt-[50px] pb-[50px] lg:pt-[100px] lg:pb-[50px];
+}
+
+.two-col-content__text-link-wrap {
+  @apply pt-5;
+}
+
+.two-col-content__text-link {
+  @apply inline-flex items-center gap-[6px] font-sans font-bold text-primary text-[14px] leading-[22px] uppercase
+    focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+}
+
+.two-col-content__text-link svg {
+  @apply transition-transform duration-200;
+}
+
+.two-col-content__text-link:hover svg {
+  @apply rotate-45;
+}
+
+.two-col-content__image-wrap {
+  @apply relative h-[474px] w-full shrink-0 rounded-[10px] overflow-hidden;
+}
+
+.two-col-content__image-wrap--rounded {
+  @apply rounded-[20px];
+}
+
+.two-col-content__image {
+  @apply absolute inset-0 w-full h-full object-cover;
+}

@@ -1,0 +1,60 @@
+{
+  "collectionName": "components_blocks_split_panels",
+  "info": {
+    "displayName": "Split Panel",
+    "description": "Full-width image + colored text panel, side-by-side on desktop, stacked on mobile"
+  },
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "required": true
+    },
+    "body": {
+      "type": "customField",
+      "customField": "plugin::ckeditor5.CKEditor",
+      "options": {
+        "preset": "defaultHtml"
+      }
+    },
+    "ctaText": {
+      "type": "string"
+    },
+    "ctaUrl": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "videos"
+      ]
+    },
+    "videoAutoplay": {
+      "type": "boolean",
+      "default": true
+    },
+    "bgColor": {
+      "type": "enumeration",
+      "enum": [
+        "primary",
+        "secondary",
+        "accent",
+        "ink"
+      ],
+      "default": "primary"
+    },
+    "imagePosition": {
+      "type": "enumeration",
+      "enum": [
+        "left",
+        "right"
+      ],
+      "default": "left"
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

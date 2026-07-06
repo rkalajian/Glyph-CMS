@@ -1,0 +1,41 @@
+@reference "../../../app/globals.css";
+
+.statement {
+  @apply relative overflow-hidden bg-surface py-[50px] max-w-[1728px] mx-auto w-full flex flex-col justify-center;
+}
+
+.statement__inner {
+  @apply relative z-10 max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[200px];
+}
+
+.statement__content {
+  @apply max-w-[800px] mx-auto;
+}
+
+.statement__heading {
+  @apply font-sans font-bold text-ink text-[30px] leading-[40px] mb-[24px];
+}
+
+.statement__body {
+  @apply font-sans font-normal text-[14px] leading-[22px];
+}
+
+.statement__body p {
+  @apply text-ink mb-[20px] last:mb-0;
+}
+
+@media (min-width: 1024px) {
+  .statement {
+    @apply py-[100px];
+  }
+
+  .statement__heading {
+    @apply text-[44px] leading-[54px];
+  }
+
+  .statement__body {
+    @apply text-[16px] leading-[24px];
+  }
+
+  .statement__body p { @apply text-justify; }
+}

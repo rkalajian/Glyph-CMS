@@ -485,12 +485,20 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
       'oneToMany',
       'api::blog-post.blog-post'
     >;
-    content: Schema.Attribute.RichText & Schema.Attribute.Required;
+    content: Schema.Attribute.RichText &
+      Schema.Attribute.Required &
+      Schema.Attribute.CustomField<
+        'plugin::ckeditor5.CKEditor',
+        {
+          preset: 'defaultHtml';
+        }
+      >;
     coverImage: Schema.Attribute.Media;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     excerpt: Schema.Attribute.Text;
+    featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -499,6 +507,7 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     parent: Schema.Attribute.Relation<'manyToOne', 'api::blog-post.blog-post'>;
     publishedAt: Schema.Attribute.DateTime;
+    scheduledPublishAt: Schema.Attribute.DateTime;
     seoDescription: Schema.Attribute.Text;
     seoTitle: Schema.Attribute.String;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
@@ -527,6 +536,7 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     description: Schema.Attribute.RichText;
     endDate: Schema.Attribute.DateTime;
+    featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     googleCalendarEventId: Schema.Attribute.String & Schema.Attribute.Unique;
     image: Schema.Attribute.Media<'images'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -541,6 +551,51 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     url: Schema.Attribute.String;
+  };
+}
+
+export interface ApiFooterOptionsFooterOption extends Struct.SingleTypeSchema {
+  collectionName: 'footer_options';
+  info: {
+    description: 'Footer content: contact info, social links, navigation columns, newsletter, partner logos, copyright';
+    displayName: 'Footer Options';
+    pluralName: 'footer-options';
+    singularName: 'footer-option';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    address: Schema.Attribute.Text;
+    copyrightText: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.String;
+    footerColumns: Schema.Attribute.Component<'shared.footer-column', true>;
+    footerLegalText: Schema.Attribute.Text;
+    footerLogo: Schema.Attribute.Media<'images'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::footer-options.footer-option'
+    > &
+      Schema.Attribute.Private;
+    newsletterActionUrl: Schema.Attribute.String;
+    newsletterDescription: Schema.Attribute.Text;
+    newsletterHeading: Schema.Attribute.String;
+    newsletterProvider: Schema.Attribute.Enumeration<
+      ['none', 'mailchimp', 'constantContact']
+    > &
+      Schema.Attribute.DefaultTo<'none'>;
+    partnerLogos: Schema.Attribute.Component<'shared.partner-logo', true>;
+    phone: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    siteHours: Schema.Attribute.String;
+    social: Schema.Attribute.Component<'theme-option.social', false>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
   };
 }
 
@@ -623,6 +678,37 @@ export interface ApiFormForm extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiHeaderOptionsHeaderOption extends Struct.SingleTypeSchema {
+  collectionName: 'header_options';
+  info: {
+    description: 'Header settings: site logo, call-to-action button URL and label';
+    displayName: 'Header Options';
+    pluralName: 'header-options';
+    singularName: 'header-option';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    ctaLabel: Schema.Attribute.String;
+    ctaUrl: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::header-options.header-option'
+    > &
+      Schema.Attribute.Private;
+    logo: Schema.Attribute.Media<'images'>;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiNavigationNavigation extends Struct.SingleTypeSchema {
   collectionName: 'navigation';
   info: {
@@ -695,10 +781,46 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         'blocks.table',
         'blocks.team',
         'blocks.video',
+        'blocks.carousel-section',
+        'blocks.contact-form',
+        'blocks.contact-info',
+        'blocks.contact-panels',
+        'blocks.content-card-grid',
+        'blocks.content-image',
+        'blocks.cta-banner',
+        'blocks.embed-section',
+        'blocks.event-calendar',
+        'blocks.featured-blog-posts',
+        'blocks.featured-carousel',
+        'blocks.featured-events',
+        'blocks.homepage-hero',
+        'blocks.info-bar',
+        'blocks.leadership-grid',
+        'blocks.board-of-directors',
+        'blocks.media-cards',
+        'blocks.membership-pricing',
+        'blocks.mission-priorities',
+        'blocks.photo-gallery',
+        'blocks.promo-cards',
+        'blocks.quick-links-grid',
+        'blocks.recent-blog-posts',
+        'blocks.split-cta',
+        'blocks.split-panel',
+        'blocks.statement',
+        'blocks.subpage-hero',
+        'blocks.tertiary-hero',
+        'blocks.two-column-content',
+        'blocks.upcoming-events',
       ]
     >;
     children: Schema.Attribute.Relation<'oneToMany', 'api::page.page'>;
-    content: Schema.Attribute.RichText;
+    content: Schema.Attribute.RichText &
+      Schema.Attribute.CustomField<
+        'plugin::ckeditor5.CKEditor',
+        {
+          preset: 'defaultHtml';
+        }
+      >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -771,7 +893,14 @@ export interface ApiPressReleasePressRelease
       'manyToMany',
       'api::press-release-category.press-release-category'
     >;
-    content: Schema.Attribute.RichText & Schema.Attribute.Required;
+    content: Schema.Attribute.RichText &
+      Schema.Attribute.Required &
+      Schema.Attribute.CustomField<
+        'plugin::ckeditor5.CKEditor',
+        {
+          preset: 'defaultHtml';
+        }
+      >;
     coverImage: Schema.Attribute.Media<'images'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -784,10 +913,46 @@ export interface ApiPressReleasePressRelease
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    scheduledPublishAt: Schema.Attribute.DateTime;
     seoDescription: Schema.Attribute.Text;
     seoTitle: Schema.Attribute.String;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
     title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiRedirectRedirect extends Struct.CollectionTypeSchema {
+  collectionName: 'redirects';
+  info: {
+    description: 'URL redirects written to the Netlify _redirects file at build time';
+    displayName: 'Redirect';
+    pluralName: 'redirects';
+    singularName: 'redirect';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    enabled: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    fromPath: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::redirect.redirect'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    statusCode: Schema.Attribute.Enumeration<['permanent', 'temporary']> &
+      Schema.Attribute.DefaultTo<'permanent'>;
+    toPath: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -853,8 +1018,13 @@ export interface ApiThemeOptionsThemeOption extends Struct.SingleTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    favicon: Schema.Attribute.Media<'images'>;
     frontendMode: Schema.Attribute.Enumeration<['react', 'static']> &
       Schema.Attribute.DefaultTo<'react'>;
+    googleCalendarApiKey: Schema.Attribute.String;
+    googleCalendarId: Schema.Attribute.String;
+    googleCalendarSyncEnabled: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<true>;
     gtm: Schema.Attribute.Component<'theme-option.gtm', false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -875,6 +1045,12 @@ export interface ApiThemeOptionsThemeOption extends Struct.SingleTypeSchema {
       > &
       Schema.Attribute.DefaultTo<12>;
     publishedAt: Schema.Attribute.DateTime;
+    recaptchaSecretKey: Schema.Attribute.String & Schema.Attribute.Private;
+    recaptchaSiteKey: Schema.Attribute.String;
+    searchConfig: Schema.Attribute.Component<
+      'shared.search-content-type',
+      true
+    >;
     showBreadcrumbs: Schema.Attribute.Boolean &
       Schema.Attribute.DefaultTo<true>;
     siteName: Schema.Attribute.String;
@@ -1399,12 +1575,15 @@ declare module '@strapi/strapi' {
       'api::blog-category.blog-category': ApiBlogCategoryBlogCategory;
       'api::blog-post.blog-post': ApiBlogPostBlogPost;
       'api::event.event': ApiEventEvent;
+      'api::footer-options.footer-option': ApiFooterOptionsFooterOption;
       'api::form-submission.form-submission': ApiFormSubmissionFormSubmission;
       'api::form.form': ApiFormForm;
+      'api::header-options.header-option': ApiHeaderOptionsHeaderOption;
       'api::navigation.navigation': ApiNavigationNavigation;
       'api::page.page': ApiPagePage;
       'api::press-release-category.press-release-category': ApiPressReleaseCategoryPressReleaseCategory;
       'api::press-release.press-release': ApiPressReleasePressRelease;
+      'api::redirect.redirect': ApiRedirectRedirect;
       'api::site-alert.site-alert': ApiSiteAlertSiteAlert;
       'api::theme-options.theme-option': ApiThemeOptionsThemeOption;
       'plugin::content-releases.release': PluginContentReleasesRelease;

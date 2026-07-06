@@ -1,0 +1,185 @@
+@reference "../../../app/globals.css";
+
+/* ─── Section wrapper ─────────────────────────────────────────────────────── */
+
+.pricing-table {
+  @apply bg-surface w-full pt-[50px] pb-[100px];
+}
+
+.pricing-table__inner {
+  @apply max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[100px];
+}
+
+/* ─── Section header ──────────────────────────────────────────────────────── */
+
+.pricing-table__header {
+  @apply flex flex-col gap-3 mb-[50px] max-w-[764px];
+}
+
+.pricing-table__heading {
+  @apply font-sans font-bold text-ink text-[30px] leading-[40px];
+}
+
+@media (min-width: 1024px) {
+  .pricing-table__heading {
+    @apply text-[44px] leading-[54px];
+  }
+}
+
+.pricing-table__description {
+  @apply font-sans font-normal text-ink text-[16px] leading-[24px];
+}
+
+/* ─── Card grid ───────────────────────────────────────────────────────────── */
+
+.pricing-table__grid {
+  @apply grid grid-cols-1 gap-[10px];
+}
+
+@media (min-width: 1024px) {
+  .pricing-table__grid {
+    @apply grid-cols-4 gap-5;
+  }
+
+  .pricing-table__grid--1 { @apply grid-cols-1; }
+  .pricing-table__grid--2 { @apply grid-cols-2; }
+  .pricing-table__grid--3 { @apply grid-cols-3; }
+}
+
+/* ─── Card ────────────────────────────────────────────────────────────────── */
+
+.pricing-table__card {
+  @apply bg-white rounded-[12px] flex flex-row items-start gap-[30px] p-4;
+}
+
+@media (min-width: 1024px) {
+  .pricing-table__card {
+    @apply flex-col p-[30px];
+    /* equal-height rows from CSS Grid; price stays at bottom via order + flex */
+  }
+}
+
+/* ─── Price block ─────────────────────────────────────────────────────────── */
+
+.pricing-table__price-block {
+  /* mobile: left column, fixed width, price stacked above period */
+  @apply shrink-0 w-[70px] flex flex-col items-start justify-end;
+}
+
+@media (min-width: 1024px) {
+  .pricing-table__price-block {
+    @apply w-full min-w-0 order-1 justify-start mt-auto;
+  }
+}
+
+.pricing-table__price {
+  @apply font-sans font-bold text-secondary block text-[30px] leading-[40px] break-all;
+}
+
+@media (min-width: 1024px) {
+  .pricing-table__price {
+    @apply text-[34px] leading-[44px];
+  }
+}
+
+.pricing-table__period {
+  @apply font-sans text-secondary block text-[14px] leading-[22px] font-normal break-words;
+}
+
+@media (min-width: 1024px) {
+  .pricing-table__period {
+    @apply text-[18px] leading-[26px] font-bold;
+  }
+}
+
+/* ─── Card info block ─────────────────────────────────────────────────────── */
+
+.pricing-table__card-info {
+  @apply flex-1 min-w-0 flex flex-col gap-[10px] order-1;
+}
+
+@media (min-width: 1024px) {
+  .pricing-table__card-info {
+    @apply order-first;
+    flex: 1 0 auto; /* kept: 1 0 auto has no clean Tailwind equivalent */
+  }
+}
+
+/* ─── Title row ───────────────────────────────────────────────────────────── */
+
+.pricing-table__card-title-row {
+  @apply flex items-center gap-2 w-full;
+}
+
+.pricing-table__card-title,
+.pricing-table__card-title-link {
+  @apply font-sans font-bold text-accent text-[20px] leading-7;
+}
+
+@media (min-width: 1024px) {
+  .pricing-table__card-title,
+  .pricing-table__card-title-link {
+    @apply text-[24px] leading-8;
+  }
+}
+
+.pricing-table__card-title-link,
+.pricing-table__card-title {
+  @apply flex items-center gap-2 w-full;
+}
+
+.pricing-table__card-title-link {
+  @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm no-underline;
+}
+
+.pricing-table__card-subtitle {
+  @apply font-sans font-bold text-accent text-xs leading-5;
+}
+
+@media (min-width: 1024px) {
+  .pricing-table__card-subtitle {
+    @apply text-[18px] leading-[22px];
+  }
+}
+
+.pricing-table__arrow {
+  @apply text-accent flex-shrink-0 block size-[26px] transition-transform duration-200;
+}
+
+.pricing-table__card-title-link:hover .pricing-table__arrow,
+.pricing-table__card-title-link:focus-visible .pricing-table__arrow {
+  @apply rotate-45;
+}
+
+@media (min-width: 1024px) {
+  .pricing-table__arrow {
+    @apply size-[28px];
+  }
+}
+
+/* ─── Card description ────────────────────────────────────────────────────── */
+
+.pricing-table__card-desc {
+  @apply font-sans font-normal text-ink text-[14px] leading-[22px];
+}
+
+@media (min-width: 1024px) {
+  .pricing-table__card-desc {
+    @apply text-[16px] leading-[24px];
+  }
+}
+
+/* ─── Footer content (below cards) ───────────────────────────────────────── */
+
+.pricing-table__footer-content {
+  @apply mt-8 font-sans font-normal text-ink text-[14px] leading-[22px];
+}
+
+.pricing-table__footer-content p { @apply mb-3 last:mb-0; }
+.pricing-table__footer-content ul,
+.pricing-table__footer-content ol { @apply pl-5 mb-3 last:mb-0 space-y-1; }
+.pricing-table__footer-content ul { @apply list-disc; }
+.pricing-table__footer-content ol { @apply list-decimal; }
+.pricing-table__footer-content strong { @apply font-semibold; }
+.pricing-table__footer-content em { @apply italic; }
+.pricing-table__footer-content a { @apply text-secondary underline hover:text-secondary/80; }

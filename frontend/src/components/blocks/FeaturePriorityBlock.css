@@ -1,0 +1,73 @@
+@reference "../../../app/globals.css";
+
+.feature-priority {
+  @apply relative overflow-hidden bg-secondary py-[80px] lg:py-[100px];
+}
+
+.feature-priority__inner {
+  @apply relative max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[100px] flex flex-col gap-[30px];
+}
+
+/* ── Service grid card ───────────────────────────────────────────────────── */
+
+.feature-priority__service-grid {
+  @apply rounded-[20px] overflow-hidden flex flex-col lg:flex-row;
+}
+
+.feature-priority__service-image {
+  @apply relative w-full h-[261px] lg:h-auto lg:flex-[1_0_0] overflow-hidden;
+}
+
+.feature-priority__service-img {
+  @apply object-cover;
+}
+
+.feature-priority__service-content {
+  @apply bg-surface flex flex-col gap-[15px] px-5 py-[45px] lg:flex-[1_0_0] lg:p-[45px];
+}
+
+.feature-priority__service-content--full {
+  @apply w-full;
+}
+
+.feature-priority__mission-heading {
+  @apply font-sans font-bold text-primary text-[24px] leading-[32px] lg:text-[40px] lg:leading-[48px];
+}
+
+.feature-priority__mission-body {
+  @apply font-sans font-normal text-[16px] leading-[24px] lg:text-[22px] lg:leading-[32px];
+}
+
+.feature-priority__mission-body p { @apply text-ink; }
+
+.feature-priority__mission-body p + p { @apply mt-[20px]; }
+
+.feature-priority__mission-body a { @apply text-secondary underline hover:text-primary transition-colors; }
+
+/* ── Priority cards section ──────────────────────────────────────────────── */
+
+.feature-priority__priorities {
+  @apply flex flex-col gap-[30px];
+}
+
+.feature-priority__section-heading {
+  @apply font-sans font-bold text-surface text-[24px] leading-[32px] lg:text-[30px] lg:leading-[40px];
+}
+
+.feature-priority__priority-cards {
+  @apply flex flex-col gap-[30px] lg:flex-row;
+}
+
+.feature-priority__priority-card {
+  @apply bg-surface rounded-[20px] p-[20px] flex flex-col gap-[15px] lg:flex-[1_0_0] lg:self-stretch;
+}
+
+.feature-priority__priority-title {
+  @apply font-sans font-bold text-primary text-[20px] leading-[28px];
+}
+
+.feature-priority__priority-body {
+  @apply font-sans font-normal text-ink text-[16px] leading-[24px];
+}
+
+.feature-priority__priority-body a { @apply text-secondary underline hover:text-primary transition-colors; }

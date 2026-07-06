@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_shared_board_sections",
+  "info": {
+    "displayName": "Board Section",
+    "description": "A titled grouping of board members"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "members": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.board-member"
+    }
+  }
+}

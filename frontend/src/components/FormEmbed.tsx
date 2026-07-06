@@ -14,6 +14,8 @@ import type { StrapiForm, StrapiFormField } from '../types/strapi';
 
 interface FormEmbedProps {
   slug: string;
+  /** Preloaded form (server components pass this to skip the client fetch) */
+  initialForm?: StrapiForm | null;
   /** reCAPTCHA v2 site key from Theme Options — renders a checkbox widget when set */
   recaptchaSiteKey?: string | null;
   className?: string;
@@ -102,10 +104,10 @@ function FormFieldInput({ field }: { field: StrapiFormField }) {
   );
 }
 
-export function FormEmbed({ slug, recaptchaSiteKey: siteKeyProp, className = '' }: FormEmbedProps) {
+export function FormEmbed({ slug, initialForm, recaptchaSiteKey: siteKeyProp, className = '' }: FormEmbedProps) {
   const router = useRouter();
-  const [form, setForm] = useState<StrapiForm | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [form, setForm] = useState<StrapiForm | null>(initialForm ?? null);
+  const [loading, setLoading] = useState(!initialForm);
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
   const [fetchedSiteKey, setFetchedSiteKey] = useState<string | null>(null);
@@ -123,6 +125,7 @@ export function FormEmbed({ slug, recaptchaSiteKey: siteKeyProp, className = '' 
   }, [siteKeyProp]);
 
   useEffect(() => {
+    if (initialForm) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
     getForm(slug)
@@ -131,7 +134,7 @@ export function FormEmbed({ slug, recaptchaSiteKey: siteKeyProp, className = '' 
       .then((f) => setForm(f ?? null))
       .catch(() => setForm(null))
       .finally(() => setLoading(false));
-  }, [slug]);
+  }, [slug, initialForm]);
 
   useEffect(() => {
     if (!recaptchaSiteKey) return;

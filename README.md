@@ -144,6 +144,8 @@ Enable `find` and `findOne` in Strapi admin → Settings → Users & Permissions
 - Navigation
 - Theme Option
 - Form
+- Header Options + Footer Options (`find`)
+- Redirect (`find`)
 
 ### Content type URLs
 
@@ -179,6 +181,31 @@ Manages **Utility Nav** (top bar), **Primary Nav** (header), and **Footer Nav**.
 ### Theme Option (single type)
 
 Controls site name, logo, favicon, colors, third-party script integrations (GTM, Marker.io), Google Calendar sync settings, reCAPTCHA keys, and search configuration.
+
+### Header Options (single type)
+
+Optional header overrides: a header-specific logo (falls back to Theme Options logo) and a call-to-action button (`ctaUrl` + `ctaLabel`) rendered on the right side of the desktop header.
+
+### Footer Options (single type)
+
+Rich footer content: footer logo, contact info (hours, phone, email, address), social links, link columns (each column links to a page or URL and holds child links), newsletter signup (Mailchimp or Constant Contact via the form action URL), legal text, partner logos, and a copyright override. When empty, the footer falls back to the simple branding + footer-nav layout.
+
+### Redirects
+
+The **Redirect** collection type manages URL redirects (`fromPath` → `toPath`, permanent/temporary, enable toggle). After `next build`, `scripts/generate-redirects.mjs` (postbuild hook) fetches enabled redirects from Strapi and writes a Netlify `_redirects` file into `frontend/out/`. Netlify placeholders (`/blog/:slug`) and splats (`/news/*` → `:splat`) are supported. Redirects are forced (`!`), so they win over existing static files.
+
+### Page Builder Blocks
+
+Pages compose content from a dynamic zone with two block families:
+
+- **Tailgrids blocks** (`hero`, `features`, `pricing`, `team`, …) — rendered through the generated component registry (`DynamicBlock`)
+- **Section blocks** (`homepage-hero`, `cta-banner`, `split-panel`, `photo-gallery`, `content-card-grid`, `featured-events`, `upcoming-events`, `featured-blog-posts`, `recent-blog-posts`, `contact-form`, `event-calendar`, `membership-pricing`, `leadership-grid`, and ~15 more) — full-width sections with their own styles, ported from a production site
+
+Section blocks use the **block palette** tokens in `src/theme/tokens.css` (`primary`, `secondary`, `accent`, `ink`, `surface`, `highlight`, `accent-alt`) — change the values there to re-theme every block at once.
+
+## Rich Text Editor (CKEditor 5)
+
+Page, Blog Post, and Press Release `content` fields (and rich-text fields inside blocks) use **CKEditor 5** (`@_sh/strapi-plugin-ckeditor`) with the `defaultHtml` preset, producing HTML. The frontend `RichText` component renders HTML, Markdown, or Strapi Blocks content, and still supports the `[form:slug]` shortcode for embedding forms.
 
 ## Forms & reCAPTCHA
 

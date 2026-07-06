@@ -1,0 +1,38 @@
+{
+  "collectionName": "components_blocks_split_ctas",
+  "info": {
+    "displayName": "Split CTA",
+    "description": "Primary bg rounded block, Highlight heading, paneled contacts with dividers"
+  },
+  "attributes": {
+    "backgroundColor": {
+      "type": "enumeration",
+      "enum": [
+        "primary",
+        "surface",
+        "ink",
+        "highlight"
+      ],
+      "default": "primary"
+    },
+    "heading": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "customField",
+      "customField": "plugin::ckeditor5.CKEditor",
+      "options": {
+        "preset": "defaultHtml"
+      }
+    },
+    "panels": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.cta-panel"
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_blocks_contact_forms",
+  "info": {
+    "displayName": "Contact Form",
+    "description": "Two-column section: form on left, Google Maps embed on right"
+  },
+  "attributes": {
+    "heading": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "form": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::form.form"
+    },
+    "mapEmbedUrl": {
+      "type": "text"
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

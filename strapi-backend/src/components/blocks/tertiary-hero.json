@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_blocks_tertiary_heroes",
+  "info": {
+    "displayName": "Tertiary Hero",
+    "description": "400px hero image with gradient overlay, decorative H1, and subtitle"
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

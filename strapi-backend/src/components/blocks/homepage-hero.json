@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_blocks_homepage_heroes",
+  "info": {
+    "displayName": "Homepage Hero",
+    "description": "Full-width carousel hero; each slide has its own image, heading, and optional CTA"
+  },
+  "attributes": {
+    "slides": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.hero-slide"
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

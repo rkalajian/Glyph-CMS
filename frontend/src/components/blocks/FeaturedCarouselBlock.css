@@ -1,0 +1,158 @@
+@reference "../../../app/globals.css";
+
+/* ── Section ─────────────────────────────────────────────── */
+
+.featured-carousel {
+  @apply bg-surface flex flex-col gap-[20px] items-center py-[40px] px-6 md:px-16 max-w-[1440px] mx-auto;
+}
+
+/* ── Card wrapper ────────────────────────────────────────── */
+
+.featured-carousel__card {
+  @apply flex flex-col w-full rounded-[20px] shadow-[0px_4px_14px_0px_rgba(0,0,0,0.1)];
+}
+
+/* ── Photo (mobile: in-flow, top corners rounded) ────────── */
+
+.featured-carousel__photo {
+  @apply relative overflow-hidden shrink-0 w-full h-[340px] rounded-t-[20px];
+}
+
+.featured-carousel__slide {
+  @apply absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700 ease-in-out;
+}
+
+.featured-carousel__slide--active {
+  @apply opacity-100;
+}
+
+/* ── Panel (mobile: solid secondary, bottom corners rounded) ─── */
+
+.featured-carousel__panel {
+  @apply bg-secondary flex flex-col p-[40px] rounded-b-[20px];
+}
+
+.featured-carousel__panel-top {
+  @apply flex flex-col gap-[24px];
+}
+
+.featured-carousel__heading-row {
+  @apply flex items-center gap-[24px] w-full;
+}
+
+.featured-carousel__heading {
+  @apply font-sans font-bold text-highlight text-[30px] leading-[40px] grow shrink-0 basis-0;
+}
+
+.featured-carousel__heading-link {
+  @apply flex items-center gap-[24px] focus:outline-none focus-visible:ring-2 focus-visible:ring-highlight rounded-lg grow shrink-0 basis-0;
+}
+
+.featured-carousel__arrow-icon {
+  @apply text-highlight shrink-0 transition-transform duration-300 size-9;
+}
+
+.featured-carousel__heading-link:hover .featured-carousel__arrow-icon {
+  @apply rotate-45;
+}
+
+.featured-carousel__body {
+  @apply font-sans font-normal text-[16px] leading-[24px];
+}
+
+.featured-carousel__body p { @apply text-surface; }
+
+/* ── Nav shared ──────────────────────────────────────────── */
+
+.featured-carousel__dots {
+  @apply flex gap-[5px] items-center;
+}
+
+.featured-carousel__dot {
+  @apply cursor-pointer border-0 p-0 rounded-[11px] transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 h-1 w-4 bg-secondary/30;
+}
+
+.featured-carousel__dot--active {
+  @apply w-[22px] bg-secondary;
+}
+
+.featured-carousel__nav-btn {
+  @apply cursor-pointer shrink-0 inline-flex items-center justify-center rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary size-[30px] text-secondary transition duration-200;
+  border: 1.5px solid currentColor; /* kept: 1.5px not in Tailwind scale */
+}
+
+.featured-carousel__nav-btn:hover {
+  @apply bg-secondary text-surface;
+}
+
+/* ── Mobile nav (below card) ─────────────────────────────── */
+
+.featured-carousel__nav-mobile {
+  @apply flex items-center justify-center gap-[20px] w-full;
+}
+
+/* ── Desktop nav (inside panel) — hidden on mobile ────────── */
+
+.featured-carousel__nav-desktop {
+  @apply hidden;
+}
+
+/* ── Desktop ─────────────────────────────────────────────── */
+
+@media (min-width: 1024px) {
+  .featured-carousel {
+    @apply pt-[100px] pb-[50px] px-[100px] gap-0;
+  }
+
+  .featured-carousel__card {
+    @apply relative flex flex-col items-start justify-center overflow-hidden mx-auto w-full max-w-[1440px] h-[661px] rounded-[20px] shadow-none;
+  }
+
+  .featured-carousel__photo {
+    @apply absolute inset-0 overflow-hidden h-full rounded-[20px];
+  }
+
+  .featured-carousel__panel {
+    @apply relative shrink-0 flex flex-col justify-between w-[347px] h-[661px] bg-secondary/90 rounded-[10px];
+  }
+
+  .featured-carousel__heading-row {
+    @apply items-end gap-4;
+  }
+
+  .featured-carousel__heading {
+    @apply flex-initial;
+  }
+
+  .featured-carousel__heading-link {
+    @apply flex-initial gap-4;
+  }
+
+  .featured-carousel__nav-desktop {
+    @apply flex items-center justify-between;
+  }
+
+  .featured-carousel__nav-mobile {
+    @apply hidden;
+  }
+
+  .featured-carousel__dot {
+    @apply bg-surface/30;
+  }
+
+  .featured-carousel__dot--active {
+    @apply bg-surface;
+  }
+
+  .featured-carousel__nav-btn {
+    @apply border-surface/60 text-surface focus-visible:ring-surface;
+  }
+
+  .featured-carousel__nav-btn:hover {
+    @apply bg-surface/[15%] text-surface;
+  }
+
+  .featured-carousel__dot {
+    @apply focus-visible:ring-surface;
+  }
+}

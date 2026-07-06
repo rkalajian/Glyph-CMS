@@ -1,0 +1,39 @@
+@reference "../../../app/globals.css";
+
+.embed-section {
+  @apply bg-surface py-[50px];
+}
+
+.embed-section__inner {
+  @apply max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[100px];
+}
+
+.embed-section__heading {
+  @apply font-sans font-bold text-accent text-[30px] leading-[40px] mb-8;
+}
+
+.embed-section__media {
+  @apply w-full rounded-[12px] overflow-hidden;
+}
+
+.embed-section__description {
+  @apply mt-8 font-sans font-normal text-[14px] leading-[22px] text-ink;
+}
+
+.embed-section__description p {
+  @apply mb-[20px] last:mb-0;
+}
+
+@media (min-width: 1024px) {
+  .embed-section {
+    @apply py-[80px];
+  }
+
+  .embed-section__heading {
+    @apply text-[44px] leading-[54px] mb-10;
+  }
+
+  .embed-section__description {
+    @apply text-[16px] leading-[24px];
+  }
+}

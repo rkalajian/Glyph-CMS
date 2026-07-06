@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   if (slug === '__placeholder') return buildPageMetadata('Press');
   const release = await getPressRelease(slug);
-  return buildPageMetadata(release?.title, { description: release?.excerpt });
+  return buildPageMetadata(release?.title, { description: release?.excerpt ?? undefined });
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {

@@ -1,0 +1,16 @@
+@reference "../../app/globals.css";
+
+.bubble-bg {
+  @apply absolute inset-0 overflow-hidden pointer-events-none;
+}
+
+.bubble-bg__pattern {
+  @apply absolute -top-[25%] -bottom-[25%] inset-x-0 bg-[url('/bubble-pattern.svg')] bg-repeat opacity-30;
+  background-size: 280px 220px; /* kept: no standard Tailwind bg-size utility for custom dimensions */
+}
+
+.bubble-bg__pattern--on-light {
+  opacity: 1;
+  background-image: url('/bubble-pattern-accent.svg');
+  filter: opacity(0.25);
+}

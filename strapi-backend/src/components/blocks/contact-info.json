@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_blocks_contact_info",
+  "info": {
+    "displayName": "Contact Info",
+    "description": "Surface bg section with centered H2 heading and 3-col grid of info cards (title + body text)"
+  },
+  "attributes": {
+    "heading": {
+      "type": "string"
+    },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.contact-info-item"
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

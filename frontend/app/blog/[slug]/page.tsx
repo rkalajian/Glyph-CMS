@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (slug === '__placeholder') return buildPageMetadata('Blog');
   const post = await getBlogPost(slug);
   return buildPageMetadata(post?.title, {
-    description: post?.excerpt,
+    description: post?.excerpt ?? undefined,
   });
 }
 

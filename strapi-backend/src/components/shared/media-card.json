@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_shared_media_cards",
+  "info": {
+    "displayName": "Media Card",
+    "description": "Image + title + body + optional link"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "body": {
+      "type": "text"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "linkUrl": {
+      "type": "string"
+    }
+  }
+}

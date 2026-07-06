@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_blocks_contact_panels",
+  "info": {
+    "displayName": "Contact Panels",
+    "description": "Primary bg rounded card with a heading and 2+ contact panels separated by dividers"
+  },
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "required": true
+    },
+    "panels": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.contact-panel"
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

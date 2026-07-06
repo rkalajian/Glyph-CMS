@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_shared_contact_panels",
+  "info": {
+    "displayName": "Contact Panel",
+    "description": "Single contact panel: department title, contact name, email, phone"
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "contactName": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    },
+    "phone": {
+      "type": "string"
+    }
+  }
+}

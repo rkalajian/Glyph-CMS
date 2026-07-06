@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_blocks_featured_events",
+  "info": {
+    "displayName": "Featured Events",
+    "icon": "star",
+    "description": "Carousel of events marked as featured"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string"
+    },
+    "limit": {
+      "type": "integer",
+      "default": 5,
+      "min": 1,
+      "max": 10
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

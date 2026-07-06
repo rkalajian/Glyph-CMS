@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_shared_footer_links",
+  "info": { "displayName": "Footer Link" },
+  "attributes": {
+    "label": { "type": "string", "required": true },
+    "url": { "type": "string" },
+    "page": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::page.page"
+    },
+    "openInNewTab": { "type": "boolean", "default": false }
+  }
+}

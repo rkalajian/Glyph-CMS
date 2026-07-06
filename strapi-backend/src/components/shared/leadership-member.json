@@ -1,0 +1,11 @@
+{
+  "collectionName": "components_shared_leadership_members",
+  "info": { "displayName": "Leadership Member", "description": "Name, role, bio, photo and LinkedIn for a leadership card" },
+  "attributes": {
+    "name": { "type": "string", "required": true },
+    "role": { "type": "string", "required": true },
+    "bio": { "type": "text" },
+    "image": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
+    "linkedinUrl": { "type": "string" }
+  }
+}

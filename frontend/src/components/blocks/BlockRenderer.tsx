@@ -2,11 +2,42 @@
  * Renders page blocks from Strapi dynamic zone.
  */
 
+import type { ReactElement } from 'react';
 import { DynamicBlock } from './DynamicBlock';
 import { AboutBlock } from './AboutBlock';
 import { RichText } from '../RichText';
 import { getStrapiImageUrl } from '../../lib/strapi';
 import { AccordionBlock } from './AccordionBlock';
+import { SubpageHeroBlock } from './SubpageHeroBlock';
+import { TertiaryHeroBlock } from './TertiaryHeroBlock';
+import { SplitCtaBlock } from './SplitCtaBlock';
+import { PhotoGalleryBlock } from './PhotoGalleryBlock';
+import { ContentImageBlock } from './ContentImageBlock';
+import { HomepageHeroBlock } from './HomepageHeroBlock';
+import { InfoBarBlock } from './InfoBarBlock';
+import { QuickLinksGridBlock } from './QuickLinksGridBlock';
+import { FeaturedCarouselBlock } from './FeaturedCarouselBlock';
+import { SplitPanelBlock } from './SplitPanelBlock';
+import { UpcomingEventsBlock } from './UpcomingEventsBlock';
+import { TwoColumnContentBlock } from './TwoColumnContentBlock';
+import { ProfileCarouselBlock } from './ProfileCarouselBlock';
+import { NameListBlock } from './NameListBlock';
+import { OverlayPairBlock } from './OverlayPairBlock';
+import { StatementBlock } from './StatementBlock';
+import { CtaBannerBlock } from './CtaBannerBlock';
+import { ContentCardGridBlock } from './ContentCardGridBlock';
+import { CarouselSectionBlock } from './CarouselSectionBlock';
+import { ContactPanelsBlock } from './ContactPanelsBlock';
+import { PricingTableBlock } from './PricingTableBlock';
+import { EventCalendarBlock } from './EventCalendarBlock';
+import { FeaturedEventsBlock } from './FeaturedEventsBlock';
+import { MediaCardsBlock } from './MediaCardsBlock';
+import { FeaturedBlogPostsBlock } from './FeaturedBlogPostsBlock';
+import { RecentBlogPostsBlock } from './RecentBlogPostsBlock';
+import { ContactInfoBlock } from './ContactInfoBlock';
+import { ContactFormBlock } from './ContactFormBlock';
+import { EmbedSectionBlock } from './EmbedSectionBlock';
+import { FeaturePriorityBlock } from './FeaturePriorityBlock';
 import type {
   StrapiPageBlock,
   StrapiBlockHero,
@@ -35,7 +66,108 @@ import type {
   StrapiBlockTailgridsComponent,
   StrapiBlockVideo,
   StrapiBlockRow,
+  StrapiBlockSubpageHero,
+  StrapiBlockTertiaryHero,
+  StrapiBlockSplitCta,
+  StrapiBlockPhotoGallery,
+  StrapiBlockContentImage,
+  StrapiBlockHomepageHero,
+  StrapiBlockInfoBar,
+  StrapiBlockQuickLinksGrid,
+  StrapiBlockFeaturedCarousel,
+  StrapiBlockSplitPanel,
+  StrapiBlockUpcomingEvents,
+  StrapiBlockTwoColumnContent,
+  StrapiBlockProfileCarousel,
+  StrapiBlockNameList,
+  StrapiBlockOverlayPair,
+  StrapiBlockStatement,
+  StrapiBlockCtaBanner,
+  StrapiBlockContentCardGrid,
+  StrapiBlockCarouselSection,
+  StrapiBlockContactPanels,
+  StrapiBlockMembershipPricing,
+  StrapiBlockFeaturedEvents,
+  StrapiBlockMediaCards,
+  StrapiBlockFeaturedBlogPosts,
+  StrapiBlockRecentBlogPosts,
+  StrapiBlockContactInfo,
+  StrapiBlockContactForm,
+  StrapiBlockEmbedSection,
+  StrapiBlockFeaturePriority,
 } from '../../types/strapi';
+
+/**
+ * Blocks ported from the production block system render their own full-width
+ * sections (each brings its own CSS), unlike Tailgrids blocks which go through
+ * the DynamicBlock registry. Returns null when the block isn't one of them.
+ */
+function renderPortedBlock(block: StrapiPageBlock, key: string): ReactElement | null {
+  switch (block.__component) {
+    case 'blocks.subpage-hero':
+      return <SubpageHeroBlock key={key} {...(block as StrapiBlockSubpageHero)} />;
+    case 'blocks.tertiary-hero':
+      return <TertiaryHeroBlock key={key} {...(block as StrapiBlockTertiaryHero)} />;
+    case 'blocks.split-cta':
+      return <SplitCtaBlock key={key} {...(block as StrapiBlockSplitCta)} />;
+    case 'blocks.photo-gallery':
+      return <PhotoGalleryBlock key={key} {...(block as StrapiBlockPhotoGallery)} />;
+    case 'blocks.content-image':
+      return <ContentImageBlock key={key} {...(block as StrapiBlockContentImage)} />;
+    case 'blocks.homepage-hero':
+      return <HomepageHeroBlock key={key} {...(block as StrapiBlockHomepageHero)} />;
+    case 'blocks.info-bar':
+      return <InfoBarBlock key={key} {...(block as StrapiBlockInfoBar)} />;
+    case 'blocks.quick-links-grid':
+      return <QuickLinksGridBlock key={key} {...(block as StrapiBlockQuickLinksGrid)} />;
+    case 'blocks.featured-carousel':
+      return <FeaturedCarouselBlock key={key} {...(block as StrapiBlockFeaturedCarousel)} />;
+    case 'blocks.split-panel':
+      return <SplitPanelBlock key={key} {...(block as StrapiBlockSplitPanel)} />;
+    case 'blocks.upcoming-events':
+      return <UpcomingEventsBlock key={key} {...(block as StrapiBlockUpcomingEvents)} />;
+    case 'blocks.two-column-content':
+      return <TwoColumnContentBlock key={key} {...(block as StrapiBlockTwoColumnContent)} />;
+    case 'blocks.leadership-grid':
+      return <ProfileCarouselBlock key={key} {...(block as StrapiBlockProfileCarousel)} />;
+    case 'blocks.board-of-directors':
+      return <NameListBlock key={key} {...(block as StrapiBlockNameList)} />;
+    case 'blocks.promo-cards':
+      return <OverlayPairBlock key={key} {...(block as StrapiBlockOverlayPair)} />;
+    case 'blocks.statement':
+      return <StatementBlock key={key} {...(block as StrapiBlockStatement)} />;
+    case 'blocks.cta-banner':
+      return <CtaBannerBlock key={key} {...(block as StrapiBlockCtaBanner)} />;
+    case 'blocks.content-card-grid':
+      return <ContentCardGridBlock key={key} {...(block as StrapiBlockContentCardGrid)} />;
+    case 'blocks.carousel-section':
+      return <CarouselSectionBlock key={key} {...(block as StrapiBlockCarouselSection)} />;
+    case 'blocks.contact-panels':
+      return <ContactPanelsBlock key={key} {...(block as StrapiBlockContactPanels)} />;
+    case 'blocks.membership-pricing':
+      return <PricingTableBlock key={key} {...(block as StrapiBlockMembershipPricing)} />;
+    case 'blocks.event-calendar':
+      return <EventCalendarBlock key={key} />;
+    case 'blocks.featured-events':
+      return <FeaturedEventsBlock key={key} {...(block as StrapiBlockFeaturedEvents)} />;
+    case 'blocks.media-cards':
+      return <MediaCardsBlock key={key} {...(block as StrapiBlockMediaCards)} />;
+    case 'blocks.featured-blog-posts':
+      return <FeaturedBlogPostsBlock key={key} {...(block as StrapiBlockFeaturedBlogPosts)} />;
+    case 'blocks.recent-blog-posts':
+      return <RecentBlogPostsBlock key={key} {...(block as StrapiBlockRecentBlogPosts)} />;
+    case 'blocks.contact-info':
+      return <ContactInfoBlock key={key} {...(block as StrapiBlockContactInfo)} />;
+    case 'blocks.contact-form':
+      return <ContactFormBlock key={key} {...(block as StrapiBlockContactForm)} />;
+    case 'blocks.embed-section':
+      return <EmbedSectionBlock key={key} {...(block as StrapiBlockEmbedSection)} />;
+    case 'blocks.mission-priorities':
+      return <FeaturePriorityBlock key={key} {...(block as StrapiBlockFeaturePriority)} />;
+    default:
+      return null;
+  }
+}
 
 type BlockMapping =
   | { type: string; variation: number; props: Record<string, unknown> }
@@ -467,6 +599,18 @@ function renderBlock(block: StrapiPageBlock, key: string, inRow?: boolean) {
       <div key={key} className={wrapperClass}>
         <RichText content={b.content} />
       </div>
+    );
+  }
+
+  const ported = renderPortedBlock(block, key);
+  if (ported) {
+    const anchorId = (block as { anchorId?: string | null }).anchorId || undefined;
+    return anchorId ? (
+      <div key={key} id={anchorId}>
+        {ported}
+      </div>
+    ) : (
+      ported
     );
   }
 

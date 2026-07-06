@@ -1,0 +1,36 @@
+{
+  "collectionName": "components_blocks_photo_galleries",
+  "info": {
+    "displayName": "Photo Gallery",
+    "description": "Highlight bg, 1 tall left + 2 stacked right layout"
+  },
+  "attributes": {
+    "variant": {
+      "type": "enumeration",
+      "enum": [
+        "default",
+        "grid"
+      ],
+      "default": "default"
+    },
+    "heading": {
+      "type": "string"
+    },
+    "description": {
+      "type": "customField",
+      "customField": "plugin::ckeditor5.CKEditor",
+      "options": {
+        "preset": "defaultHtml"
+      }
+    },
+    "galleryImages": {
+      "type": "component",
+      "repeatable": true,
+      "required": true,
+      "component": "shared.gallery-image"
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

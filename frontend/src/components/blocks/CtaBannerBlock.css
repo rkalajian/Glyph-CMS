@@ -1,0 +1,100 @@
+@reference "../../../app/globals.css";
+
+.cta-banner {
+  @apply px-6 md:px-16 lg:px-[100px] max-w-[1440px] mx-auto pt-[40px] pb-[80px] md:py-[50px] lg:py-[80px];
+}
+
+.cta-banner__card {
+  @apply rounded-[20px] px-6 md:px-[100px] py-12 w-full;
+}
+
+.cta-banner__card--primary {
+  @apply bg-primary;
+}
+
+.cta-banner__card--accent {
+  @apply bg-accent;
+}
+
+.cta-banner__card--secondary {
+  @apply bg-secondary;
+}
+
+.cta-banner__card--ink {
+  @apply bg-ink;
+}
+
+.cta-banner__card--highlight {
+  @apply bg-highlight;
+}
+
+.cta-banner__card--highlight .cta-banner__heading {
+  @apply text-primary;
+}
+
+.cta-banner__card--highlight .cta-banner__body {
+  @apply text-ink;
+}
+
+.cta-banner__card--highlight .cta-banner__button {
+  @apply text-primary border-primary hover:bg-primary hover:text-highlight uppercase;
+}
+
+.cta-banner__card--accent .cta-banner__heading {
+  @apply text-ink;
+}
+
+.cta-banner__card--accent .cta-banner__body {
+  @apply text-ink;
+}
+
+.cta-banner__card--accent .cta-banner__button {
+  @apply text-ink border-ink hover:bg-ink hover:text-surface uppercase;
+}
+
+.cta-banner__body a {
+  @apply text-white underline underline-offset-2;
+}
+
+.cta-banner__body a:hover {
+  @apply text-white no-underline font-bold;
+}
+
+.cta-banner__card--highlight .cta-banner__body a {
+  @apply text-white underline underline-offset-2;
+}
+
+.cta-banner__card--highlight .cta-banner__body a:hover {
+  @apply text-white no-underline font-bold;
+}
+
+.cta-banner__card--primary .cta-banner__body a {
+  @apply text-white underline underline-offset-2 font-normal;
+}
+
+.cta-banner__card--primary .cta-banner__body a:hover {
+  @apply no-underline font-bold;
+}
+
+.cta-banner__row {
+  @apply flex flex-col gap-6 items-start md:flex-row md:items-center md:justify-between;
+}
+
+.cta-banner__text {
+  @apply flex flex-col gap-4;
+}
+
+.cta-banner__heading {
+  @apply font-sans font-bold text-highlight text-[24px] leading-[32px] md:text-[44px] md:leading-[54px];
+}
+
+.cta-banner__body {
+  @apply font-sans font-normal text-surface text-[16px] leading-[24px] md:max-w-[640px];
+}
+
+.cta-banner__button {
+  @apply font-sans font-bold text-surface text-[16px] leading-[24px] uppercase
+    border border-surface rounded-[10px] px-[25px] py-[12px]
+    w-full md:w-auto text-center whitespace-nowrap
+    hover:bg-surface hover:text-ink transition-colors;
+}

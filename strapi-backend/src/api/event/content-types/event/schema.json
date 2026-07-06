@@ -42,7 +42,9 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ]
     },
     "url": {
       "type": "string"
@@ -50,6 +52,11 @@
     "googleCalendarEventId": {
       "type": "string",
       "unique": true
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false,
+      "description": "Show in Featured Events blocks"
     }
   }
 }

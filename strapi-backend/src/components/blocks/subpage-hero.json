@@ -1,0 +1,37 @@
+{
+  "collectionName": "components_blocks_subpage_heroes",
+  "info": {
+    "displayName": "Subpage Hero",
+    "description": "756px hero image with gradient overlay, decorative H1, and subtitle"
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "customField",
+      "customField": "plugin::ckeditor5.CKEditor",
+      "options": {
+        "preset": "defaultHtml"
+      }
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "ctaText": {
+      "type": "string"
+    },
+    "ctaUrl": {
+      "type": "string"
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

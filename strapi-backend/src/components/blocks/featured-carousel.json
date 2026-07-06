@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_blocks_featured_carousels",
+  "info": {
+    "displayName": "Featured Carousel",
+    "description": "Full-bleed photo carousel with per-slide heading, body, and link — used for homepage animal showcase"
+  },
+  "attributes": {
+    "slides": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.featured-carousel-slide"
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

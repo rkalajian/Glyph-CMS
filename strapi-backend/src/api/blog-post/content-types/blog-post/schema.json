@@ -25,7 +25,11 @@
       "type": "text"
     },
     "content": {
-      "type": "richtext",
+      "type": "customField",
+      "customField": "plugin::ckeditor5.CKEditor",
+      "options": {
+        "preset": "defaultHtml"
+      },
       "required": true
     },
     "publishedAt": {
@@ -65,6 +69,11 @@
       "target": "api::blog-post.blog-post",
       "mappedBy": "parent",
       "description": "Child posts"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false,
+      "description": "Show in Featured Blog Posts blocks"
     }
   }
 }

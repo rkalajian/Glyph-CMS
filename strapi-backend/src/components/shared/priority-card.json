@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_shared_priority_cards",
+  "info": {
+    "displayName": "Priority Card",
+    "description": "Title + body used in Mission & Priorities block"
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "body": {
+      "type": "customField",
+      "customField": "plugin::ckeditor5.CKEditor",
+      "options": {
+        "preset": "defaultHtml"
+      },
+      "required": true
+    }
+  }
+}

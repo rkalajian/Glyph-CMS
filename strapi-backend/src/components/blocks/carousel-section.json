@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_blocks_carousel_sections",
+  "info": {
+    "displayName": "Carousel Section",
+    "description": "Mobile snap-scroll carousel + 3-col desktop grid of program cards with image, title, body, and CTA link"
+  },
+  "attributes": {
+    "heading": {
+      "type": "string"
+    },
+    "description": {
+      "type": "customField",
+      "customField": "plugin::ckeditor5.CKEditor",
+      "options": {
+        "preset": "defaultHtml"
+      }
+    },
+    "programs": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.program-card"
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

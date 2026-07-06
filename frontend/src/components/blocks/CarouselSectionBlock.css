@@ -1,0 +1,154 @@
+@reference "../../../app/globals.css";
+
+/* ── Section shell ─────────────────────────────────────────── */
+
+.carousel-section {
+  @apply bg-surface py-[50px] px-4;
+}
+
+.carousel-section__inner {
+  @apply flex flex-col gap-[40px];
+}
+
+.carousel-section__header {
+  @apply flex flex-col gap-6;
+}
+
+.carousel-section__heading {
+  @apply font-sans font-bold text-ink text-[30px] leading-[40px];
+}
+
+.carousel-section__description {
+  @apply font-sans font-normal text-[16px] leading-[24px];
+}
+
+.carousel-section__description p { @apply text-ink; }
+
+/* ── Carousel shell ────────────────────────────────────────── */
+
+.carousel-section__carousel {
+  @apply flex flex-col;
+}
+
+/* ── Card grid (mobile: horizontal scroll) ─────────────────── */
+
+.carousel-section__grid {
+  @apply flex overflow-x-auto gap-5 pb-[2px];
+  scroll-snap-type: x mandatory; /* kept: no Tailwind equivalent */
+  -ms-overflow-style: none;      /* kept: IE scrollbar hide */
+  scrollbar-width: none;         /* kept: Firefox scrollbar hide */
+}
+
+.carousel-section__grid::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Card ──────────────────────────────────────────────────── */
+
+.carousel-section__card {
+  @apply flex flex-col overflow-hidden rounded-[10px] grow-0 shrink-0 basis-[280px];
+  scroll-snap-align: start; /* kept: no Tailwind equivalent */
+}
+
+.carousel-section__card-image-wrap {
+  @apply relative shrink-0 overflow-hidden h-[238px];
+}
+
+.carousel-section__card-img {
+  @apply absolute inset-0 w-full h-full object-cover;
+}
+
+.carousel-section__card-body {
+  @apply flex flex-col gap-4 py-6 flex-1;
+}
+
+.carousel-section__card-title {
+  @apply font-sans font-bold text-primary text-[24px] leading-[32px];
+}
+
+.carousel-section__card-desc {
+  @apply font-sans font-normal text-ink text-[14px] leading-[22px] flex-1;
+}
+
+.carousel-section__card-link {
+  @apply font-sans font-bold text-primary inline-flex items-center gap-[6px];
+  @apply text-[14px] leading-[22px] uppercase no-underline min-h-[44px] transition-opacity duration-150;
+  @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded;
+}
+
+.carousel-section__card-link:hover {
+  @apply opacity-70;
+}
+
+/* ── Nav ───────────────────────────────────────────────────── */
+
+.carousel-section__nav {
+  @apply flex items-center gap-3 mt-6;
+}
+
+.carousel-section__nav-btn {
+  @apply text-white flex items-center justify-center size-[30px] rounded-full bg-primary;
+  @apply border-0 cursor-pointer shrink-0 p-0 transition-opacity duration-150;
+  @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+}
+
+.carousel-section__nav-btn:disabled {
+  @apply opacity-[0.35] cursor-default;
+}
+
+.carousel-section__nav-btn:not(:disabled):hover {
+  @apply opacity-80;
+}
+
+.carousel-section__progress {
+  @apply flex items-center gap-[5px] flex-1;
+}
+
+.carousel-section__bar {
+  @apply h-1 w-4 rounded-[11px] bg-primary opacity-30 border-0 cursor-pointer p-0 transition-all duration-200;
+  @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1;
+}
+
+.carousel-section__bar--active {
+  @apply w-[22px] opacity-100;
+}
+
+/* ── Desktop: 3-col grid ───────────────────────────────────── */
+
+@media (min-width: 1024px) {
+  .carousel-section {
+    @apply py-[80px] px-[100px];
+  }
+
+  .carousel-section__heading {
+    @apply text-[44px] leading-[54px];
+  }
+
+  .carousel-section__description {
+    @apply text-[22px] leading-[32px] max-w-[730px];
+  }
+
+  .carousel-section__description p {
+    @apply text-[22px] leading-[32px];
+  }
+
+  .carousel-section__grid {
+    @apply grid grid-cols-3 gap-5;
+    overflow-x: unset;        /* kept: unset not in Tailwind */
+    scroll-snap-type: unset;  /* kept: unset not in Tailwind */
+  }
+
+  .carousel-section__card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* kept: multi-prop */
+    flex: unset;              /* kept: unset not in Tailwind */
+    scroll-snap-align: unset; /* kept: unset not in Tailwind */
+  }
+
+  .carousel-section__card:hover {
+    @apply -translate-y-1 shadow-[0_8px_24px_rgba(0,0,0,0.12)];
+  }
+
+  .carousel-section__nav {
+    @apply hidden;
+  }
+}

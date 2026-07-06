@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_shared_featured_carousel_slides",
+  "info": {
+    "displayName": "Featured Carousel Slide",
+    "description": "Single slide for the featured carousel block — image, heading, body, and optional link"
+  },
+  "attributes": {
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "heading": {
+      "type": "string",
+      "required": true
+    },
+    "body": {
+      "type": "customField",
+      "customField": "plugin::ckeditor5.CKEditor",
+      "options": {
+        "preset": "defaultHtml"
+      }
+    },
+    "linkUrl": {
+      "type": "string"
+    }
+  }
+}

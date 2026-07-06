@@ -1,0 +1,83 @@
+@reference "../../../app/globals.css";
+
+.photo-gallery {
+  @apply py-16 lg:py-[80px] px-6 md:px-16 lg:px-[100px];
+  @apply bg-highlight;
+}
+
+.photo-gallery__inner {
+  @apply max-w-[1440px] mx-auto;
+}
+
+.photo-gallery__header {
+  @apply mb-10 text-center;
+}
+
+.photo-gallery__heading {
+  @apply font-sans font-bold text-[44px] leading-[54px] text-ink;
+}
+
+.photo-gallery__description {
+  @apply mt-4 font-sans text-[16px] leading-[24px] text-ink max-w-[800px] mx-auto;
+}
+
+.photo-gallery__description a {
+  @apply text-ink underline;
+}
+
+.photo-gallery__description a:hover {
+  @apply text-black font-bold no-underline;
+}
+
+.photo-gallery__link {
+  @apply flex flex-col gap-2 w-full;
+}
+
+.photo-gallery__link-label {
+  @apply font-sans font-normal text-[14px] leading-[22px] text-ink underline;
+}
+
+.photo-gallery__link:hover .photo-gallery__link-label,
+.photo-gallery__link:focus-visible .photo-gallery__link-label {
+  @apply text-black font-bold no-underline;
+}
+
+.photo-gallery__link:focus-visible {
+  @apply outline-none ring-2 ring-secondary ring-offset-2 rounded;
+}
+
+.photo-gallery__layout {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+}
+
+.photo-gallery__left {
+  @apply overflow-hidden rounded-lg;
+}
+
+.photo-gallery__left-img {
+  @apply w-full h-full object-cover min-h-[400px];
+}
+
+.photo-gallery__right {
+  @apply flex flex-col gap-4;
+}
+
+.photo-gallery__right-img {
+  @apply w-full object-cover rounded-lg flex-1 h-[calc(50%-8px)];
+}
+
+.photo-gallery__extra {
+  @apply grid grid-cols-2 md:grid-cols-3 gap-4 mt-4;
+}
+
+.photo-gallery__extra-img {
+  @apply w-full aspect-square object-cover rounded-lg;
+}
+
+.photo-gallery__grid {
+  @apply grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4;
+}
+
+.photo-gallery__grid-img {
+  @apply w-full aspect-square object-cover rounded-lg;
+}

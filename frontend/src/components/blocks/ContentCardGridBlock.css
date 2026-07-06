@@ -1,0 +1,140 @@
+@reference "../../../app/globals.css";
+
+.content-card-grid {
+  @apply w-full max-w-[1728px] mx-auto py-[50px] lg:py-[80px];
+}
+
+.content-card-grid--primary { @apply bg-primary; }
+.content-card-grid--surface   { @apply bg-surface; }
+.content-card-grid--ink  { @apply bg-ink; }
+.content-card-grid--highlight   { @apply bg-highlight; }
+
+.content-card-grid__inner {
+  @apply max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[100px];
+}
+
+.content-card-grid__header {
+  @apply flex flex-col gap-6 mb-10;
+}
+
+.content-card-grid--primary .content-card-grid__header,
+.content-card-grid--ink  .content-card-grid__header { @apply text-surface; }
+
+.content-card-grid--surface .content-card-grid__header,
+.content-card-grid--highlight .content-card-grid__header  { @apply text-ink; }
+
+.content-card-grid__heading {
+  @apply font-sans font-bold text-[30px] leading-[40px] lg:text-[44px] lg:leading-[54px];
+}
+
+.content-card-grid__description {
+  @apply font-sans font-normal text-[22px] leading-[32px];
+  @apply max-w-full lg:max-w-[730px];
+}
+
+.content-card-grid--primary .content-card-grid__description p,
+.content-card-grid--ink  .content-card-grid__description p { @apply text-surface; }
+
+.content-card-grid--surface .content-card-grid__description p,
+.content-card-grid--highlight .content-card-grid__description p  { @apply text-ink; }
+
+.content-card-grid--primary .content-card-grid__description a,
+.content-card-grid--ink  .content-card-grid__description a { @apply text-white underline; }
+
+.content-card-grid--primary .content-card-grid__description a:hover,
+.content-card-grid--ink  .content-card-grid__description a:hover { @apply font-bold no-underline; }
+
+.content-card-grid--surface .content-card-grid__description a,
+.content-card-grid--highlight .content-card-grid__description a { @apply text-white underline; }
+
+.content-card-grid--surface .content-card-grid__description a:hover,
+.content-card-grid--highlight .content-card-grid__description a:hover { @apply font-bold no-underline; }
+
+/* Card grid: single col mobile, 3-col desktop */
+.content-card-grid__grid {
+  @apply flex flex-col gap-5 lg:grid lg:grid-cols-3;
+}
+
+.content-card-grid__card {
+  @apply flex flex-col overflow-hidden rounded-[10px];
+}
+
+.content-card-grid__card-image-wrap {
+  @apply relative shrink-0 overflow-hidden h-[238px];
+}
+
+.content-card-grid__card-image {
+  @apply absolute inset-0 w-full h-full object-cover;
+}
+
+.content-card-grid__card-body {
+  @apply flex flex-col gap-4 py-6 flex-1;
+}
+
+/* Card background colors */
+.content-card-grid--card-highlight   .content-card-grid__card-body { @apply bg-highlight; }
+.content-card-grid--card-surface   .content-card-grid__card-body { @apply bg-surface; }
+.content-card-grid--card-primary .content-card-grid__card-body { @apply bg-primary; }
+.content-card-grid--card-ink  .content-card-grid__card-body { @apply bg-ink; }
+
+/* Horizontal padding on card body whenever section and card colors differ */
+.content-card-grid--primary .content-card-grid__card-body,
+.content-card-grid--surface   .content-card-grid__card-body,
+.content-card-grid--ink  .content-card-grid__card-body,
+.content-card-grid--highlight   .content-card-grid__card-body { @apply px-6; }
+
+/* Card title — light bg (highlight, surface) → primary; dark bg (primary, ink) → highlight */
+.content-card-grid__card-title {
+  @apply font-sans font-bold;
+  @apply text-[24px] leading-[32px] lg:text-[30px] lg:leading-[40px];
+}
+
+.content-card-grid--card-highlight .content-card-grid__card-title,
+.content-card-grid--card-surface .content-card-grid__card-title { @apply text-primary; }
+
+.content-card-grid--card-primary .content-card-grid__card-title,
+.content-card-grid--card-ink  .content-card-grid__card-title { @apply text-highlight; }
+
+/* Card description */
+.content-card-grid__card-desc {
+  @apply font-sans font-normal text-[14px] leading-[22px];
+}
+
+/* Remove card body horizontal padding when section and card bg colors match */
+.content-card-grid--primary.content-card-grid--card-primary .content-card-grid__card-body,
+.content-card-grid--surface.content-card-grid--card-surface .content-card-grid__card-body,
+.content-card-grid--ink.content-card-grid--card-ink .content-card-grid__card-body,
+.content-card-grid--highlight.content-card-grid--card-highlight .content-card-grid__card-body {
+  @apply px-0;
+}
+
+.content-card-grid--card-highlight .content-card-grid__card-desc p,
+.content-card-grid--card-surface .content-card-grid__card-desc p { @apply text-ink; }
+
+.content-card-grid--card-primary .content-card-grid__card-desc p,
+.content-card-grid--card-ink  .content-card-grid__card-desc p { @apply text-surface/80; }
+
+/* Card link */
+.content-card-grid__card-link {
+  @apply inline-flex items-center gap-1.5 font-sans font-bold text-[14px] leading-[22px] uppercase;
+  @apply focus:outline-none focus-visible:ring-2 rounded;
+}
+
+.content-card-grid__card-link svg {
+  @apply transition-transform duration-200 -rotate-45;
+}
+
+.content-card-grid__card-link:hover svg,
+.content-card-grid__card-link:focus-visible svg {
+  @apply rotate-0;
+}
+
+.content-card-grid--card-highlight .content-card-grid__card-link,
+.content-card-grid--card-surface .content-card-grid__card-link {
+  @apply text-ink lg:text-primary focus-visible:ring-primary;
+}
+
+.content-card-grid--card-primary .content-card-grid__card-link,
+.content-card-grid--card-ink  .content-card-grid__card-link {
+  @apply text-highlight focus-visible:ring-highlight;
+}

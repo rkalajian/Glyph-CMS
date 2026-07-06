@@ -1,0 +1,77 @@
+@reference "../../../app/globals.css";
+
+/* ── Section ─────────────────────────────────────────────── */
+
+.media-cards {
+  @apply bg-surface py-[50px] lg:pt-[100px] lg:pb-[50px];
+}
+
+.media-cards__inner {
+  @apply max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[100px];
+}
+
+/* ── Grid ────────────────────────────────────────────────── */
+
+.media-cards__grid {
+  @apply grid grid-cols-1 lg:grid-cols-3 gap-[40px];
+}
+
+/* ── Card ────────────────────────────────────────────────── */
+
+.media-card {
+  @apply flex flex-col gap-[20px];
+}
+
+/* ── Image ───────────────────────────────────────────────── */
+
+.media-card__image {
+  @apply relative overflow-hidden shrink-0 w-full h-[258px] rounded-[10px];
+}
+
+.media-card__img {
+  @apply absolute inset-0 w-full h-full object-cover;
+}
+
+.media-card__image-placeholder {
+  @apply absolute inset-0 bg-highlight/20;
+}
+
+/* ── Content ─────────────────────────────────────────────── */
+
+.media-card__content {
+  @apply flex flex-col gap-[24px];
+}
+
+/* ── Title row ───────────────────────────────────────────── */
+
+.media-card__title-row {
+  @apply flex items-center gap-[24px] w-full;
+}
+
+.media-card__link {
+  @apply flex items-center gap-[24px] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-lg;
+}
+
+.media-card__title {
+  @apply font-sans font-bold text-accent text-[24px] leading-[32px] shrink-0;
+}
+
+@media (min-width: 1024px) {
+  .media-card__title {
+    @apply text-[30px] leading-[40px];
+  }
+}
+
+.media-card__arrow {
+  @apply text-accent shrink-0 transition-transform duration-300 size-9;
+}
+
+.media-card__link:hover .media-card__arrow {
+  @apply rotate-45;
+}
+
+/* ── Body ────────────────────────────────────────────────── */
+
+.media-card__body {
+  @apply font-sans font-normal text-ink text-[16px] leading-[1.4];
+}

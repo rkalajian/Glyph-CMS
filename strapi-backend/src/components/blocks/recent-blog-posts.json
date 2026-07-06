@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_blocks_recent_blog_posts",
+  "info": {
+    "displayName": "Recent Blog Posts",
+    "icon": "newspaper",
+    "description": "3-column grid of non-featured blog posts with client-side pagination"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "default": "Our Recent News"
+    },
+    "description": {
+      "type": "text"
+    },
+    "postsPerPage": {
+      "type": "integer",
+      "default": 9,
+      "min": 3,
+      "max": 24
+    },
+    "contentType": {
+      "type": "enumeration",
+      "enum": [
+        "blog",
+        "press-release"
+      ],
+      "default": "blog"
+    },
+    "anchorId": {
+      "type": "string"
+    }
+  }
+}

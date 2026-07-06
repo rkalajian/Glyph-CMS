@@ -1,0 +1,95 @@
+@reference "../../app/globals.css";
+
+.rich-text {
+  @apply font-sans text-[16px] leading-[24px] text-ink/80;
+}
+
+.rich-text p {
+  @apply mb-4;
+}
+
+.rich-text p:last-child {
+  @apply mb-0;
+}
+
+.rich-text h2 {
+  @apply font-sans font-bold text-[30px] leading-[40px] text-ink mt-8 mb-4;
+}
+
+.rich-text h3 {
+  @apply font-sans font-bold text-[24px] leading-[32px] text-ink mt-6 mb-3;
+}
+
+.rich-text h4 {
+  @apply font-sans font-bold text-[20px] leading-[28px] text-ink mt-5 mb-2;
+}
+
+.rich-text ul,
+.rich-text ol {
+  @apply mb-4 pl-6;
+}
+
+.rich-text ul {
+  @apply list-disc;
+}
+
+.rich-text ol {
+  @apply list-decimal;
+}
+
+.rich-text li {
+  @apply mb-1.5;
+}
+
+.rich-text li ul,
+.rich-text li ol {
+  @apply mt-1 mb-0 pl-5;
+}
+
+.rich-text li ul {
+  @apply list-[circle];
+}
+
+.rich-text li ol {
+  @apply list-[lower-alpha];
+}
+
+.rich-text blockquote {
+  @apply border-l-4 border-accent pl-5 py-1 my-6 font-sans italic text-ink/60;
+}
+
+.rich-text pre {
+  @apply bg-ink/5 rounded-lg p-4 overflow-x-auto mb-4 font-mono text-[14px];
+}
+
+.rich-text code {
+  @apply bg-ink/8 px-1.5 py-0.5 rounded text-[14px] font-mono text-accent;
+}
+
+.rich-text pre code {
+  @apply bg-transparent p-0 text-ink/80;
+}
+
+.rich-text img {
+  @apply max-w-full h-auto rounded-xl my-6;
+}
+
+.rich-text__image-caption {
+  @apply flex items-center gap-2 mt-2 font-sans font-medium text-[14px] leading-[22px] text-ink;
+}
+
+.rich-text__image-caption-icon {
+  @apply shrink-0 text-ink/60;
+}
+
+.rich-text__image-caption a {
+  @apply text-ink underline underline-offset-2 hover:text-accent transition-colors;
+}
+
+.rich-text a {
+  @apply text-secondary underline underline-offset-2 hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 rounded transition-colors;
+}
+
+.rich-text strong {
+  @apply font-semibold text-ink;
+}
