@@ -7,7 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "lint": "eslint .",
-    "prebuild": "node scripts/generate-registry.mjs",
+    "prebuild": "node scripts/generate-registry.mjs && node scripts/clear-fetch-cache.mjs",
     "postbuild": "node scripts/generate-redirects.mjs",
     "predev": "node scripts/generate-registry.mjs"
   },

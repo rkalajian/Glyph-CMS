@@ -185,7 +185,7 @@ Custom Strapi endpoints (registered in `src/index.ts` / api routes):
 - **Header/Footer Options** — single types. Header: logo override + CTA button (`ctaUrl`/`ctaLabel`). Footer: contact info, link columns, newsletter (Mailchimp JSONP / Constant Contact iframe post), partner logos, legal text, copyright; rendered by `SiteFooter`, falls back to the simple footer when the single type is empty.
 - **Redirect manager** — `Redirect` collection type + `frontend/scripts/generate-redirects.mjs` (postbuild) writes `out/_redirects` for Netlify. Redirect lines are forced (`!`). Uses `permanent`/`temporary` enum values (Strapi enums can't start with a digit, so not `301`/`302`).
 - **`featured` flag** — added to Blog Post and Event for the featured-blog-posts / featured-events blocks.
-- Local build gotcha: Next's fetch cache persists in `.next/cache` across builds — if content changes don't show up in a local rebuild, `rm -rf .next` first. (Netlify builds run in fresh containers, so production is unaffected.)
+- Stale-content fix: `scripts/clear-fetch-cache.mjs` (prebuild hook) deletes `.next/cache/fetch-cache` before every build — Next persists build-time fetch responses there across builds, which otherwise serves stale Strapi content in local rebuilds. Compiler caches are untouched.
 
 Intentionally **not** ported: Animal/Plant content types, zoo-specific blocks (see above), google-reviews sync, the VPS webhook build service.
 
