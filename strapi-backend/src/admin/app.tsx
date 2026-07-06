@@ -9,34 +9,6 @@ import { initWysiwygSubSup } from './extensions/WysiwygSubSup';
 import './extensions/custom-button-styles.css';
 
 // -----------------------------------------------------------------------------
-// Theme colors
-// -----------------------------------------------------------------------------
-const lightTheme = {
-  colors: {
-    neutral0: '#ffffff',
-    neutral100: '#fafafa',
-    neutral150: '#f5f5f5',
-    neutral200: '#e5e5e5',
-    neutral300: '#d4d4d4',
-    neutral400: '#a3a3a3',
-    neutral500: '#737373',
-    neutral600: '#525252',
-    neutral700: '#404040',
-    neutral800: '#262626',
-    neutral900: '#171717',
-    neutral1000: '#0a0a0a',
-    primary100: '#f5f5f5',
-    primary200: '#e5e5e5',
-    primary500: '#d4d4d4',
-    primary600: '#e5e5e5',
-    primary700: '#f5f5f5',
-    buttonPrimary500: '#404040',
-    buttonPrimary600: '#525252',
-    buttonNeutral0: '#ffffff',
-  },
-};
-
-// -----------------------------------------------------------------------------
 // Admin config
 // -----------------------------------------------------------------------------
 
@@ -47,9 +19,6 @@ export default {
     },
     menu: {
       logo: Logo,
-    },
-    theme: {
-      light: lightTheme,
     },
     locales: [],
     translations: {

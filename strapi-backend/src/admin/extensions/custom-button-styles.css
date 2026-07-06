@@ -2,36 +2,6 @@
  * Strapi admin button overrides – Rebellion Group branding.
  */
 
-/* Force light mode globally */
-* {
-  --strapi-colors-neutral0: #ffffff !important;
-  --strapi-colors-neutral100: #fafafa !important;
-  --strapi-colors-neutral150: #f5f5f5 !important;
-  --strapi-colors-neutral200: #e5e5e5 !important;
-  --strapi-colors-neutral300: #d4d4d4 !important;
-  --strapi-colors-neutral400: #a3a3a3 !important;
-  --strapi-colors-neutral500: #737373 !important;
-  --strapi-colors-neutral600: #525252 !important;
-  --strapi-colors-neutral700: #404040 !important;
-  --strapi-colors-neutral800: #262626 !important;
-  --strapi-colors-neutral900: #171717 !important;
-  --strapi-colors-neutral1000: #0a0a0a !important;
-  --strapi-colors-primary100: #f5f5f5 !important;
-  --strapi-colors-primary200: #e5e5e5 !important;
-  --strapi-colors-primary500: #d4d4d4 !important;
-  --strapi-colors-primary600: #e5e5e5 !important;
-  --strapi-colors-primary700: #f5f5f5 !important;
-}
-
-/* Override any hardcoded dark backgrounds */
-[style*="rgb(10, 10, 10)"],
-[style*="#0a0a0a"],
-[style*="rgb(17, 17, 17)"],
-[style*="#111111"] {
-  background-color: #f5f5f5 !important;
-  color: #0a0a0a !important;
-}
-
 /* Remove borders from all buttons and button-like links */
 .custom-admin-buttons button,
 .custom-admin-buttons a[role="button"] {
@@ -47,54 +17,6 @@
 /* Fallback: Marketplace links to market.strapi.io (may use div wrapper) */
 .custom-admin-buttons *:has(> a[href*="market.strapi.io"]) {
   display: none !important;
-}
-
-/**
- * Primary buttons: black background, white text. No borders.
- * Hover: white background, black text.
- */
-
-/* "Create new entry" link in list views */
-.custom-admin-buttons a[href*="/create"]:not([href*="/create/"]) {
-  background-color: #0a0a0a !important;
-  border: none !important;
-  color: #ffffff !important;
-}
-.custom-admin-buttons a[href*="/create"]:not([href*="/create/"]):hover {
-  background-color: #ffffff !important;
-  border: none !important;
-  color: #0a0a0a !important;
-}
-
-/* Primary action buttons (Save, Publish, etc.) – exclude checkbox, switch, icon-only, component initializer */
-.custom-admin-buttons button[type="submit"],
-.custom-admin-buttons button[type="button"]:not([role="checkbox"]):not([role="switch"]):not([aria-label="Close"]):not([aria-label="Search"]):not([aria-label="Add"]):not([aria-label="Filter"]):not([aria-label="Refresh"]):not(:has(svg[width="3.2rem"])) {
-  background-color: #0a0a0a !important;
-  border: none !important;
-  color: #ffffff !important;
-}
-.custom-admin-buttons button[type="submit"]:hover,
-.custom-admin-buttons button[type="button"]:not([role="checkbox"]):not([role="switch"]):not([aria-label="Close"]):not([aria-label="Search"]):not([aria-label="Add"]):not([aria-label="Filter"]):not([aria-label="Refresh"]):not(:has(svg[width="3.2rem"])):hover {
-  background-color: #ffffff !important;
-  border: none !important;
-  color: #0a0a0a !important;
-}
-
-/* "No entry. Click to add one" component initializer – white bg, black text/icon on hover */
-.custom-admin-buttons button[type="button"]:has(svg[width="3.2rem"]):hover {
-  background-color: #ffffff !important;
-  border: none !important;
-  color: #0a0a0a !important;
-}
-/* Override all descendants – Strapi uses theme primary600 (white in dark mode) for text/icon */
-.custom-admin-buttons button[type="button"]:has(svg[width="3.2rem"]):hover * {
-  color: #0a0a0a !important;
-}
-.custom-admin-buttons button[type="button"]:has(svg[width="3.2rem"]):hover svg,
-.custom-admin-buttons button[type="button"]:has(svg[width="3.2rem"]):hover path,
-.custom-admin-buttons button[type="button"]:has(svg[width="3.2rem"]):hover circle {
-  color: #0a0a0a !important;
-  fill: #0a0a0a !important;
 }
 
 /* Content Manager: indent categories and Form Submissions as sub-items */
