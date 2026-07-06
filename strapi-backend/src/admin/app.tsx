@@ -11,32 +11,6 @@ import './extensions/custom-button-styles.css';
 // -----------------------------------------------------------------------------
 // Theme colors
 // -----------------------------------------------------------------------------
-// Dark: black backgrounds, white text. Light: white backgrounds, black text.
-const darkTheme = {
-  colors: {
-    neutral0: '#0a0a0a',
-    neutral100: '#111111',
-    neutral150: '#1a1a1a',
-    neutral200: '#262626',
-    neutral300: '#404040',
-    neutral400: '#525252',
-    neutral500: '#737373',
-    neutral600: '#a3a3a3',
-    neutral700: '#d4d4d4',
-    neutral800: '#e5e5e5',
-    neutral900: '#f5f5f5',
-    neutral1000: '#ffffff',
-    primary100: '#404040',
-    primary200: '#737373',
-    primary500: '#e5e5e5',
-    primary600: '#ffffff',
-    primary700: '#ffffff',
-    buttonPrimary500: '#0a0a0a',
-    buttonPrimary600: '#0a0a0a',
-    buttonNeutral0: '#ffffff',
-  },
-};
-
 const lightTheme = {
   colors: {
     neutral0: '#ffffff',
@@ -76,7 +50,6 @@ export default {
     },
     theme: {
       light: lightTheme,
-      dark: darkTheme,
     },
     locales: [],
     translations: {
