@@ -28,7 +28,7 @@ cms/
 │   │   │   ├── strapi.ts           # API functions, getPages(), getForms() added
 │   │   │   ├── strapi-schemas.ts   # Zod schemas
 │   │   │   └── metadata.ts         # buildPageMetadata() helper
-│   │   ├── theme/         # tokens.css, dark.css, templates/
+│   │   ├── theme/         # tokens.css, templates/
 │   │   ├── types/         # strapi.ts (TypeScript interfaces)
 │   │   └── utils/         # classes.ts, format.ts
 │   ├── scripts/           # generate-registry.mjs (replaces Puppeteer prerender)

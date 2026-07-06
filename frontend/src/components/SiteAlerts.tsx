@@ -13,9 +13,9 @@ const MotionLink = motion(Link);
 import type { StrapiSiteAlert } from '../types/strapi';
 
 const severityStyles: Record<string, string> = {
-  info: 'bg-blue-100 dark:bg-blue-900/40 text-blue-900 dark:text-blue-100 border-blue-200 dark:border-blue-800',
-  warning: 'bg-amber-100 dark:bg-amber-900/40 text-amber-900 dark:text-amber-100 border-amber-200 dark:border-amber-800',
-  critical: 'bg-red-100 dark:bg-red-900/40 text-red-900 dark:text-red-100 border-red-200 dark:border-red-800',
+  info: 'bg-blue-100 text-blue-900 border-blue-200',
+  warning: 'bg-amber-100 text-amber-900 border-amber-200',
+  critical: 'bg-red-100 text-red-900 border-red-200',
 };
 
 interface SiteAlertsProps {

@@ -40,7 +40,7 @@ const DEFAULTS = {
 
 function Section({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
-    <section className={`overflow-hidden bg-white dark:bg-dark pt-20 pb-12 lg:pt-[120px] lg:pb-[90px] ${className}`}>
+    <section className={`overflow-hidden bg-white pt-20 pb-12 lg:pt-[120px] lg:pb-[90px] ${className}`}>
       <div className="container mx-auto">
         <div className="-mx-4 flex flex-wrap items-center">
           {children}
@@ -63,22 +63,22 @@ function ContentBlock({ badge, title, description, subtitle, listItems, buttonTe
           <span className="block mb-2 text-lg font-semibold text-primary">{badge}</span>
         )}
         {title && (
-          <h2 className="mb-5 text-3xl font-bold leading-tight text-dark dark:text-white sm:text-[40px]/[48px]">
+          <h2 className="mb-5 text-3xl font-bold leading-tight text-dark sm:text-[40px]/[48px]">
             {title}
           </h2>
         )}
         {desc && (
-          <p className="mb-10 text-base leading-relaxed text-body-color dark:text-dark-6">
+          <p className="mb-10 text-base leading-relaxed text-body-color">
             {desc}
           </p>
         )}
         {subtitle && (
-          <h3 className="mb-8 text-2xl font-bold text-dark dark:text-white">{subtitle}</h3>
+          <h3 className="mb-8 text-2xl font-bold text-dark">{subtitle}</h3>
         )}
         {list.length > 0 && (
           <ul className="pb-6 list-disc list-inside marker:text-primary space-y-4">
             {list.map((item, i) => (
-              <li key={i} className="text-base text-body-color dark:text-dark-6">
+              <li key={i} className="text-base text-body-color">
                 {item.text}
               </li>
             ))}
@@ -172,7 +172,7 @@ function AboutVariation3(props: AboutBlockProps) {
       <div className="w-full px-4 lg:w-6/12">
         <div className="mb-10 max-w-[500px]">
           {badge && <span className="block mb-2 text-lg font-semibold text-primary">{badge}</span>}
-          {title && <h2 className="text-3xl font-bold text-dark dark:text-white sm:text-4xl">{title}</h2>}
+          {title && <h2 className="text-3xl font-bold text-dark sm:text-4xl">{title}</h2>}
         </div>
         <div className="flex flex-wrap -mx-4 gap-6">
           {featureItems.map((item, i) => (
@@ -184,8 +184,8 @@ function AboutVariation3(props: AboutBlockProps) {
                   <span className="text-2xl font-bold">{i + 1}</span>
                 )}
               </div>
-              <h3 className="mb-3 text-xl font-semibold text-dark dark:text-white">{item.title}</h3>
-              {item.description && <p className="text-base text-body-color dark:text-dark-6">{item.description}</p>}
+              <h3 className="mb-3 text-xl font-semibold text-dark">{item.title}</h3>
+              {item.description && <p className="text-base text-body-color">{item.description}</p>}
             </div>
           ))}
         </div>

@@ -59,13 +59,13 @@ function AccordionItemV1({ item, defaultText }: { item: AccordionItemProps; defa
   const [active, setActive] = useState(false);
   const text = item.text ?? defaultText;
   return (
-    <div className="mb-8 w-full rounded-lg bg-white p-4 shadow-[0px_20px_95px_0px_rgba(201,203,204,0.30)] dark:bg-dark-2 dark:shadow-[0px_20px_95px_0px_rgba(0,0,0,0.30)] sm:p-8 lg:px-6 xl:px-8">
+    <div className="mb-8 w-full rounded-lg bg-white p-4 shadow-[0px_20px_95px_0px_rgba(201,203,204,0.30)] sm:p-8 lg:px-6 xl:px-8">
       <button className="faq-btn flex w-full text-left" onClick={() => setActive(!active)}>
-        <div className="mr-5 flex h-10 w-full max-w-[40px] items-center justify-center rounded-lg bg-primary/5 text-primary dark:bg-white/5">
+        <div className="mr-5 flex h-10 w-full max-w-[40px] items-center justify-center rounded-lg bg-primary/5 text-primary">
           <ChevronIcon active={active} />
         </div>
         <div className="w-full">
-          <h4 className="mt-1 text-lg font-semibold text-dark dark:text-white">{item.header}</h4>
+          <h4 className="mt-1 text-lg font-semibold text-dark">{item.header}</h4>
         </div>
       </button>
       <AnimatePresence initial={false}>
@@ -77,7 +77,7 @@ function AccordionItemV1({ item, defaultText }: { item: AccordionItemProps; defa
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2, ease: 'easeInOut' }}
           >
-            <p className="py-3 text-base leading-relaxed text-body-color dark:text-dark-6">{text}</p>
+            <p className="py-3 text-base leading-relaxed text-body-color">{text}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -89,9 +89,9 @@ function AccordionItemV2({ item, defaultText }: { item: AccordionItemProps; defa
   const [active, setActive] = useState(false);
   const text = item.text ?? defaultText;
   return (
-    <div className="mb-10 rounded-lg bg-white px-7 py-6 shadow-[0px_4px_18px_0px_rgba(0,0,0,0.07)] dark:bg-dark-2 md:px-10 md:py-8">
+    <div className="mb-10 rounded-lg bg-white px-7 py-6 shadow-[0px_4px_18px_0px_rgba(0,0,0,0.07)] md:px-10 md:py-8">
       <button className="faq-btn flex w-full items-center justify-between text-left" onClick={() => setActive(!active)}>
-        <h4 className="mr-2 text-base font-semibold text-dark dark:text-white sm:text-lg md:text-xl lg:text-2xl">
+        <h4 className="mr-2 text-base font-semibold text-dark sm:text-lg md:text-xl lg:text-2xl">
           {item.header}
         </h4>
         <span className="icon inline-flex h-8 w-full max-w-[32px] items-center justify-center rounded-full border-2 border-primary text-lg font-semibold text-primary">
@@ -99,7 +99,7 @@ function AccordionItemV2({ item, defaultText }: { item: AccordionItemProps; defa
         </span>
       </button>
       <div className={active ? 'block' : 'hidden'}>
-        <p className="text-relaxed pt-6 text-base text-body-color dark:text-dark-6">{text}</p>
+        <p className="text-relaxed pt-6 text-base text-body-color">{text}</p>
       </div>
     </div>
   );
@@ -114,10 +114,10 @@ function AccordionItemV3({ item, defaultText }: { item: AccordionItemProps; defa
           <QuestionIcon />
         </div>
         <div className="w-full">
-          <h3 className="mb-6 text-xl font-semibold text-dark dark:text-white sm:text-2xl lg:text-xl xl:text-2xl">
+          <h3 className="mb-6 text-xl font-semibold text-dark sm:text-2xl lg:text-xl xl:text-2xl">
             {item.header}
           </h3>
-          <p className="text-base leading-relaxed text-body-color dark:text-dark-6">{text}</p>
+          <p className="text-base leading-relaxed text-body-color">{text}</p>
         </div>
       </div>
     </div>
@@ -142,8 +142,8 @@ function TabButton({
       onClick={() => setOpenTab(tabNumber)}
       className={`block w-full border-l-4 px-7 py-6 text-left text-base font-medium md:px-10 lg:px-7 xl:px-10 ${
         isActive
-          ? 'border-primary bg-primary/[.13] text-dark dark:bg-dark-2 dark:text-white'
-          : 'border-transparent text-body-color hover:border-primary hover:text-dark dark:text-dark-6 dark:hover:text-white'
+          ? 'border-primary bg-primary/[.13] text-dark'
+          : 'border-transparent text-body-color hover:border-primary hover:text-dark'
       }`}
     >
       {children}
@@ -169,10 +169,10 @@ function AccordionItemV4({
 
   return (
     <div className={isActive ? 'block' : 'hidden'}>
-      <h2 className="mb-6 text-3xl font-semibold text-dark dark:text-white">{item.header}</h2>
-      <p className="mb-8 text-base leading-relaxed text-body-color dark:text-dark-6">{text}</p>
+      <h2 className="mb-6 text-3xl font-semibold text-dark">{item.header}</h2>
+      <p className="mb-8 text-base leading-relaxed text-body-color">{text}</p>
       {text2 && (
-        <p className="mb-8 text-base leading-relaxed text-body-color dark:text-dark-6">{text2}</p>
+        <p className="mb-8 text-base leading-relaxed text-body-color">{text2}</p>
       )}
       {listItems.length > 0 && (
         <div>
@@ -181,7 +181,7 @@ function AccordionItemV4({
               <span className="mr-5 flex h-[30px] w-full max-w-[30px] items-center justify-center rounded-full bg-primary text-sm font-semibold text-white">
                 {i + 1}
               </span>
-              <p className="text-base leading-relaxed text-body-color dark:text-dark-6">{li.text}</p>
+              <p className="text-base leading-relaxed text-body-color">{li.text}</p>
             </div>
           ))}
         </div>
@@ -194,11 +194,11 @@ function AccordionItemV5({ item, defaultText }: { item: AccordionItemProps; defa
   const text = item.text ?? defaultText;
   return (
     <div className="w-full px-4 lg:w-1/2">
-      <div className="relative mb-10 overflow-hidden rounded-lg border border-[#F3F4FE] p-6 dark:border-dark-3/50 sm:px-10 sm:py-11 lg:px-8 2xl:px-14">
-        <h4 className="mb-6 text-lg font-semibold text-dark dark:text-white sm:text-xl lg:text-lg xl:text-xl">
+      <div className="relative mb-10 overflow-hidden rounded-lg border border-[#F3F4FE] p-6 sm:px-10 sm:py-11 lg:px-8 2xl:px-14">
+        <h4 className="mb-6 text-lg font-semibold text-dark sm:text-xl lg:text-lg xl:text-xl">
           {item.header}
         </h4>
-        <p className="text-base leading-relaxed text-body-color dark:text-dark-6">{text}</p>
+        <p className="text-base leading-relaxed text-body-color">{text}</p>
         <span className="absolute left-0 top-0 z-[-1]">
           <svg width="155" height="245" viewBox="0 0 155 245" fill="none" xmlns="http://www.w3.org/2000/svg">
             <ellipse cx="17.5" cy="124.5" rx="137.5" ry="139.5" fill="url(#paint0_linear)" />
@@ -268,14 +268,14 @@ export function AccordionBlock({
     const left = displayItems.slice(0, half);
     const right = displayItems.slice(half);
     return (
-      <section className="relative z-20 overflow-hidden bg-white pb-12 pt-20 dark:bg-dark lg:pb-[90px] lg:pt-[120px]">
+      <section className="relative z-20 overflow-hidden bg-white pb-12 pt-20 lg:pb-[90px] lg:pt-[120px]">
         <div className="container mx-auto">
           <div className="-mx-4 flex flex-wrap">
             <div className="w-full px-4">
               <div className="mx-auto mb-[60px] max-w-[520px] text-center lg:mb-20">
                 <span className="mb-2 block text-lg font-semibold text-primary">{badgeVal}</span>
-                <h2 className="mb-4 text-3xl font-bold text-dark dark:text-white sm:text-[40px]/[48px]">{titleVal}</h2>
-                <p className="text-base text-body-color dark:text-dark-6">{subtitleVal}</p>
+                <h2 className="mb-4 text-3xl font-bold text-dark sm:text-[40px]/[48px]">{titleVal}</h2>
+                <p className="text-base text-body-color">{subtitleVal}</p>
               </div>
             </div>
           </div>
@@ -314,13 +314,13 @@ export function AccordionBlock({
   // Variation 2: centered single column, collapsible +/-
   if (variation === 2) {
     return (
-      <section className="bg-white pb-10 pt-20 dark:bg-dark lg:pb-20 lg:pt-[120px]">
+      <section className="bg-white pb-10 pt-20 lg:pb-20 lg:pt-[120px]">
         <div className="container mx-auto">
           <div className="-mx-4 flex flex-wrap">
             <div className="w-full px-4">
               <div className="mx-auto mb-[60px] max-w-[510px] text-center lg:mb-20">
                 <span className="mb-2 block text-lg font-semibold text-primary">{badgeVal}</span>
-                <h2 className="text-3xl font-bold text-dark dark:text-white sm:text-[40px]/[48px]">{titleVal}</h2>
+                <h2 className="text-3xl font-bold text-dark sm:text-[40px]/[48px]">{titleVal}</h2>
               </div>
             </div>
           </div>
@@ -339,13 +339,13 @@ export function AccordionBlock({
   // Variation 3: 2-column always expanded with icon
   if (variation === 3) {
     return (
-      <section className="relative z-20 overflow-hidden bg-white pb-8 pt-20 dark:bg-dark lg:pb-[50px] lg:pt-[120px]">
+      <section className="relative z-20 overflow-hidden bg-white pb-8 pt-20 lg:pb-[50px] lg:pt-[120px]">
         <div className="container mx-auto">
           <div className="-mx-4 flex flex-wrap">
             <div className="w-full px-4">
               <div className="mx-auto mb-[60px] max-w-[510px] text-center lg:mb-20">
                 <span className="mb-2 block text-lg font-semibold text-primary">{badgeVal}</span>
-                <h2 className="text-3xl font-bold text-dark dark:text-white sm:text-[40px]/[48px]">{titleVal}</h2>
+                <h2 className="text-3xl font-bold text-dark sm:text-[40px]/[48px]">{titleVal}</h2>
               </div>
             </div>
           </div>
@@ -377,13 +377,13 @@ export function AccordionBlock({
 
   // Variation 5: 2-column cards, always expanded
   return (
-    <section className="relative z-20 overflow-hidden bg-white pb-10 pt-20 dark:bg-dark lg:pb-20 lg:pt-[120px]">
+    <section className="relative z-20 overflow-hidden bg-white pb-10 pt-20 lg:pb-20 lg:pt-[120px]">
       <div className="container mx-auto">
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4">
             <div className="mx-auto mb-[60px] max-w-[510px] text-center lg:mb-20">
               <span className="mb-2 block text-lg font-semibold text-primary">{badgeVal}</span>
-              <h2 className="text-3xl font-bold text-dark dark:text-white sm:text-[40px]">{titleVal}</h2>
+              <h2 className="text-3xl font-bold text-dark sm:text-[40px]">{titleVal}</h2>
             </div>
           </div>
         </div>
@@ -406,11 +406,11 @@ function AccordionVariation4({
 }) {
   const [openTab, setOpenTab] = useState('1');
   return (
-    <section className="relative z-20 overflow-hidden bg-white py-20 dark:bg-dark lg:py-[120px]">
+    <section className="relative z-20 overflow-hidden bg-white py-20 lg:py-[120px]">
       <div className="container mx-auto">
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4 lg:w-4/12">
-            <div className="mb-10 overflow-hidden rounded bg-[#F3F6FF] dark:bg-dark-3 lg:mb-0">
+            <div className="mb-10 overflow-hidden rounded bg-[#F3F6FF] lg:mb-0">
               {displayItems.map((item, i) => (
                 <TabButton key={i} tabNumber={String(i + 1)} openTab={openTab} setOpenTab={setOpenTab}>
                   {item.header}

@@ -36,7 +36,7 @@ export function DynamicBlock({
 
   if (error) {
     return (
-      <div className="rounded border border-red-300 bg-red-50 p-4 text-red-800 dark:border-red-800 dark:bg-red-950 dark:text-red-200">
+      <div className="rounded border border-red-300 bg-red-50 p-4 text-red-800">
         Failed to load {type}:{variation}: {error.message}
       </div>
     );
@@ -44,7 +44,7 @@ export function DynamicBlock({
 
   if (!Component) {
     return (
-      <div className="animate-pulse rounded bg-gray-200 py-12 dark:bg-gray-700" aria-hidden="true" />
+      <div className="animate-pulse rounded bg-gray-200 py-12" aria-hidden="true" />
     );
   }
 

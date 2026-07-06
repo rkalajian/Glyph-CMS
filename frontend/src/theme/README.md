@@ -6,8 +6,7 @@ Central place for frontend theming. This directory holds design tokens (colors, 
 
 ```
 theme/
-├── tokens.css      # Light/default design tokens
-├── dark.css        # Dark mode overrides
+├── tokens.css      # Design tokens
 ├── index.css       # Aggregates CSS imports
 ├── README.md       # This file
 └── templates/      # Page, post, and event templates
@@ -28,31 +27,29 @@ theme/
 
 | File | Purpose |
 |------|---------|
-| `tokens.css` | Light/default theme tokens (colors, etc.) |
-| `dark.css` | Dark mode overrides (when user prefers dark) |
+| `tokens.css` | Theme tokens (colors, etc.) |
 | `index.css` | Aggregates theme CSS imports |
 
 ## Design Tokens
 
 Tokens are CSS variables used by Tailwind utilities and components:
 
-| Token | Usage | Light | Dark |
-|-------|--------|------|------|
-| `--color-fg` | Text, foreground | `#1a1a1a` | `#f3f4f6` |
-| `--color-bg` | Background | `#ffffff` | `#111827` |
-| `--color-accent` | Primary actions, links | `#2563eb` | `#60a5fa` |
-| `--color-accent-hover` | Hover state for accent | `#1d4ed8` | `#93c5fd` |
-| `--color-muted` | Secondary text | `#4b5563` | `#9ca3af` |
-| `--color-border` | Borders, dividers | `#e5e7eb` | `#374151` |
-| `--color-utility-nav-bg` | Utility nav background | `#f9fafb` | `#1f2937` |
+| Token | Usage | Value |
+|-------|--------|-------|
+| `--color-fg` | Text, foreground | `#1a1a1a` |
+| `--color-bg` | Background | `#ffffff` |
+| `--color-accent` | Primary actions, links | `#2563eb` |
+| `--color-accent-hover` | Hover state for accent | `#1d4ed8` |
+| `--color-muted` | Secondary text | `#4b5563` |
+| `--color-border` | Borders, dividers | `#e5e7eb` |
+| `--color-utility-nav-bg` | Utility nav background | `#f9fafb` |
 
 Tailwind utilities: `text-fg`, `bg-bg`, `bg-accent`, `text-accent`, `border-border`, `text-muted`, etc.
 
 ## Adding Tokens
 
-1. Add the token to `tokens.css` (in the `@theme` block) for light mode.
-2. Add the override to `dark.css` (inside the `:root` block) for dark mode.
-3. Use the token in components via `var(--color-name)` or Tailwind utilities if mapped.
+1. Add the token to `tokens.css` (in the `@theme` block).
+2. Use the token in components via `var(--color-name)` or Tailwind utilities if mapped.
 
 ## Templates
 

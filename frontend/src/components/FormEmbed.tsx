@@ -271,8 +271,8 @@ export function FormEmbed({ slug, initialForm, recaptchaSiteKey: siteKeyProp, cl
             aria-live="polite"
             className={`mb-4 p-4 rounded ${
               status === 'error'
-                ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
-                : 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200'
+                ? 'bg-red-100 text-red-800'
+                : 'bg-green-100 text-green-800'
             }`}
           >
             {message}

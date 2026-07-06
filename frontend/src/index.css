@@ -28,13 +28,8 @@
     @apply top-0;
   }
 
-  /* Site logo: invert in light mode (glyph is white), normal in dark mode */
+  /* Site logo: invert in light mode (glyph is white) */
   .site-logo {
     filter: invert(1) brightness(0);
-  }
-  @media (prefers-color-scheme: dark) {
-    .site-logo {
-      filter: none;
-    }
   }
 }

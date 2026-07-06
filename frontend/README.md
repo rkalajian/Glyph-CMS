@@ -86,7 +86,6 @@ src/
 │   └── metadata.ts            # buildPageMetadata() helper for generateMetadata
 ├── theme/
 │   ├── tokens.css             # Design tokens (--color-fg, --color-accent, etc.)
-│   ├── dark.css               # Dark mode overrides
 │   ├── index.css              # Base styles (imported in globals.css)
 │   └── templates/             # Page-level template components (Server + Client)
 ├── types/
@@ -132,13 +131,13 @@ export function BlogPost({ post }) {
 
 Defined in `src/theme/tokens.css`, use via Tailwind utilities:
 
-| Token | Tailwind Class | Light | Dark |
-|-------|---------------|-------|------|
-| `--color-fg` | `text-fg` | `#1a1a1a` | `#f3f4f6` |
-| `--color-bg` | `bg-bg` | `#ffffff` | `#111827` |
-| `--color-accent` | `text-accent` / `bg-accent` | `#2563eb` | `#60a5fa` |
-| `--color-muted` | `text-muted` | `#4b5563` | `#9ca3af` |
-| `--color-border` | `border-border` | `#e5e7eb` | `#374151` |
+| Token | Tailwind Class | Value |
+|-------|---------------|-------|
+| `--color-fg` | `text-fg` | `#1a1a1a` |
+| `--color-bg` | `bg-bg` | `#ffffff` |
+| `--color-accent` | `text-accent` / `bg-accent` | `#2563eb` |
+| `--color-muted` | `text-muted` | `#4b5563` |
+| `--color-border` | `border-border` | `#e5e7eb` |
 
 ## Component Registry
 
