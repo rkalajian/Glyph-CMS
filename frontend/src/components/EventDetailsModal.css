@@ -1,0 +1,89 @@
+@reference "../../app/globals.css";
+
+/* ── Trigger button ────────────────────────────────────────── */
+/* Layout/color are left to the caller's own class (e.g. .event-card__title-link) —
+   this only resets button chrome so the trigger inherits the card's title styling. */
+
+.event-details__trigger {
+  @apply bg-transparent border-0 p-0 m-0 cursor-pointer text-left
+    focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 rounded-sm;
+}
+
+/* ── Dialog + backdrop ─────────────────────────────────────── */
+
+.event-details__dialog {
+  @apply w-[calc(100vw-2rem)] max-w-[640px] p-0 bg-transparent border-0 m-auto;
+}
+
+.event-details__dialog::backdrop {
+  /* ink @ 70% — @apply not supported on ::backdrop */
+  background: color-mix(in srgb, var(--color-ink) 70%, transparent);
+}
+
+.event-details__panel {
+  @apply relative bg-surface text-ink rounded-[16px] overflow-y-auto shadow-2xl;
+  max-height: 85vh;
+}
+
+/* ── Close button ──────────────────────────────────────────── */
+
+.event-details__close {
+  @apply absolute top-3 right-3 z-10 inline-flex items-center justify-center size-11 rounded-full bg-surface/90 text-ink cursor-pointer border-0
+    hover:bg-highlight transition-colors
+    focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2;
+}
+
+.event-details__close-icon {
+  @apply size-5;
+}
+
+/* ── Image ─────────────────────────────────────────────────── */
+
+.event-details__image {
+  @apply w-full h-[220px] object-cover rounded-t-[16px];
+}
+
+/* ── Content ───────────────────────────────────────────────── */
+
+.event-details__content {
+  @apply flex flex-col gap-4 p-6 md:p-8;
+}
+
+.event-details__title {
+  @apply font-sans font-bold text-ink text-[28px] leading-[36px] pr-10;
+}
+
+.event-details__meta {
+  @apply flex flex-col gap-2 m-0;
+}
+
+.event-details__meta-row {
+  @apply flex items-center gap-2.5 font-sans font-medium text-[15px] leading-[24px] text-ink;
+}
+
+.event-details__meta-icon {
+  @apply shrink-0 size-4 text-accent;
+}
+
+.event-details__meta-row dd {
+  @apply m-0;
+}
+
+.event-details__link {
+  @apply text-secondary underline underline-offset-2 hover:text-secondary/70 transition-colors
+    focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm;
+}
+
+.event-details__description {
+  @apply font-sans text-ink text-[16px] leading-[26px];
+}
+
+/* ── CTA ───────────────────────────────────────────────────── */
+
+.event-details__cta {
+  @apply self-start uppercase inline-flex items-center justify-center bg-accent-alt text-white border border-accent-alt font-sans font-bold rounded-[10px] no-underline transition-colors
+    hover:bg-white hover:text-accent-alt
+    focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-alt focus-visible:ring-offset-2
+    text-[15px] leading-6 py-3 px-6;
+  min-height: 44px;
+}

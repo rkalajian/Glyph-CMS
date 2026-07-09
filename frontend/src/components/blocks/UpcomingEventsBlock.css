@@ -88,6 +88,10 @@
   @apply rotate-45;
 }
 
+.event-card__title-link:hover .event-card__title {
+  @apply underline;
+}
+
 .event-card__title {
   @apply font-sans font-bold text-primary text-[16px] leading-[22px];
 }
@@ -101,7 +105,19 @@
 }
 
 .event-card__location-link {
-  @apply text-primary underline underline-offset-2 hover:text-primary/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm transition-colors;
+  @apply text-primary no-underline hover:underline underline-offset-2 hover:text-primary/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm transition-colors;
+}
+
+.event-card__multiday {
+  @apply flex items-center gap-2 flex-wrap m-0;
+}
+
+.event-card__multiday-tag {
+  @apply inline-flex items-center bg-primary text-white font-sans font-bold uppercase tracking-wide rounded-full text-[10px] leading-none px-2 py-1;
+}
+
+.event-card__multiday-range {
+  @apply font-sans font-semibold text-primary text-[12px] leading-[18px];
 }
 
 .event-card__meta {

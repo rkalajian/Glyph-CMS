@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { isMultiDayEvent, formatEventRangeShort } from '../../utils/format';
 
 export interface FeaturedEventSlide {
   id: number;
@@ -8,6 +9,8 @@ export interface FeaturedEventSlide {
   description: string | null;
   imageUrl: string | null;
   href: string;
+  startDate: string;
+  endDate: string | null;
   focalPoint?: { x: number; y: number } | null;
 }
 
@@ -89,6 +92,16 @@ export function FeaturedEventsCarousel({ slides }: Props) {
         {/* Panel */}
         <div className="featured-events__panel">
           <div className="featured-events__panel-top">
+            {slide.startDate && (
+              <p className="featured-events__date">
+                <span className="featured-events__date-range">
+                  {formatEventRangeShort(slide.startDate, slide.endDate)}
+                </span>
+                {isMultiDayEvent(slide.startDate, slide.endDate) && (
+                  <span className="featured-events__multiday-tag">Multi-Day</span>
+                )}
+              </p>
+            )}
             <div className="featured-events__title-row">
               <a
                 href={slide.href}

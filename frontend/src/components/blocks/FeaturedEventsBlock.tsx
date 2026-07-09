@@ -27,6 +27,8 @@ export async function FeaturedEventsBlock({ heading, limit }: StrapiBlockFeature
     description: extractText(e.description),
     imageUrl: getStrapiImageUrl(e.image) ?? null,
     href: e.url || `/events/${e.slug}`,
+    startDate: e.startDate,
+    endDate: e.endDate ?? null,
     focalPoint: e.image?.focalPoint ?? null,
   }));
 

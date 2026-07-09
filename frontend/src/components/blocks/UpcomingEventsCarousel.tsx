@@ -1,6 +1,9 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
+import { isMultiDayEvent, formatEventRangeShort } from '../../utils/format';
+import { EventDetailsButton } from '../EventDetailsModal';
+import type { StrapiBlock } from '../../types/strapi';
 
 export interface EventCardData {
   id: number;
@@ -12,6 +15,7 @@ export interface EventCardData {
   location: string | null;
   url: string | null;
   imageUrl: string | null;
+  description?: string | StrapiBlock[] | null;
   focalPoint?: { x: number; y: number } | null;
 }
 
@@ -41,13 +45,18 @@ function PinIcon() {
   );
 }
 
-function EventCard({ event }: { event: EventCardData }) {
+function EventCard({ event, now }: { event: EventCardData; now: Date }) {
   const date = new Date(event.startDate);
   // Pin to the site's timezone so server (build, UTC) and client (visitor-local)
   // render identical text — otherwise hydration mismatches (React #418).
   const TZ = process.env.NEXT_PUBLIC_TIMEZONE || 'America/New_York';
-  const month = date.toLocaleString('en-US', { month: 'short', timeZone: TZ }).toUpperCase();
-  const day = date.toLocaleString('en-US', { day: 'numeric', timeZone: TZ });
+  const multiDay = isMultiDayEvent(event.startDate, event.endDate);
+  // Multi-day events stay listed until they're over, so once underway show
+  // today's date on the badge instead of a stale start date. Events that
+  // haven't started yet still show their actual start date.
+  const badgeDate = multiDay && now >= date ? now : date;
+  const month = badgeDate.toLocaleString('en-US', { month: 'short', timeZone: TZ }).toUpperCase();
+  const day = badgeDate.toLocaleString('en-US', { day: 'numeric', timeZone: TZ });
   const timeStr = event.allDay
     ? 'All Day'
     : date.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: TZ });
@@ -76,16 +85,32 @@ function EventCard({ event }: { event: EventCardData }) {
         </div>
         <div className="event-card__divider" aria-hidden="true" />
         <div className="event-card__info">
-          <div className="event-card__title-row">
-            {event.url ? (
-              <a href={event.url} className="event-card__title-link">
-                <h3 className="event-card__title">{event.title}</h3>
-                <span className="event-card__arrow"><ArrowNEIcon /></span>
-              </a>
-            ) : (
-              <h3 className="event-card__title">{event.title}</h3>
-            )}
-          </div>
+          {multiDay && (
+            <p className="event-card__multiday">
+              <span className="event-card__multiday-tag">Multi-Day</span>
+              <span className="event-card__multiday-range">
+                {formatEventRangeShort(event.startDate, event.endDate)}
+              </span>
+            </p>
+          )}
+          <h3 className="event-card__title-row">
+            <EventDetailsButton
+              triggerClassName="event-card__title-link"
+              event={{
+                title: event.title,
+                startDate: event.startDate,
+                endDate: event.endDate,
+                allDay: event.allDay,
+                location: event.location,
+                url: event.url,
+                description: event.description,
+                imageUrl: event.imageUrl,
+              }}
+            >
+              <span className="event-card__title">{event.title}</span>
+              <span className="event-card__arrow"><ArrowNEIcon /></span>
+            </EventDetailsButton>
+          </h3>
           {!event.allDay && (
             <div className="event-card__meta">
               <ClockIcon />
@@ -113,11 +138,18 @@ function EventCard({ event }: { event: EventCardData }) {
 
 interface Props {
   events: EventCardData[];
+  serverNow: string;
 }
 
-export function UpcomingEventsCarousel({ events }: Props) {
+export function UpcomingEventsCarousel({ events, serverNow }: Props) {
   const [activeIdx, setActiveIdx] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
+  // Until mounted, "now" is the server's build timestamp (identical on SSR and the
+  // first client render → no hydration mismatch); after mount, use the real date.
+  const [clientNow, setClientNow] = useState<Date | null>(null);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => setClientNow(new Date()), []);
+  const now = clientNow ?? new Date(serverNow);
 
   useEffect(() => {
     const container = scrollRef.current;
@@ -152,7 +184,7 @@ export function UpcomingEventsCarousel({ events }: Props) {
     <>
       <div ref={scrollRef} className="upcoming-events__grid">
         {events.map((event) => (
-          <EventCard key={event.id} event={event} />
+          <EventCard key={event.id} event={event} now={now} />
         ))}
       </div>
       {events.length > 1 && (

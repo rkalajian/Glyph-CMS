@@ -494,9 +494,12 @@ export async function getRecentPressReleases(): Promise<StrapiPressRelease[]> {
 }
 
 export async function getUpcomingEvents(limit = 6): Promise<StrapiEvent[]> {
-  const now = new Date().toISOString();
+  const nowEnc = encodeURIComponent(new Date().toISOString());
+  // Keep an event listed until it is over: show it if its end is still in the
+  // future, OR (single-day / no end) if its start is still in the future.
+  // Without this, a multi-day event vanishes the moment its startDate passes.
   const res = await fetchApi<StrapiEvent>(
-    `/api/events?status=published&sort=startDate:asc&filters[startDate][$gte]=${encodeURIComponent(now)}&pagination[limit]=${limit}&populate[0]=image`
+    `/api/events?status=published&sort=startDate:asc&filters[$or][0][endDate][$gte]=${nowEnc}&filters[$or][1][startDate][$gte]=${nowEnc}&pagination[limit]=${limit}&populate[0]=image`
   );
   return toArray(res.data) as StrapiEvent[];
 }

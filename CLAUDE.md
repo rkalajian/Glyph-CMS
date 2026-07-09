@@ -144,7 +144,8 @@ GOOGLE_CALENDAR_SYNC_CRON=0 * * * *   # default: every hour
 The sync service is in `strapi-backend/src/google-calendar-sync.ts`. It runs on Strapi startup and on the cron schedule. Key behaviour:
 - Matches events by `googleCalendarEventId` — title, dates, description, location are always overwritten from Google
 - The `image` field is **never overwritten** — upload one in Strapi to permanently attach it to a synced event
-- Cancelled Google Calendar events are skipped; deleted-from-Google events are not auto-removed from Strapi
+- Cancelled Google Calendar events are skipped
+- Events removed from Google Calendar are pruned from Strapi, guarded three ways: only synced events (with a `googleCalendarEventId`), only future events in the sync window (`startDate >= timeMin`), and only after a fully clean Google fetch (a partial/failed fetch skips the prune). Manually-created events are never touched
 
 ## Component Registry
 
@@ -186,6 +187,14 @@ Custom Strapi endpoints (registered in `src/index.ts` / api routes):
 - **Redirect manager** — `Redirect` collection type + `frontend/scripts/generate-redirects.mjs` (postbuild) writes `out/_redirects` for Netlify. Redirect lines are forced (`!`). Uses `permanent`/`temporary` enum values (Strapi enums can't start with a digit, so not `301`/`302`).
 - **`featured` flag** — added to Blog Post and Event for the featured-blog-posts / featured-events blocks.
 - Stale-content fix: `scripts/clear-fetch-cache.mjs` (prebuild hook) deletes `.next/cache/fetch-cache` before every build — Next persists build-time fetch responses there across builds, which otherwise serves stale Strapi content in local rebuilds. Compiler caches are untouched.
+
+**Third-wave port (multi-day events, details modal, gcal prune — July 2026):**
+
+- **Multi-day events** — `isMultiDayEvent()` + `formatEventRangeShort()` in `utils/format.ts` (timezone via `NEXT_PUBLIC_TIMEZONE`, default `America/New_York`). A "Multi-Day" tag + short range ("Sep 15–18", cross-month/year aware) renders on `UpcomingEventsCarousel` and `FeaturedEventsCarousel` cards; in-progress multi-day events show today's date on the badge (hydration-safe via a `serverNow` prop swapped for the real date after mount).
+- **Stay listed until over** — `getUpcomingEvents()` filters with `$or` on `endDate>=now` / `startDate>=now`, so an in-progress multi-day event keeps showing until its `endDate` passes.
+- **Details modal** — `EventDetailsButton` (`components/EventDetailsModal.tsx`), a `'use client'` component using the native `<dialog>` (focus trap / Escape / inert background / focus restore for free). Event card titles open it with the event's full details (date range, location link, `description` via `RichText`, Learn More CTA). Genericized from production: no `categoryName`/`registrationRequired` (those content-type fields aren't in this template) and the CTA stays visible (production hides it).
+- **gcal-sync prune** — events removed from Google Calendar are now deleted from Strapi (see Google Calendar Sync above for the guardrails).
+- Production's `EventCalendar` month-picker/badge fixes and the nav tertiary-flyout keyboard fix were **not** ported — this template's `EventCalendar` is its own month-grid design and its nav has no tertiary flyouts.
 
 Intentionally **not** ported: Animal/Plant content types, zoo-specific blocks (see above), google-reviews sync, the VPS webhook build service.
 

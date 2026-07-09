@@ -8,8 +8,13 @@
  * Rules:
  *  - Title, dates, description, and location are always overwritten from Google.
  *  - `image` is NEVER overwritten — if a user has uploaded one in Strapi it is kept.
- *  - Events deleted from Google Calendar are NOT auto-deleted from Strapi
- *    (they remain for manual review/cleanup).
+ *  - Events removed from Google Calendar are pruned from Strapi, but only:
+ *      • events that originated from Google (have a googleCalendarEventId),
+ *      • events in the sync window (startDate >= timeMin) — past events are
+ *        never touched since Google no longer returns them,
+ *      • and only when the Google fetch completed cleanly (a partial/failed
+ *        fetch must never trigger a mass delete).
+ *    Manually-created Strapi events are always left alone.
  */
 
 import type { Core } from '@strapi/strapi';
@@ -88,13 +93,18 @@ function resolveDates(ev: GoogleCalendarEvent): {
   };
 }
 
-/** Fetch all upcoming events from a Google Calendar (handles pagination) */
+/**
+ * Fetch all upcoming events from a Google Calendar (handles pagination).
+ *
+ * `complete` is false if any page errored — callers must treat the event list
+ * as partial and skip destructive pruning when it is false.
+ */
 async function fetchGoogleCalendarEvents(
   calendarId: string,
   apiKey: string,
+  timeMin: string,
   strapi: Core.Strapi
-): Promise<GoogleCalendarEvent[]> {
-  const timeMin = new Date().toISOString();
+): Promise<{ events: GoogleCalendarEvent[]; complete: boolean }> {
   const base = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events`;
   const allEvents: GoogleCalendarEvent[] = [];
   let pageToken: string | undefined;
@@ -112,13 +122,13 @@ async function fetchGoogleCalendarEvents(
     const res = await fetch(`${base}?${params.toString()}`);
     if (!res.ok) {
       strapi.log.error(`[gcal-sync] Google Calendar API error: ${res.status} ${res.statusText}`);
-      break;
+      return { events: allEvents, complete: false };
     }
 
     const body = (await res.json()) as GoogleCalendarListResponse;
     if (body.error) {
       strapi.log.error(`[gcal-sync] Google Calendar API error: ${body.error.message}`);
-      break;
+      return { events: allEvents, complete: false };
     }
 
     for (const ev of body.items ?? []) {
@@ -128,7 +138,44 @@ async function fetchGoogleCalendarEvents(
     pageToken = body.nextPageToken;
   } while (pageToken);
 
-  return allEvents;
+  return { events: allEvents, complete: true };
+}
+
+/**
+ * Delete Strapi events that originated from Google Calendar but are no longer
+ * present in the fetched set. Scoped to the sync window (startDate >= timeMin)
+ * so past events — which Google no longer returns — are never removed.
+ */
+async function pruneRemovedEvents(
+  liveIds: Set<string>,
+  timeMin: string,
+  strapi: Core.Strapi
+): Promise<number> {
+  const docService = strapi.documents(EVENT_UID);
+
+  // All synced, future events in any state (draft or published).
+  const candidates = await docService.findMany({
+    filters: {
+      googleCalendarEventId: { $notNull: true },
+      startDate: { $gte: timeMin },
+    },
+    fields: ['documentId', 'googleCalendarEventId', 'title'],
+    status: 'draft',
+    pagination: { pageSize: 1000 },
+  });
+
+  let deleted = 0;
+  for (const ev of candidates ?? []) {
+    if (liveIds.has(ev.googleCalendarEventId)) continue;
+    try {
+      await docService.delete({ documentId: ev.documentId });
+      deleted++;
+      strapi.log.info(`[gcal-sync] Deleted event removed from Google Calendar: "${ev.title}" (${ev.googleCalendarEventId})`);
+    } catch (err) {
+      strapi.log.error(`[gcal-sync] Failed to delete event "${ev.title}" (${ev.documentId}):`, err);
+    }
+  }
+  return deleted;
 }
 
 /**
@@ -241,7 +288,13 @@ export async function syncGoogleCalendar(strapi: Core.Strapi): Promise<void> {
   strapi.log.info('[gcal-sync] Starting Google Calendar sync…');
 
   try {
-    const gcalEvents = await fetchGoogleCalendarEvents(calendarId, apiKey, strapi);
+    const timeMin = new Date().toISOString();
+    const { events: gcalEvents, complete } = await fetchGoogleCalendarEvents(
+      calendarId,
+      apiKey,
+      timeMin,
+      strapi
+    );
     strapi.log.info(`[gcal-sync] Fetched ${gcalEvents.length} events from Google Calendar`);
 
     let created = 0;
@@ -260,7 +313,17 @@ export async function syncGoogleCalendar(strapi: Core.Strapi): Promise<void> {
       }
     }
 
-    strapi.log.info(`[gcal-sync] Done — ${created} created, ${updated} updated, ${failed} failed`);
+    // Prune events removed from Google Calendar — but only after a clean fetch.
+    // A partial fetch would make live events look deleted and wipe them out.
+    let deleted = 0;
+    if (complete) {
+      const liveIds = new Set(gcalEvents.map((ev) => ev.id));
+      deleted = await pruneRemovedEvents(liveIds, timeMin, strapi);
+    } else {
+      strapi.log.warn('[gcal-sync] Incomplete fetch — skipping prune of removed events');
+    }
+
+    strapi.log.info(`[gcal-sync] Done — ${created} created, ${updated} updated, ${deleted} deleted, ${failed} failed`);
   } catch (err) {
     strapi.log.error('[gcal-sync] Sync failed:', err);
   }

@@ -23,6 +23,7 @@ export async function UpcomingEventsBlock({
     location: e.location ?? null,
     url: e.url ?? null,
     imageUrl: getStrapiImageUrl(e.image) ?? null,
+    description: e.description ?? null,
     focalPoint: e.image?.focalPoint ?? null,
   }));
 
@@ -34,7 +35,7 @@ export async function UpcomingEventsBlock({
           <RichText content={description} className="upcoming-events__description" />
         )}
         {cards.length > 0 ? (
-          <UpcomingEventsCarousel events={cards} />
+          <UpcomingEventsCarousel events={cards} serverNow={new Date().toISOString()} />
         ) : (
           <p className="font-sans text-ink text-center opacity-60">No upcoming events at this time.</p>
         )}

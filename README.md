@@ -227,7 +227,7 @@ Events can be auto-imported from a public Google Calendar. Configure in Theme Op
 
 - Events are matched by `googleCalendarEventId` — title, dates, description, location are always overwritten from Google
 - The `image` field is **never overwritten** — upload one in Strapi to permanently attach it to a synced event
-- Cancelled Google Calendar events are skipped; deleted events are not auto-removed from Strapi
+- Cancelled Google Calendar events are skipped; events deleted from Google are pruned from Strapi (synced future events only, and only after a fully clean fetch — manually-created events are never touched)
 - All-day dates are anchored at noon UTC so they don't roll back a day in US timezones
 - Each event syncs independently — one bad event can't abort the batch
 

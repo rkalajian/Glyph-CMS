@@ -48,6 +48,16 @@
   @apply flex flex-col gap-[24px] flex-1;
 }
 
+/* ── Date row ────────────────────────────────────────────── */
+
+.featured-events__date {
+  @apply flex items-center gap-3 flex-wrap m-0 font-sans font-semibold text-highlight text-[16px] leading-[24px];
+}
+
+.featured-events__multiday-tag {
+  @apply inline-flex items-center bg-highlight text-ink font-bold uppercase tracking-wide rounded-full text-[11px] leading-none px-2.5 py-1;
+}
+
 /* ── Event title row ─────────────────────────────────────── */
 
 .featured-events__title-row {
